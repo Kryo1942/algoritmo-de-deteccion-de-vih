@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deteccion Temprana de VIH</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --ink: #182033;
+      --muted: #52607a;
+      --panel: #ffffff;
+      --navy: #16213d;
+      --blue: #cfe0ff;
+      --blue-stroke: #3b73ff;
+      --teal: #d5f5f0;
+      --teal-stroke: #20a08d;
+      --yellow: #fff3c0;
+      --yellow-stroke: #d79b09;
+      --green: #daf7dd;
+      --green-stroke: #25a14b;
+      --red: #ffd9d6;
+      --red-stroke: #e24b40;
+      --purple: #efdfff;
+      --purple-stroke: #9447e8;
+      --orange: #ffe7ca;
+      --orange-stroke: #f17a1c;
+      --shadow: 0 12px 30px rgba(24, 32, 51, 0.1);
+      --radius: 22px;
+      --line: #52607a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(59, 115, 255, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(241, 122, 28, 0.12), transparent 18%),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 55%, #e7edf6 100%);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 28px auto 48px;
+    }
+
+    .hero {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 26px;
+      padding: 28px 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      right: -30px;
+      top: -60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 177, 74, 0.45), rgba(255, 177, 74, 0));
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 1rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 22px 0 28px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(22, 33, 61, 0.22);
+    }
+
+    .ghost {
+      background: rgba(22, 33, 61, 0.08);
+      color: var(--navy);
+    }
+
+    .status {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(82, 96, 122, 0.18);
+      border-radius: 18px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .status strong {
+      font-size: 1.05rem;
+    }
+
+    .path-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(82, 96, 122, 0.12);
+      color: var(--ink);
+      font-size: 0.95rem;
+    }
+
+    .pill.active-red {
+      background: rgba(226, 75, 64, 0.15);
+      color: #b6261d;
+    }
+
+    .pill.active-green {
+      background: rgba(37, 161, 75, 0.15);
+      color: #1a7c39;
+    }
+
+    .diagram {
+      display: grid;
+      gap: 16px;
+    }
+
+    .node {
+      width: min(780px, 100%);
+      margin: 0 auto;
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      border: 3px solid transparent;
+      position: relative;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .node:hover,
+    .node:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(24, 32, 51, 0.14);
+    }
+
+    .node.active {
+      border-color: var(--navy);
+      box-shadow: 0 18px 40px rgba(22, 33, 61, 0.18);
+    }
+
+    .node-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .node h2 {
+      margin: 0;
+      font-size: clamp(1.12rem, 2vw, 1.45rem);
+      line-height: 1.2;
+    }
+
+    .node p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .node .tag {
+      white-space: nowrap;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .node .extra {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(82, 96, 122, 0.16);
+      display: none;
+      color: var(--ink);
+    }
+
+    .node.open .extra {
+      display: block;
+    }
+
+    .node ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    .node li + li {
+      margin-top: 6px;
+    }
+
+    .node button.toggle {
+      margin-top: 14px;
+      background: rgba(22, 33, 61, 0.08);
+      color: var(--navy);
+      padding: 10px 14px;
+    }
+
+    .line {
+      width: 4px;
+      height: 24px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(82, 96, 122, 0.45), var(--line));
+      position: relative;
+    }
+
+    .line::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 12px solid var(--line);
+    }
+
+    .decision {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .branch-label {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .branch-label.red {
+      background: var(--red-stroke);
+    }
+
+    .branch-label.green {
+      background: var(--green-stroke);
+    }
+
+    .bridge {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 120px 1fr;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bridge .bar {
+      height: 4px;
+      background: var(--line);
+      opacity: 0.8;
+    }
+
+    .bridge .down {
+      position: relative;
+      height: 40px;
+      width: 4px;
+      margin: 0 auto;
+      background: var(--line);
+    }
+
+    .bridge .down::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 12px solid var(--line);
+    }
+
+    .alert {
+      margin: 28px auto 0;
+      width: min(980px, 100%);
+      background: #a81f1c;
+      color: #fff;
+      border-radius: 22px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .alert h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+    }
+
+    .cards {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 3px solid transparent;
+    }
+
+    .card h4 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .card.blue { border-color: var(--blue-stroke); }
+    .card.green { border-color: var(--green-stroke); }
+    .card.purple { border-color: var(--purple-stroke); }
+    .card.red { border-color: var(--red-stroke); }
+
+    .footer-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 18px;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(82, 96, 122, 0.18);
+    }
+
+    .info-box h3 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+    }
+
+    .info-box ol,
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .info-box li + li {
+      margin-top: 6px;
+    }
+
+    .blue-node { background: linear-gradient(180deg, rgba(207, 224, 255, 0.9), rgba(255, 255, 255, 0.92)); border-color: var(--blue-stroke); }
+    .teal-node { background: linear-gradient(180deg, rgba(213, 245, 240, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--teal-stroke); }
+    .yellow-node { background: linear-gradient(180deg, rgba(255, 243, 192, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--yellow-stroke); }
+    .green-node { background: linear-gradient(180deg, rgba(218, 247, 221, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--green-stroke); }
+    .red-node { background: linear-gradient(180deg, rgba(255, 217, 214, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--red-stroke); }
+    .purple-node { background: linear-gradient(180deg, rgba(239, 223, 255, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--purple-stroke); }
+    .orange-node { background: linear-gradient(180deg, rgba(255, 231, 202, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--orange-stroke); }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    @media (max-width: 900px) {
+      .decision,
+      .cards,
+      .footer-grid,
+      .bridge {
+        grid-template-columns: 1fr;
+      }
+
+      .bridge .bar {
+        display: none;
+      }
+
+      .bridge .down {
+        height: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+        margin-top: 14px;
+      }
+
+      .hero {
+        padding: 22px 20px;
+      }
+
+      .node {
+        padding: 16px;
+      }
+
+      .node-top {
+        flex-direction: column;
+      }
+
+      .status {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Algoritmo interactivo de deteccion temprana de VIH</h1>
+      <p class="subtitle">Version educativa basada en el diagrama: quien solicita, consentimiento, pruebas, confirmacion y seguimiento.</p>
+    </section>
+
+    <section class="toolbar" aria-label="Controles">
+      <button class="primary" id="playRoute">Recorrer algoritmo</button>
+      <button class="ghost" data-mode="all">Mostrar todo</button>
+      <button class="ghost" data-mode="acute">Ruta sospecha aguda</button>
+      <button class="ghost" data-mode="screening">Ruta tamizaje habitual</button>
+    </section>
+
+    <section class="status" aria-live="polite">
+      <strong id="statusTitle">Vista general activa</strong>
+      <div id="statusText">Haz clic en cualquier bloque para ampliar la explicacion. Tambien puedes resaltar una ruta completa desde los botones superiores.</div>
+      <div class="path-pills">
+        <span class="pill">Entrada</span>
+        <span class="pill">Solicitud</span>
+        <span class="pill">Consejeria</span>
+        <span class="pill">Decision clinica</span>
+        <span class="pill" id="pillAcute">Sospecha aguda</span>
+        <span class="pill" id="pillScreening">Tamizaje habitual</span>
+        <span class="pill">Confirmacion</span>
+        <span class="pill">Seguimiento</span>
+      </div>
+    </section>
+
+    <section class="diagram" id="diagram">
+      <article class="node blue-node" data-id="1" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>1. Entrada al algoritmo</h2>
+            <p>Persona con exposicion de riesgo, sintomas compatibles, embarazo, ITS, control preventivo o solicitud voluntaria de prueba.</p>
+          </div>
+          <span class="tag">Inicio</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Idea clave:</strong> el algoritmo puede iniciar por sospecha clinica o por tamizaje preventivo.
+          <ul>
+            <li>Incluye personas sintomaticas y asintomaticas.</li>
+            <li>Tambien aplica en campanas comunitarias o control prenatal.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="line" aria-hidden="true"></div>
+
+      <article class="node blue-node" data-id="2" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>2. Quien solicita la prueba</h2>
+            <p>La puede solicitar la persona usuaria o indicarla personal medico, salud publica, banco de sangre, control prenatal, programa ITS/VIH o campana comunitaria.</p>
+          </div>
+          <span class="tag">Solicitud</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Importa porque:</strong> define el contexto de atencion y la oportunidad del diagnostico.
+          <ul>
+            <li>El acceso puede ser por decision personal o por indicacion clinica.</li>
+            <li>La solicitud no sustituye el consentimiento informado.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="line" aria-hidden="true"></div>
+
+      <article class="node teal-node" data-id="3" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>3. Consentimiento informado y consejeria preprueba</h2>
+            <p>Explicar objetivo, confidencialidad, voluntariedad, beneficios, limites, periodo ventana y posibles resultados antes de tomar la muestra.</p>
+          </div>
+          <span class="tag">Consejeria</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Puntos a cubrir:</strong>
+          <ul>
+            <li>Que significa un resultado reactivo y uno no reactivo.</li>
+            <li>Por que una prueba negativa temprana puede no descartar infeccion reciente.</li>
+            <li>Como se protege la privacidad y que pasos siguen despues.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="line" aria-hidden="true"></div>
+
+      <article class="node yellow-node" data-id="4" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>4. Decision clinica inicial</h2>
+            <p>Se define si hubo exposicion reciente o sintomas compatibles con infeccion aguda por VIH, o si se trata de tamizaje habitual.</p>
+          </div>
+          <span class="tag">Decision</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Aqui se abren dos rutas:</strong>
+          <ul>
+            <li><strong>Sospecha aguda:</strong> prioriza pruebas utiles en fase temprana.</li>
+            <li><strong>Tamizaje habitual:</strong> sigue la ruta usual de cribado inicial.</li>
+          </ul>
+        </div>
+      </article>
+
+      <section class="decision">
+        <div>
+          <span class="branch-label red">Si: sospecha de VIH agudo</span>
+          <article class="node red-node" data-id="5A" data-group="acute">
+            <div class="node-top">
+              <div>
+                <h2>5A. Sospecha de infeccion aguda</h2>
+                <p>No descartar VIH con una sola prueba rapida negativa. En fase aguda puede no haber anticuerpos detectables.</p>
+              </div>
+              <span class="tag">Ruta roja</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>Mensaje critico:</strong>
+              <ul>
+                <li>El riesgo reciente cambia la interpretacion de una prueba negativa.</li>
+                <li>Si la sospecha clinica es fuerte, se continua con pruebas de mayor sensibilidad temprana.</li>
+              </ul>
+            </div>
+          </article>
+          <div class="line" aria-hidden="true"></div>
+          <article class="node red-node" data-id="6A" data-group="acute">
+            <div class="node-top">
+              <div>
+                <h2>6A. Prueba de 4a generacion</h2>
+                <p>Solicitar inmunoensayo Ag/Ac: detecta antigeno p24 y anticuerpos VIH-1/VIH-2.</p>
+              </div>
+              <span class="tag">Prueba</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>Ventaja:</strong> acorta el periodo ventana frente a pruebas solo de anticuerpos.
+              <ul>
+                <li>Es mas util que una prueba rapida simple en infeccion muy temprana.</li>
+                <li>Un resultado se interpreta junto con sintomas y fecha de exposicion.</li>
+              </ul>
+            </div>
+          </article>
+          <div class="line" aria-hidden="true"></div>
+          <article class="node yellow-node" data-id="7A" data-group="acute">
+            <div class="node-top">
+              <div>
+                <h2>7A. Resultado discordante o clinica fuerte</h2>
+                <p>Si la prueba de 4a generacion es reactiva, discordante o la sospecha persiste: solicitar NAT/PCR/carga viral VIH-1. ARN positivo apoya infeccion aguda.</p>
+              </div>
+              <span class="tag">Escalamiento</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>Cuando escalar:</strong>
+              <ul>
+                <li>Resultados incongruentes.</li>
+                <li>Sintomas compatibles con seroconversion.</li>
+                <li>Exposicion reciente con alta probabilidad clinica.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div>
+          <span class="branch-label green">No: tamizaje habitual</span>
+          <article class="node green-node" data-id="5B" data-group="screening">
+            <div class="node-top">
+              <div>
+                <h2>5B. Tamizaje inicial</h2>
+                <p>Realizar prueba rapida de VIH o inmunoensayo Ag/Ac segun disponibilidad y algoritmo nacional.</p>
+              </div>
+              <span class="tag">Ruta verde</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>Objetivo:</strong>
+              <ul>
+                <li>Identificar resultados no reactivos y reactivos en poblacion general o tamizaje preventivo.</li>
+                <li>Elegir la prueba segun normas locales y acceso del servicio.</li>
+              </ul>
+            </div>
+          </article>
+          <div class="line" aria-hidden="true"></div>
+          <article class="node green-node" data-id="6B" data-group="screening">
+            <div class="node-top">
+              <div>
+                <h2>6B. Resultado no reactivo</h2>
+                <p>Informar resultado. Si hubo exposicion dentro del periodo ventana, repetir prueba posteriormente y reforzar prevencion.</p>
+              </div>
+              <span class="tag">No reactivo</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>No siempre cierra el caso:</strong>
+              <ul>
+                <li>Si la exposicion fue reciente, aun puede requerirse repeticion.</li>
+                <li>Se aprovecha para reforzar reduccion de riesgo y seguimiento.</li>
+              </ul>
+            </div>
+          </article>
+          <div class="line" aria-hidden="true"></div>
+          <article class="node yellow-node" data-id="7B" data-group="screening">
+            <div class="node-top">
+              <div>
+                <h2>7B. Resultado reactivo</h2>
+                <p>Confirmar con una segunda prueba diferente o con el esquema indicado por el pais. Entregar con consejeria.</p>
+              </div>
+              <span class="tag">Reactivo</span>
+            </div>
+            <button class="toggle" type="button">Ver detalles</button>
+            <div class="extra">
+              <strong>Punto clave:</strong>
+              <ul>
+                <li>Un tamizaje reactivo no es el cierre definitivo sin confirmacion.</li>
+                <li>La consejeria reduce ansiedad y aclara siguientes pasos.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="bridge" aria-hidden="true">
+        <div class="bar"></div>
+        <div class="down"></div>
+        <div class="bar"></div>
+      </section>
+
+      <article class="node purple-node" data-id="8" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>8. Confirmacion diagnostica y consejeria postprueba</h2>
+            <p>Registrar resultado y entregarlo con consejeria postprueba. Explicar significado, confidencialidad, pasos siguientes y manejo de resultados discordantes.</p>
+          </div>
+          <span class="tag">Confirmacion</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Incluye:</strong>
+          <ul>
+            <li>Interpretacion del resultado en lenguaje claro.</li>
+            <li>Orientacion sobre notificacion, apoyo y continuidad de atencion.</li>
+            <li>Manejo especial si existen pruebas conflictivas o indeterminadas.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="line" aria-hidden="true"></div>
+
+      <article class="node orange-node" data-id="9" data-group="common">
+        <div class="node-top">
+          <div>
+            <h2>9. Seguimiento y vinculacion</h2>
+            <p>Si VIH positivo: vincular de inmediato a atencion, valorar inicio de TAR, solicitar carga viral y CD4 basales, tamizar ITS, evaluar contactos/parejas y dar apoyo psicosocial. Si negativo con riesgo reciente: repetir segun periodo ventana y reforzar prevencion.</p>
+          </div>
+          <span class="tag">Seguimiento</span>
+        </div>
+        <button class="toggle" type="button">Ver detalles</button>
+        <div class="extra">
+          <strong>Meta final:</strong>
+          <ul>
+            <li>No quedarse solo en el resultado del laboratorio.</li>
+            <li>Conectar a tratamiento, prevencion y acompanamiento oportunos.</li>
+          </ul>
+        </div>
+      </article>
+
+      <section class="alert">
+        <h3>Alerta clave</h3>
+        <p>Un resultado negativo no descarta VIH agudo si hay exposicion reciente, sintomas compatibles o una prueba de 4a generacion reactiva seguida de resultados discordantes. En ese contexto, se requiere interpretacion clinica y pruebas complementarias.</p>
+      </section>
+    </section>
+
+    <section class="cards" aria-label="Tipos de pruebas">
+      <article class="card blue">
+        <h4>Prueba rapida Ac</h4>
+        <p>Detecta anticuerpos. Util en tamizaje, pero puede ser negativa en infeccion aguda.</p>
+      </article>
+      <article class="card green">
+        <h4>4a generacion Ag/Ac</h4>
+        <p>Detecta antigeno p24 y anticuerpos. Reduce el periodo ventana.</p>
+      </article>
+      <article class="card purple">
+        <h4>NAT / PCR / carga viral</h4>
+        <p>Detecta ARN viral. Es clave cuando hay sospecha aguda o resultados discordantes.</p>
+      </article>
+      <article class="card red">
+        <h4>Western blot</h4>
+        <p>Metodo clasico. No debe definir por si solo infeccion aguda debido al riesgo de falsos negativos tempranos.</p>
+      </article>
+    </section>
+
+    <section class="footer-grid">
+      <article class="info-box">
+        <h3>Equipo</h3>
+        <ol>
+          <li>Jorge Antonio Gutierrez Martinez</li>
+          <li>Jonathan Eliud Lizcano Jinez</li>
+          <li>Jesus Gael Garcia Guadarrama</li>
+          <li>Stephany Monserrat Fuantos Pena</li>
+        </ol>
+      </article>
+      <article class="info-box">
+        <h3>Articulo base / cita</h3>
+        <p>Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. Usa esta seccion como referencia visual del articulo que origino el diagrama y ajusta la cita exacta segun el formato que te hayan pedido.</p>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const nodes = [...document.querySelectorAll(".node")];
+    const statusTitle = document.getElementById("statusTitle");
+    const statusText = document.getElementById("statusText");
+    const pillAcute = document.getElementById("pillAcute");
+    const pillScreening = document.getElementById("pillScreening");
+    const playRouteButton = document.getElementById("playRoute");
+
+    const routeMessages = {
+      all: {
+        title: "Vista general activa",
+        text: "Estas viendo el algoritmo completo. Selecciona una ruta para resaltar la sospecha aguda o el tamizaje habitual."
+      },
+      acute: {
+        title: "Ruta de sospecha aguda",
+        text: "Se resalta el trayecto cuando hay exposicion reciente o clinica sugestiva. Aqui una prueba negativa aislada no basta para descartar infeccion temprana."
+      },
+      screening: {
+        title: "Ruta de tamizaje habitual",
+        text: "Se resalta el trayecto para tamizaje inicial. Los resultados reactivos requieren confirmacion y los no reactivos deben interpretarse segun periodo ventana."
+      }
+    };
+
+    function setMode(mode) {
+      nodes.forEach((node) => {
+        const group = node.dataset.group;
+        const visible = mode === "all" || group === "common" || group === mode;
+        node.style.opacity = visible ? "1" : "0.28";
+        node.classList.toggle("active", visible && group !== "common");
+      });
+
+      pillAcute.className = "pill" + (mode === "acute" ? " active-red" : "");
+      pillScreening.className = "pill" + (mode === "screening" ? " active-green" : "");
+      statusTitle.textContent = routeMessages[mode].title;
+      statusText.textContent = routeMessages[mode].text;
+    }
+
+    document.querySelectorAll("[data-mode]").forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+
+    nodes.forEach((node) => {
+      const button = node.querySelector(".toggle");
+      button.addEventListener("click", () => {
+        const open = node.classList.toggle("open");
+        button.textContent = open ? "Ocultar detalles" : "Ver detalles";
+        statusTitle.textContent = "Bloque " + node.dataset.id + " seleccionado";
+        statusText.textContent = node.querySelector("p").textContent;
+      });
+
+      node.addEventListener("click", (event) => {
+        if (event.target.tagName === "BUTTON") return;
+        nodes.forEach((item) => item.classList.remove("active"));
+        node.classList.add("active");
+        statusTitle.textContent = "Bloque " + node.dataset.id + " en foco";
+        statusText.textContent = node.querySelector("p").textContent;
+      });
+    });
+
+    playRouteButton.addEventListener("click", async () => {
+      const sequence = ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"];
+      setMode("acute");
+      for (const id of sequence) {
+        const node = document.querySelector(`[data-id="${id}"]`);
+        nodes.forEach((item) => item.classList.remove("active"));
+        node.classList.add("active");
+        node.scrollIntoView({ behavior: "smooth", block: "center" });
+        statusTitle.textContent = "Recorriendo paso " + id;
+        statusText.textContent = node.querySelector("p").textContent;
+        await new Promise((resolve) => setTimeout(resolve, 950));
+      }
+      statusTitle.textContent = "Recorrido completado";
+      statusText.textContent = "Puedes cambiar a la ruta de tamizaje habitual o abrir los detalles de cualquier bloque.";
+    });
+
+    setMode("all");
+  </script>
+</body>
+</html>
