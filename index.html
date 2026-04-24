@@ -103,6 +103,12 @@
       transform: translateY(-2px);
     }
 
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
     .primary {
       background: var(--navy);
       color: #fff;
@@ -112,6 +118,12 @@
     .ghost {
       background: rgba(22, 33, 61, 0.08);
       color: var(--navy);
+    }
+
+    .ghost.active-filter {
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(22, 33, 61, 0.18);
     }
 
     .status {
@@ -168,6 +180,7 @@
       border: 3px solid transparent;
       position: relative;
       transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      cursor: pointer;
     }
 
     .node:hover,
@@ -179,6 +192,11 @@
     .node.active {
       border-color: var(--navy);
       box-shadow: 0 18px 40px rgba(22, 33, 61, 0.18);
+    }
+
+    .node.route-highlight {
+      border-color: rgba(22, 33, 61, 0.38);
+      box-shadow: 0 14px 34px rgba(24, 32, 51, 0.12);
     }
 
     .node-top {
@@ -237,6 +255,7 @@
       background: rgba(22, 33, 61, 0.08);
       color: var(--navy);
       padding: 10px 14px;
+      cursor: pointer;
     }
 
     .line {
@@ -464,10 +483,10 @@
     </section>
 
     <section class="toolbar" aria-label="Controles">
-      <button class="primary" id="playRoute">Recorrer algoritmo</button>
-      <button class="ghost" data-mode="all">Mostrar todo</button>
-      <button class="ghost" data-mode="acute">Ruta de sospecha aguda</button>
-      <button class="ghost" data-mode="screening">Ruta de tamizaje habitual</button>
+      <button class="primary" id="playRoute" type="button">Recorrer algoritmo</button>
+      <button class="ghost" data-mode="all" type="button" aria-pressed="true">Mostrar todo</button>
+      <button class="ghost" data-mode="acute" type="button" aria-pressed="false">Ruta de sospecha aguda</button>
+      <button class="ghost" data-mode="screening" type="button" aria-pressed="false">Ruta de tamizaje habitual</button>
     </section>
 
     <section class="status" aria-live="polite">
@@ -778,6 +797,17 @@
     const pillAcute = document.getElementById("pillAcute");
     const pillScreening = document.getElementById("pillScreening");
     const playRouteButton = document.getElementById("playRoute");
+    const modeButtons = [...document.querySelectorAll("[data-mode]")];
+    const defaultPlayLabel = "Recorrer algoritmo";
+    const routeSequences = {
+      all: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+      acute: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+      screening: ["1", "2", "3", "4", "5B", "6B", "7B", "8", "9"]
+    };
+    let currentMode = "all";
+    let selectedNodeId = null;
+    let isPlaying = false;
+    let playToken = 0;
 
     const routeMessages = {
       all: {
@@ -794,56 +824,115 @@
       }
     };
 
-    function setMode(mode) {
+    function updateToolbarState() {
+      modeButtons.forEach((button) => {
+        const active = button.dataset.mode === currentMode;
+        button.classList.toggle("active-filter", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      playRouteButton.textContent = isPlaying ? "Detener recorrido" : defaultPlayLabel;
+    }
+
+    function updateNodeStyles() {
       nodes.forEach((node) => {
         const group = node.dataset.group;
-        const visible = mode === "all" || group === "common" || group === mode;
+        const visible = currentMode === "all" || group === "common" || group === currentMode;
         node.style.opacity = visible ? "1" : "0.28";
-        node.classList.toggle("active", visible && group !== "common");
+        node.classList.toggle("route-highlight", currentMode !== "all" && group === currentMode);
+        node.classList.toggle("active", visible && node.dataset.id === selectedNodeId);
       });
+    }
 
+    function setMode(mode) {
+      currentMode = mode;
+      if (selectedNodeId) {
+        const selectedNode = document.querySelector(`[data-id="${selectedNodeId}"]`);
+        if (selectedNode && selectedNode.dataset.group !== "common" && selectedNode.dataset.group !== currentMode && currentMode !== "all") {
+          selectedNodeId = null;
+        }
+      }
+      updateNodeStyles();
+      updateToolbarState();
       pillAcute.className = "pill" + (mode === "acute" ? " active-red" : "");
       pillScreening.className = "pill" + (mode === "screening" ? " active-green" : "");
       statusTitle.textContent = routeMessages[mode].title;
       statusText.textContent = routeMessages[mode].text;
     }
 
-    document.querySelectorAll("[data-mode]").forEach((button) => {
-      button.addEventListener("click", () => setMode(button.dataset.mode));
+    function stopPlayback(message) {
+      if (!isPlaying) return;
+      isPlaying = false;
+      playToken += 1;
+      updateToolbarState();
+      if (message) {
+        statusTitle.textContent = "Recorrido detenido";
+        statusText.textContent = message;
+      }
+    }
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (isPlaying) {
+          stopPlayback();
+        }
+        setMode(button.dataset.mode);
+      });
     });
 
     nodes.forEach((node) => {
       const button = node.querySelector(".toggle");
-      button.addEventListener("click", () => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (isPlaying) {
+          stopPlayback();
+        }
         const open = node.classList.toggle("open");
         button.textContent = open ? "Ocultar detalles" : "Ver detalles";
+        selectedNodeId = node.dataset.id;
+        updateNodeStyles();
         statusTitle.textContent = "Bloque " + node.dataset.id + " seleccionado";
         statusText.textContent = node.querySelector("p").textContent;
       });
 
       node.addEventListener("click", (event) => {
         if (event.target.tagName === "BUTTON") return;
-        nodes.forEach((item) => item.classList.remove("active"));
-        node.classList.add("active");
+        if (isPlaying) {
+          stopPlayback();
+        }
+        selectedNodeId = node.dataset.id;
+        updateNodeStyles();
         statusTitle.textContent = "Bloque " + node.dataset.id + " en foco";
         statusText.textContent = node.querySelector("p").textContent;
       });
     });
 
     playRouteButton.addEventListener("click", async () => {
-      const sequence = ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"];
-      setMode("acute");
+      if (isPlaying) {
+        stopPlayback("Puedes seleccionar otra ruta o abrir los detalles de cualquier bloque.");
+        return;
+      }
+
+      isPlaying = true;
+      playToken += 1;
+      const localToken = playToken;
+      updateToolbarState();
+      const selectedRoute = currentMode === "all" ? "acute" : currentMode;
+      const sequence = routeSequences[selectedRoute];
+      setMode(selectedRoute);
       for (const id of sequence) {
+        if (localToken !== playToken) return;
         const node = document.querySelector(`[data-id="${id}"]`);
-        nodes.forEach((item) => item.classList.remove("active"));
-        node.classList.add("active");
+        selectedNodeId = id;
+        updateNodeStyles();
         node.scrollIntoView({ behavior: "smooth", block: "center" });
         statusTitle.textContent = "Recorriendo paso " + id;
         statusText.textContent = node.querySelector("p").textContent;
         await new Promise((resolve) => setTimeout(resolve, 950));
       }
+      isPlaying = false;
+      updateToolbarState();
       statusTitle.textContent = "Recorrido completado";
-      statusText.textContent = "Puedes cambiar a la ruta de tamizaje habitual o abrir los detalles de cualquier bloque.";
+      statusText.textContent = "Puedes cambiar de ruta, volver a reproducir o abrir los detalles de cualquier bloque.";
     });
 
     setMode("all");
