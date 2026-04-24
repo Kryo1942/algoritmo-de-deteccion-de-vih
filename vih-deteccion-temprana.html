@@ -3,145 +3,485 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detección Temprana de VIH</title>
+  <title>Protocolos Med - Plataforma de protocolos</title>
   <style>
     :root {
-      --bg: #eef2f7;
-      --ink: #182033;
-      --muted: #52607a;
-      --panel: #ffffff;
-      --navy: #16213d;
-      --blue: #cfe0ff;
-      --blue-stroke: #3b73ff;
-      --teal: #d5f5f0;
-      --teal-stroke: #20a08d;
-      --yellow: #fff3c0;
-      --yellow-stroke: #d79b09;
-      --green: #daf7dd;
-      --green-stroke: #25a14b;
-      --red: #ffd9d6;
-      --red-stroke: #e24b40;
-      --purple: #efdfff;
-      --purple-stroke: #9447e8;
-      --orange: #ffe7ca;
-      --orange-stroke: #f17a1c;
-      --shadow: 0 12px 30px rgba(24, 32, 51, 0.1);
-      --radius: 22px;
-      --line: #52607a;
+      --bg: #f4f0e8;
+      --bg-soft: #fbf8f3;
+      --ink: #172033;
+      --muted: #5f6d84;
+      --panel: rgba(255, 255, 255, 0.9);
+      --panel-strong: #ffffff;
+      --line: rgba(23, 32, 51, 0.12);
+      --navy: #10213c;
+      --navy-soft: #1f355c;
+      --gold: #df8d2f;
+      --red: #d95b52;
+      --green: #2b9d63;
+      --teal: #1998a3;
+      --purple: #7559d9;
+      --orange: #ef7b2d;
+      --blue-fill: #dbe8ff;
+      --blue-stroke: #3e73ff;
+      --teal-fill: #daf7f5;
+      --teal-stroke: #1998a3;
+      --yellow-fill: #fff3c8;
+      --yellow-stroke: #d7a21b;
+      --green-fill: #dcf8e4;
+      --green-stroke: #2b9d63;
+      --red-fill: #ffe0dc;
+      --red-stroke: #d95b52;
+      --purple-fill: #efe7ff;
+      --purple-stroke: #7559d9;
+      --orange-fill: #ffe8d0;
+      --orange-stroke: #ef7b2d;
+      --shadow-lg: 0 24px 60px rgba(16, 33, 60, 0.12);
+      --shadow-md: 0 14px 30px rgba(16, 33, 60, 0.1);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: "Avenir Next", "Segoe UI", sans-serif;
       color: var(--ink);
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(59, 115, 255, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(241, 122, 28, 0.12), transparent 18%),
-        linear-gradient(180deg, #f8fbff 0%, var(--bg) 55%, #e7edf6 100%);
+        radial-gradient(circle at top left, rgba(223, 141, 47, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(62, 115, 255, 0.16), transparent 24%),
+        linear-gradient(180deg, #fcfaf6 0%, var(--bg) 58%, #eee8de 100%);
     }
 
-    .page {
-      width: min(1180px, calc(100% - 32px));
-      margin: 28px auto 48px;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(23, 32, 51, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 51, 0.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, black 54%, transparent 100%);
     }
 
-    .hero {
-      background: var(--navy);
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: "Avenir Next Condensed", "Avenir Next", "Helvetica Neue", sans-serif;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: min(1440px, calc(100% - 28px));
+      margin: 18px auto;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 18px;
+      min-height: calc(100vh - 36px);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, rgba(16, 33, 60, 0.96), rgba(13, 25, 46, 0.98));
       color: #fff;
-      border-radius: 26px;
-      padding: 28px 32px;
-      box-shadow: var(--shadow);
-      position: relative;
+      border-radius: 34px;
+      padding: 24px 20px;
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      gap: 16px;
+      align-self: start;
+      position: sticky;
+      top: 18px;
+      max-height: calc(100vh - 36px);
       overflow: hidden;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 210px;
-      height: 210px;
-      right: -30px;
-      top: -60px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 177, 74, 0.45), rgba(255, 177, 74, 0));
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.3rem);
-      line-height: 1.06;
-      letter-spacing: -0.04em;
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #fff0d4, #f4b75c);
+      color: var(--navy);
+      font-size: 1.4rem;
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
 
-    .subtitle {
+    .brand small {
+      display: block;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .sidebar-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      padding: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    .search-label,
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .search-input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 14px 16px;
+      color: var(--ink);
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    }
+
+    .search-input:focus {
+      border-color: rgba(62, 115, 255, 0.55);
+      box-shadow: 0 0 0 4px rgba(62, 115, 255, 0.12);
+    }
+
+    .search-hint {
       margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.88rem;
+      line-height: 1.45;
     }
 
-    .toolbar {
+    .filter-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-chip {
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .filter-chip:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .filter-chip.active {
+      background: linear-gradient(135deg, #fff0d4, #f4b75c);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .protocol-list {
+      display: grid;
+      gap: 12px;
+      max-height: min(56vh, 760px);
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .protocol-card {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 14px;
+      text-align: left;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .protocol-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(244, 183, 92, 0.44);
+    }
+
+    .protocol-card.selected {
+      background: rgba(255, 240, 212, 0.12);
+      border-color: rgba(244, 183, 92, 0.54);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .protocol-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .protocol-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-pill);
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .mini-tag.category {
+      background: rgba(62, 115, 255, 0.2);
+      color: #cfe0ff;
+    }
+
+    .mini-tag.status {
+      background: rgba(244, 183, 92, 0.18);
+      color: #ffe1ab;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      padding: 0 4px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .workspace {
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.64);
+      border-radius: 34px;
+      padding: 22px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(14px);
+    }
+
+    .workspace-top {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 243, 235, 0.9));
+      border-radius: 28px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow-md);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--navy-soft);
+      font-weight: 800;
+    }
+
+    .workspace-top h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .workspace-top p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      max-width: 70ch;
+    }
+
+    .hero-summary {
+      min-width: 230px;
+      background: var(--navy);
+      color: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 16px 34px rgba(16, 33, 60, 0.18);
+    }
+
+    .hero-summary strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-summary span,
+    .hero-summary small {
+      color: rgba(255, 255, 255, 0.74);
+      display: block;
+      line-height: 1.45;
+    }
+
+    .viewer {
+      min-height: 64vh;
+    }
+
+    .viewer-shell {
+      display: grid;
+      gap: 18px;
+    }
+
+    .meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-chip {
+      border-radius: var(--radius-pill);
+      padding: 9px 14px;
+      background: rgba(16, 33, 60, 0.08);
+      color: var(--navy);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .overview-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 245, 237, 0.92));
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--line);
+    }
+
+    .overview-card span {
+      display: block;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .overview-card strong {
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .module-card {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(23, 32, 51, 0.09);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .module-card h2 {
+      font-size: clamp(1.55rem, 2vw, 2rem);
+      margin-bottom: 8px;
+    }
+
+    .module-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .algorithm-toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin: 22px 0 28px;
+      margin-top: 16px;
     }
 
-    button {
+    .toolbar-button {
       border: none;
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       padding: 12px 18px;
-      font: inherit;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
 
-    button:hover {
-      transform: translateY(-2px);
+    .toolbar-button:hover {
+      transform: translateY(-1px);
     }
 
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
+    .toolbar-button:disabled {
+      opacity: 0.65;
       transform: none;
+      cursor: not-allowed;
     }
 
-    .primary {
+    .toolbar-button.primary {
       background: var(--navy);
       color: #fff;
-      box-shadow: 0 10px 24px rgba(22, 33, 61, 0.22);
+      box-shadow: 0 12px 22px rgba(16, 33, 60, 0.16);
     }
 
-    .ghost {
-      background: rgba(22, 33, 61, 0.08);
+    .toolbar-button.secondary {
+      background: rgba(16, 33, 60, 0.08);
       color: var(--navy);
     }
 
-    .ghost.active-filter {
+    .toolbar-button.secondary.active {
       background: var(--navy);
       color: #fff;
-      box-shadow: 0 10px 24px rgba(22, 33, 61, 0.18);
+      box-shadow: 0 12px 22px rgba(16, 33, 60, 0.14);
     }
 
-    .status {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(82, 96, 122, 0.18);
-      border-radius: 18px;
-      padding: 18px 20px;
-      box-shadow: var(--shadow);
+    .status-card {
+      margin-top: 16px;
       display: grid;
-      gap: 10px;
-      margin-bottom: 26px;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.74);
+      border-radius: 24px;
+      padding: 18px;
+      border: 1px solid var(--line);
     }
 
-    .status strong {
-      font-size: 1.05rem;
+    .status-card strong {
+      font-size: 1.06rem;
     }
 
-    .path-pills {
+    .status-card p {
+      margin: 0;
+    }
+
+    .pill-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -149,124 +489,38 @@
 
     .pill {
       padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(82, 96, 122, 0.12);
+      border-radius: var(--radius-pill);
+      background: rgba(16, 33, 60, 0.08);
       color: var(--ink);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .pill.active-red {
-      background: rgba(226, 75, 64, 0.15);
-      color: #b6261d;
+      background: rgba(217, 91, 82, 0.16);
+      color: #a3352d;
     }
 
     .pill.active-green {
-      background: rgba(37, 161, 75, 0.15);
-      color: #1a7c39;
+      background: rgba(43, 157, 99, 0.16);
+      color: #196b42;
     }
 
-    .diagram {
+    .diagram-stack {
       display: grid;
       gap: 16px;
+      margin-top: 18px;
     }
 
-    .node {
-      width: min(780px, 100%);
-      margin: 0 auto;
-      background: var(--panel);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      box-shadow: var(--shadow);
-      border: 3px solid transparent;
-      position: relative;
-      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-      cursor: pointer;
-    }
-
-    .node:hover,
-    .node:focus-within {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 36px rgba(24, 32, 51, 0.14);
-    }
-
-    .node.active {
-      border-color: var(--navy);
-      box-shadow: 0 18px 40px rgba(22, 33, 61, 0.18);
-    }
-
-    .node.route-highlight {
-      border-color: rgba(22, 33, 61, 0.38);
-      box-shadow: 0 14px 34px rgba(24, 32, 51, 0.12);
-    }
-
-    .node-top {
-      display: flex;
-      align-items: start;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .node h2 {
-      margin: 0;
-      font-size: clamp(1.12rem, 2vw, 1.45rem);
-      line-height: 1.2;
-    }
-
-    .node p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .node .tag {
-      white-space: nowrap;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.6);
-    }
-
-    .node .extra {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(82, 96, 122, 0.16);
-      display: none;
-      color: var(--ink);
-    }
-
-    .node.open .extra {
-      display: block;
-    }
-
-    .node ul {
-      margin: 10px 0 0 18px;
-      padding: 0;
-      color: var(--muted);
-    }
-
-    .node li + li {
-      margin-top: 6px;
-    }
-
-    .node button.toggle {
-      margin-top: 14px;
-      background: rgba(22, 33, 61, 0.08);
-      color: var(--navy);
-      padding: 10px 14px;
-      cursor: pointer;
-    }
-
-    .line {
+    .connector {
       width: 4px;
       height: 24px;
       margin: 0 auto;
-      background: linear-gradient(180deg, rgba(82, 96, 122, 0.45), var(--line));
+      background: linear-gradient(180deg, rgba(95, 109, 132, 0.45), rgba(95, 109, 132, 0.9));
       position: relative;
+      border-radius: 99px;
     }
 
-    .line::after {
+    .connector::after {
       content: "";
       position: absolute;
       bottom: -3px;
@@ -274,11 +528,131 @@
       transform: translateX(-50%);
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-top: 12px solid var(--line);
+      border-top: 12px solid rgba(95, 109, 132, 0.95);
     }
 
-    .decision {
-      width: min(980px, 100%);
+    .node {
+      width: min(840px, 100%);
+      margin: 0 auto;
+      border-radius: 24px;
+      padding: 18px 20px;
+      border: 3px solid transparent;
+      box-shadow: var(--shadow-md);
+      background: #fff;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+      cursor: pointer;
+    }
+
+    .node:hover {
+      transform: translateY(-2px);
+    }
+
+    .node.active {
+      border-color: var(--navy);
+      box-shadow: 0 18px 36px rgba(16, 33, 60, 0.16);
+    }
+
+    .node.route-highlight {
+      border-color: rgba(16, 33, 60, 0.28);
+    }
+
+    .node-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .node h3 {
+      font-size: clamp(1.12rem, 1.8vw, 1.4rem);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .node .badge {
+      border-radius: var(--radius-pill);
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.62);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .node .toggle {
+      margin-top: 14px;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 10px 14px;
+      background: rgba(16, 33, 60, 0.08);
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .node .extra {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(95, 109, 132, 0.16);
+    }
+
+    .node.open .extra {
+      display: block;
+    }
+
+    .node .extra ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .node .extra li + li {
+      margin-top: 6px;
+    }
+
+    .node--blue {
+      background: linear-gradient(180deg, var(--blue-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--blue-stroke);
+    }
+
+    .node--teal {
+      background: linear-gradient(180deg, var(--teal-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--teal-stroke);
+    }
+
+    .node--yellow {
+      background: linear-gradient(180deg, var(--yellow-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--yellow-stroke);
+    }
+
+    .node--green {
+      background: linear-gradient(180deg, var(--green-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--green-stroke);
+    }
+
+    .node--red {
+      background: linear-gradient(180deg, var(--red-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--red-stroke);
+    }
+
+    .node--purple {
+      background: linear-gradient(180deg, var(--purple-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--purple-stroke);
+    }
+
+    .node--orange {
+      background: linear-gradient(180deg, var(--orange-fill), rgba(255, 255, 255, 0.94));
+      border-color: var(--orange-stroke);
+    }
+
+    .branch-grid {
+      width: min(1080px, 100%);
       margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -288,46 +662,47 @@
 
     .branch-label {
       display: inline-block;
-      padding: 7px 12px;
-      border-radius: 999px;
       color: #fff;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
       font-size: 0.84rem;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 10px;
     }
 
     .branch-label.red {
-      background: var(--red-stroke);
+      background: var(--red);
     }
 
     .branch-label.green {
-      background: var(--green-stroke);
+      background: var(--green);
     }
 
-    .bridge {
-      width: min(980px, 100%);
+    .merge-line {
+      width: min(1080px, 100%);
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 120px 1fr;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .bridge .bar {
+    .merge-line .bar {
       height: 4px;
-      background: var(--line);
-      opacity: 0.8;
+      background: rgba(95, 109, 132, 0.84);
+      border-radius: 99px;
     }
 
-    .bridge .down {
-      position: relative;
-      height: 40px;
+    .merge-line .down {
       width: 4px;
+      height: 42px;
       margin: 0 auto;
-      background: var(--line);
+      position: relative;
+      background: rgba(95, 109, 132, 0.84);
+      border-radius: 99px;
     }
 
-    .bridge .down::after {
+    .merge-line .down::after {
       content: "";
       position: absolute;
       bottom: -3px;
@@ -335,130 +710,265 @@
       transform: translateX(-50%);
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-top: 12px solid var(--line);
+      border-top: 12px solid rgba(95, 109, 132, 0.95);
     }
 
-    .alert {
-      margin: 28px auto 0;
-      width: min(980px, 100%);
-      background: #a81f1c;
+    .alert-banner {
+      background: linear-gradient(135deg, #8f1a1d, #b93131);
       color: #fff;
-      border-radius: 22px;
-      padding: 20px 24px;
-      box-shadow: var(--shadow);
+      border-radius: 24px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow-md);
+      width: min(1080px, 100%);
+      margin: 0 auto;
     }
 
-    .alert h3 {
-      margin: 0 0 8px;
-      font-size: 1.4rem;
+    .alert-banner h3 {
+      margin-bottom: 8px;
+      font-size: 1.38rem;
     }
 
-    .cards {
-      margin-top: 28px;
+    .alert-banner p {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .test-grid,
+    .reference-grid,
+    .template-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 16px;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.82);
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      border: 3px solid transparent;
+    .test-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    .card h4 {
-      margin: 0 0 8px;
-      font-size: 1.05rem;
+    .test-card,
+    .info-card,
+    .template-section,
+    .template-side-card,
+    .empty-state {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(23, 32, 51, 0.09);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
     }
 
-    .card p {
+    .test-card h4,
+    .info-card h3,
+    .template-section h3,
+    .template-side-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .test-card p,
+    .info-card p,
+    .template-section p,
+    .template-side-card p {
       margin: 0;
+      line-height: 1.6;
       color: var(--muted);
-      line-height: 1.45;
     }
 
-    .card.blue { border-color: var(--blue-stroke); }
-    .card.green { border-color: var(--green-stroke); }
-    .card.purple { border-color: var(--purple-stroke); }
-    .card.red { border-color: var(--red-stroke); }
-
-    .footer-grid {
-      margin-top: 24px;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 18px;
+    .test-card.blue {
+      border-color: rgba(62, 115, 255, 0.4);
     }
 
-    .info-box {
-      background: rgba(255, 255, 255, 0.82);
-      border-radius: 22px;
-      padding: 20px 22px;
-      box-shadow: var(--shadow);
-      border: 2px solid rgba(82, 96, 122, 0.18);
+    .test-card.green {
+      border-color: rgba(43, 157, 99, 0.4);
     }
 
-    .info-box h3 {
-      margin: 0 0 10px;
-      font-size: 1.5rem;
+    .test-card.purple {
+      border-color: rgba(117, 89, 217, 0.42);
     }
 
-    .info-box ol,
-    .info-box p {
+    .test-card.red {
+      border-color: rgba(217, 91, 82, 0.42);
+    }
+
+    .reference-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .info-card ol,
+    .info-card ul,
+    .template-side-card ul {
       margin: 0;
+      padding-left: 18px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    .info-box li + li {
+    .info-card li + li,
+    .template-side-card li + li {
       margin-top: 6px;
     }
 
-    .blue-node { background: linear-gradient(180deg, rgba(207, 224, 255, 0.9), rgba(255, 255, 255, 0.92)); border-color: var(--blue-stroke); }
-    .teal-node { background: linear-gradient(180deg, rgba(213, 245, 240, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--teal-stroke); }
-    .yellow-node { background: linear-gradient(180deg, rgba(255, 243, 192, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--yellow-stroke); }
-    .green-node { background: linear-gradient(180deg, rgba(218, 247, 221, 0.92), rgba(255, 255, 255, 0.92)); border-color: var(--green-stroke); }
-    .red-node { background: linear-gradient(180deg, rgba(255, 217, 214, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--red-stroke); }
-    .purple-node { background: linear-gradient(180deg, rgba(239, 223, 255, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--purple-stroke); }
-    .orange-node { background: linear-gradient(180deg, rgba(255, 231, 202, 0.94), rgba(255, 255, 255, 0.92)); border-color: var(--orange-stroke); }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
+    .template-layout {
+      display: grid;
+      gap: 18px;
     }
 
-    @media (max-width: 900px) {
-      .decision,
-      .cards,
-      .footer-grid,
-      .bridge {
+    .template-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+      background: linear-gradient(135deg, rgba(16, 33, 60, 0.96), rgba(31, 53, 92, 0.94));
+      color: #fff;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .template-hero p {
+      color: rgba(255, 255, 255, 0.78);
+      margin-top: 8px;
+    }
+
+    .template-badge {
+      align-self: start;
+      background: rgba(255, 240, 212, 0.16);
+      color: #ffe1ab;
+      border-radius: var(--radius-pill);
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 0.86rem;
+    }
+
+    .template-grid {
+      grid-template-columns: minmax(0, 1.25fr) 340px;
+      align-items: start;
+    }
+
+    .template-main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .template-sections {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .template-side {
+      display: grid;
+      gap: 16px;
+      align-self: start;
+      position: sticky;
+      top: 22px;
+    }
+
+    .template-section small,
+    .template-side-card small {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--navy-soft);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+    }
+
+    .deliverable-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .deliverable {
+      border-radius: var(--radius-pill);
+      padding: 8px 12px;
+      background: rgba(16, 33, 60, 0.08);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 42px 28px;
+    }
+
+    .empty-state h2 {
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+
+    .empty-state p {
+      margin: 0 auto;
+      max-width: 56ch;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell {
         grid-template-columns: 1fr;
       }
 
-      .bridge .bar {
-        display: none;
+      .sidebar {
+        position: static;
+        max-height: none;
       }
 
-      .bridge .down {
-        height: 24px;
+      .workspace-top,
+      .template-grid,
+      .reference-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .template-side {
+        position: static;
+      }
+
+      .overview-grid,
+      .test-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 640px) {
-      .page {
-        width: min(100% - 20px, 1180px);
-        margin-top: 14px;
+    @media (max-width: 900px) {
+      .branch-grid,
+      .template-sections,
+      .test-grid,
+      .overview-grid {
+        grid-template-columns: 1fr;
       }
 
-      .hero {
-        padding: 22px 20px;
+      .merge-line {
+        grid-template-columns: 1fr;
+      }
+
+      .merge-line .bar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell {
+        width: min(100% - 16px, 1440px);
+        margin: 8px auto 18px;
+      }
+
+      .sidebar,
+      .workspace {
+        padding: 16px;
+        border-radius: 26px;
+      }
+
+      .workspace-top,
+      .module-card,
+      .template-hero,
+      .template-section,
+      .template-side-card,
+      .info-card,
+      .test-card {
+        border-radius: 22px;
       }
 
       .node {
@@ -468,474 +978,1000 @@
       .node-top {
         flex-direction: column;
       }
-
-      .status {
-        padding: 16px;
-      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="hero">
-      <h1>Algoritmo interactivo para detección temprana de VIH</h1>
-      <p class="subtitle">Versión educativa basada en el artículo de Medina-De la Garza y colaboradores sobre infección aguda, pruebas discordantes y consejería diagnóstica.</p>
-    </section>
-
-    <section class="toolbar" aria-label="Controles">
-      <button class="primary" id="playRoute" type="button">Recorrer algoritmo</button>
-      <button class="ghost" data-mode="all" type="button" aria-pressed="true">Mostrar todo</button>
-      <button class="ghost" data-mode="acute" type="button" aria-pressed="false">Ruta de sospecha aguda</button>
-      <button class="ghost" data-mode="screening" type="button" aria-pressed="false">Ruta de tamizaje habitual</button>
-    </section>
-
-    <section class="status" aria-live="polite">
-      <strong id="statusTitle">Vista general activa</strong>
-      <div id="statusText">Haz clic en cualquier bloque para ampliar la explicación. También puedes resaltar una ruta completa desde los botones superiores.</div>
-      <div class="path-pills">
-        <span class="pill">Entrada</span>
-        <span class="pill">Solicitud</span>
-        <span class="pill">Consejería</span>
-        <span class="pill">Decisión clínica</span>
-        <span class="pill" id="pillAcute">Sospecha aguda</span>
-        <span class="pill" id="pillScreening">Tamizaje habitual</span>
-        <span class="pill">Confirmación</span>
-        <span class="pill">Seguimiento</span>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <h2>Protocolos Med</h2>
+          <small>Plataforma para búsqueda, consulta y toma de decisiones</small>
+        </div>
       </div>
-    </section>
 
-    <section class="diagram" id="diagram">
-      <article class="node blue-node" data-id="1" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>1. Entrada al algoritmo</h2>
-            <p>Persona con exposición de riesgo, síntomas compatibles, embarazo, infecciones de transmisión sexual (ITS), control preventivo o solicitud voluntaria de la prueba.</p>
-          </div>
-          <span class="tag">Inicio</span>
-        </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Idea clave:</strong> el algoritmo puede iniciar por síntomas sugestivos o por tamizaje preventivo.
-          <ul>
-            <li>Incluye personas sintomáticas y asintomáticas.</li>
-            <li>También aplica en campañas comunitarias o control prenatal.</li>
-          </ul>
-        </div>
-      </article>
+      <section class="sidebar-card">
+        <label class="search-label" for="protocolSearch">
+          <span>Buscar protocolos</span>
+        </label>
+        <input
+          id="protocolSearch"
+          class="search-input"
+          type="search"
+          placeholder="VIH, cohorte, revisión sistemática..."
+          autocomplete="off"
+        >
+        <p class="search-hint">Busca por nombre, categoría o palabra clave. La biblioteca mezcla protocolos clínicos y plantillas de investigación.</p>
+      </section>
 
-      <div class="line" aria-hidden="true"></div>
-
-      <article class="node blue-node" data-id="2" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>2. Quién solicita la prueba</h2>
-            <p>La prueba puede solicitarla la persona usuaria o indicarla personal médico, salud pública, banco de sangre, control prenatal o programas de VIH e ITS.</p>
-          </div>
-          <span class="tag">Solicitud</span>
+      <section class="sidebar-card">
+        <div class="section-heading">
+          <span>Filtros</span>
+          <span id="resultCount">0 resultados</span>
         </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Importa porque:</strong> define el contexto de atención y la oportunidad del diagnóstico.
-          <ul>
-            <li>El acceso puede ser por decisión personal o por indicación clínica.</li>
-            <li>La solicitud no sustituye el consentimiento informado.</li>
-          </ul>
-        </div>
-      </article>
+        <div class="filter-wrap" id="filterWrap"></div>
+      </section>
 
-      <div class="line" aria-hidden="true"></div>
-
-      <article class="node teal-node" data-id="3" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>3. Consentimiento informado y consejería antes de la prueba</h2>
-            <p>Antes de tomar la muestra, explicar el objetivo de la prueba, la confidencialidad, la voluntariedad, el período de ventana y el posible significado de cada resultado.</p>
-          </div>
-          <span class="tag">Consejería</span>
+      <section class="sidebar-card">
+        <div class="section-heading">
+          <span>Biblioteca</span>
+          <span id="catalogCount"></span>
         </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Puntos a cubrir:</strong>
-          <ul>
-            <li>Qué significa un resultado reactivo y uno no reactivo.</li>
-            <li>Por qué una prueba negativa temprana puede no descartar una infección reciente.</li>
-            <li>Qué es el período de ventana y qué pasos siguen después.</li>
-          </ul>
-        </div>
-      </article>
+        <div class="protocol-list" id="protocolList"></div>
+      </section>
 
-      <div class="line" aria-hidden="true"></div>
+      <div class="sidebar-foot">
+        Base inicial para organizar protocolos de decisión clínica y diferentes tipos de protocolos de investigación en una sola plataforma.
+      </div>
+    </aside>
 
-      <article class="node yellow-node" data-id="4" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>4. Decisión clínica inicial</h2>
-            <p>Valorar si hubo exposición reciente o síntomas compatibles con infección aguda por VIH. Si no los hay, seguir la ruta de tamizaje habitual.</p>
-          </div>
-          <span class="tag">Decisión</span>
-        </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Aquí se abren dos rutas:</strong>
-          <ul>
-            <li><strong>Sospecha aguda:</strong> prioriza pruebas útiles para detectar infección reciente.</li>
-            <li><strong>Tamizaje habitual:</strong> sigue la ruta usual de cribado inicial.</li>
-          </ul>
-        </div>
-      </article>
-
-      <section class="decision">
+    <section class="workspace">
+      <header class="workspace-top">
         <div>
-          <span class="branch-label red">Si: sospecha de VIH agudo</span>
-          <article class="node red-node" data-id="5A" data-group="acute">
-            <div class="node-top">
-              <div>
-                <h2>5A. Sospecha de infección aguda</h2>
-                <p>No descartar VIH con una sola prueba rápida negativa. En los primeros días o semanas puede no haber anticuerpos detectables.</p>
-              </div>
-              <span class="tag">Ruta roja</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>Mensaje crítico:</strong>
-              <ul>
-                <li>Una prueba rápida de anticuerpos o un Western blot negativos no excluyen infección aguda si la exposición fue reciente.</li>
-                <li>Si la sospecha clínica sigue alta, se debe continuar con pruebas más sensibles.</li>
-              </ul>
-            </div>
-          </article>
-          <div class="line" aria-hidden="true"></div>
-          <article class="node red-node" data-id="6A" data-group="acute">
-            <div class="node-top">
-              <div>
-                <h2>6A. Prueba de cuarta generación</h2>
-                <p>Solicitar una prueba de cuarta generación. Detecta el antígeno p24 y anticuerpos contra VIH-1 y VIH-2, por lo que acorta el período de ventana.</p>
-              </div>
-              <span class="tag">Prueba</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>Ventaja:</strong> acorta el período de ventana frente a pruebas solo de anticuerpos.
-              <ul>
-                <li>Es más útil que una prueba rápida simple en infección muy temprana.</li>
-                <li>El antígeno p24 puede aparecer antes de que los anticuerpos sean detectables.</li>
-              </ul>
-            </div>
-          </article>
-          <div class="line" aria-hidden="true"></div>
-          <article class="node yellow-node" data-id="7A" data-group="acute">
-            <div class="node-top">
-              <div>
-                <h2>7A. Si hay resultados discordantes o la sospecha sigue alta</h2>
-                <p>Solicitar una prueba molecular, como NAT, PCR o carga viral. Estas pruebas buscan el ARN del VIH y ayudan a confirmar infección aguda.</p>
-              </div>
-              <span class="tag">Escalamiento</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>Cuando escalar:</strong>
-              <ul>
-                <li>Si una prueba de cuarta generación sale reactiva, pero otras pruebas son negativas.</li>
-                <li>Si hay síntomas compatibles con seroconversión.</li>
-                <li>Si la exposición reciente mantiene una alta probabilidad clínica.</li>
-              </ul>
-            </div>
-          </article>
+          <p class="eyebrow">Plataforma de protocolos</p>
+          <h1 id="workspaceTitle">Biblioteca de protocolos</h1>
+          <p id="workspaceSubtitle">Explora, filtra y compara protocolos clínicos e investigación dentro de una misma interfaz.</p>
         </div>
-
-        <div>
-          <span class="branch-label green">No: tamizaje habitual</span>
-          <article class="node green-node" data-id="5B" data-group="screening">
-            <div class="node-top">
-              <div>
-                <h2>5B. Tamizaje inicial</h2>
-                <p>Realizar una prueba rápida de VIH o una prueba de cuarta generación, según disponibilidad y el algoritmo nacional.</p>
-              </div>
-              <span class="tag">Ruta verde</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>Objetivo:</strong>
-              <ul>
-                <li>Identificar resultados no reactivos y reactivos en población general o en tamizaje preventivo.</li>
-                <li>Elegir la prueba según normas locales y acceso del servicio.</li>
-              </ul>
-            </div>
-          </article>
-          <div class="line" aria-hidden="true"></div>
-          <article class="node green-node" data-id="6B" data-group="screening">
-            <div class="node-top">
-              <div>
-                <h2>6B. Resultado no reactivo</h2>
-                <p>Si el resultado es no reactivo, informarlo con claridad. Si la exposición fue reciente, repetir la prueba después del período de ventana y reforzar prevención.</p>
-              </div>
-              <span class="tag">No reactivo</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>No siempre cierra el caso:</strong>
-              <ul>
-                <li>Si la exposición fue reciente, aún puede requerirse repetición.</li>
-                <li>Se aprovecha para reforzar reducción de riesgo y seguimiento.</li>
-              </ul>
-            </div>
-          </article>
-          <div class="line" aria-hidden="true"></div>
-          <article class="node yellow-node" data-id="7B" data-group="screening">
-            <div class="node-top">
-              <div>
-                <h2>7B. Resultado reactivo</h2>
-                <p>Confirmar con una segunda prueba diferente o con el esquema indicado por el país. Entregar el resultado con consejería.</p>
-              </div>
-              <span class="tag">Reactivo</span>
-            </div>
-            <button class="toggle" type="button">Ver detalles</button>
-            <div class="extra">
-              <strong>Punto clave:</strong>
-              <ul>
-                <li>Un tamizaje reactivo no es el cierre definitivo sin confirmación.</li>
-                <li>La consejería reduce ansiedad y aclara los siguientes pasos.</li>
-              </ul>
-            </div>
-          </article>
+        <div class="hero-summary">
+          <strong id="selectedCategory">Selecciona un protocolo</strong>
+          <span id="selectedStatus">Biblioteca inicial</span>
+          <small id="selectedAudience">Diseñada para consulta rápida y navegación por módulos.</small>
         </div>
-      </section>
+      </header>
 
-      <section class="bridge" aria-hidden="true">
-        <div class="bar"></div>
-        <div class="down"></div>
-        <div class="bar"></div>
-      </section>
-
-      <article class="node purple-node" data-id="8" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>8. Confirmación diagnóstica y consejería después de la prueba</h2>
-            <p>Registrar el resultado y explicarlo con lenguaje claro. Aclarar confidencialidad, pasos siguientes y qué hacer si las pruebas no coinciden entre sí.</p>
-          </div>
-          <span class="tag">Confirmación</span>
-        </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Incluye:</strong>
-          <ul>
-            <li>Interpretación del resultado en lenguaje claro.</li>
-            <li>Orientación sobre notificación, apoyo y continuidad de atención.</li>
-            <li>Manejo especial si existen pruebas conflictivas o indeterminadas.</li>
-          </ul>
-        </div>
-      </article>
-
-      <div class="line" aria-hidden="true"></div>
-
-      <article class="node orange-node" data-id="9" data-group="common">
-        <div class="node-top">
-          <div>
-            <h2>9. Seguimiento y vinculación</h2>
-            <p>Si el diagnóstico se confirma, vincular de inmediato a atención, valorar tratamiento antirretroviral (TAR), solicitar carga viral y conteo basal de CD4, tamizar otras ITS y ofrecer apoyo psicosocial. Si el resultado es negativo pero hubo riesgo reciente, repetir la prueba según el período de ventana.</p>
-          </div>
-          <span class="tag">Seguimiento</span>
-        </div>
-        <button class="toggle" type="button">Ver detalles</button>
-        <div class="extra">
-          <strong>Meta final:</strong>
-          <ul>
-            <li>No quedarse solo en el resultado del laboratorio.</li>
-            <li>El conteo de CD4 ayuda a valorar el estado inmunológico inicial.</li>
-            <li>Conectar a tratamiento, prevención y acompañamiento oportunos.</li>
-          </ul>
-        </div>
-      </article>
-
-      <section class="alert">
-        <h3>Alerta clave</h3>
-        <p>Una prueba rápida de anticuerpos o un Western blot negativos no descartan infección aguda si hubo exposición reciente o síntomas compatibles. Si la sospecha clínica es alta, se debe pedir una prueba de cuarta generación y, si hace falta, una prueba molecular.</p>
-      </section>
-    </section>
-
-    <section class="cards" aria-label="Tipos de pruebas y siglas clave">
-      <article class="card blue">
-        <h4>Prueba rápida de anticuerpos</h4>
-        <p>Detecta defensas contra el VIH. Es útil para tamizaje, pero puede salir negativa al inicio de la infección.</p>
-      </article>
-      <article class="card green">
-        <h4>Prueba de cuarta generación</h4>
-        <p>Detecta el antígeno p24 y anticuerpos. Reduce el período de ventana y ayuda más en infección reciente.</p>
-      </article>
-      <article class="card purple">
-        <h4>Prueba molecular: NAT, PCR o carga viral</h4>
-        <p>NAT y PCR son pruebas moleculares que detectan el ARN del VIH, es decir, material genético del virus. Son claves cuando hay sospecha aguda o resultados discordantes.</p>
-      </article>
-      <article class="card red">
-        <h4>Western blot</h4>
-        <p>Técnica confirmatoria antigua. No debe usarse sola para descartar infección aguda por el riesgo de falsos negativos tempranos.</p>
-      </article>
-    </section>
-
-    <section class="footer-grid">
-      <article class="info-box">
-        <h3>Equipo</h3>
-        <ol>
-          <li>Jorge Antonio Gutiérrez Martínez</li>
-          <li>Jonathan Eliud Lizcano Jinez</li>
-          <li>Jesús Gael García Guadarrama</li>
-          <li>Stephany Monserrat Fuantos Pena</li>
-        </ol>
-      </article>
-      <article class="info-box">
-        <h3>Artículo base / cita</h3>
-        <p>Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. <em>Near misdiagnosis of acute HIV-infection with ELISA-Western Blot scheme: Time for mindset change</em>. IDCases. 2021;25:e01168. doi:10.1016/j.idcr.2021.e01168.</p>
-        <p>Idea central del artículo: en la infección aguda puede haber resultados discordantes. Por eso la sospecha clínica, la consejería y el uso de pruebas de cuarta generación o moleculares son claves para no retrasar el diagnóstico.</p>
-      </article>
+      <div id="viewerContent" class="viewer"></div>
     </section>
   </main>
 
   <script>
-    const nodes = [...document.querySelectorAll(".node")];
-    const statusTitle = document.getElementById("statusTitle");
-    const statusText = document.getElementById("statusText");
-    const pillAcute = document.getElementById("pillAcute");
-    const pillScreening = document.getElementById("pillScreening");
-    const playRouteButton = document.getElementById("playRoute");
-    const modeButtons = [...document.querySelectorAll("[data-mode]")];
-    const defaultPlayLabel = "Recorrer algoritmo";
-    const routeSequences = {
-      all: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
-      acute: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
-      screening: ["1", "2", "3", "4", "5B", "6B", "7B", "8", "9"]
-    };
-    let currentMode = "all";
-    let selectedNodeId = null;
-    let isPlaying = false;
-    let playToken = 0;
-
-    const routeMessages = {
-      all: {
-        title: "Vista general activa",
-        text: "Estás viendo el algoritmo completo. Selecciona una ruta para resaltar la sospecha aguda o el tamizaje habitual."
+    const protocols = [
+      {
+        id: "vih",
+        kind: "algorithm",
+        title: "Detección temprana de VIH",
+        category: "Clínico",
+        status: "Basado en artículo",
+        audience: "Toma de decisiones clínicas",
+        summary: "Algoritmo interactivo para decidir qué hacer ante exposición reciente, pruebas discordantes y seguimiento diagnóstico.",
+        subtitle: "Versión interactiva basada en el artículo de Medina-De la Garza y colaboradores sobre casi diagnóstico erróneo en infección aguda.",
+        tags: ["VIH", "infección aguda", "tamizaje", "consejería", "diagnóstico"],
+        quickFacts: [
+          { label: "Enfoque", value: "Sospecha clínica + pruebas" },
+          { label: "Punto crítico", value: "Un negativo aislado no basta" },
+          { label: "Prueba clave", value: "Cuarta generación" },
+          { label: "Escalamiento", value: "NAT, PCR o carga viral" }
+        ],
+        routeMessages: {
+          all: {
+            title: "Vista general activa",
+            text: "Estás viendo el algoritmo completo. Puedes elegir una ruta específica o reproducir el recorrido paso a paso."
+          },
+          acute: {
+            title: "Ruta de sospecha aguda",
+            text: "Aquí la clínica pesa mucho. Una prueba rápida o un Western blot negativos no descartan infección aguda si la exposición fue reciente."
+          },
+          screening: {
+            title: "Ruta de tamizaje habitual",
+            text: "Esta ruta sirve para cribado inicial. Los resultados reactivos requieren confirmación y los no reactivos deben interpretarse con el período de ventana."
+          }
+        },
+        commonNodes: [
+          {
+            id: "1",
+            group: "common",
+            tone: "blue",
+            badge: "Inicio",
+            title: "1. Entrada al algoritmo",
+            text: "Persona con exposición de riesgo, síntomas compatibles, embarazo, infecciones de transmisión sexual (ITS), control preventivo o solicitud voluntaria de la prueba.",
+            details: [
+              "Puede iniciar tanto por sospecha clínica como por tamizaje preventivo.",
+              "Incluye personas sintomáticas y asintomáticas."
+            ]
+          },
+          {
+            id: "2",
+            group: "common",
+            tone: "blue",
+            badge: "Solicitud",
+            title: "2. Quién solicita la prueba",
+            text: "La prueba puede solicitarla la persona usuaria o indicarla personal médico, salud pública, banco de sangre, control prenatal o programas de VIH e ITS.",
+            details: [
+              "El acceso puede ser por decisión personal o por indicación clínica.",
+              "La solicitud no sustituye el consentimiento informado."
+            ]
+          },
+          {
+            id: "3",
+            group: "common",
+            tone: "teal",
+            badge: "Consejería",
+            title: "3. Consentimiento informado y consejería antes de la prueba",
+            text: "Antes de tomar la muestra, explicar el objetivo de la prueba, la confidencialidad, la voluntariedad, el período de ventana y el posible significado de cada resultado.",
+            details: [
+              "Explicar qué significa un resultado reactivo y uno no reactivo.",
+              "Dejar claro que una prueba negativa temprana puede no descartar infección reciente."
+            ]
+          },
+          {
+            id: "4",
+            group: "common",
+            tone: "yellow",
+            badge: "Decisión",
+            title: "4. Decisión clínica inicial",
+            text: "Valorar si hubo exposición reciente o síntomas compatibles con infección aguda por VIH. Si no los hay, seguir la ruta de tamizaje habitual.",
+            details: [
+              "La sospecha aguda prioriza pruebas útiles en infección reciente.",
+              "Si no hay sospecha aguda, seguir la ruta habitual de tamizaje."
+            ]
+          }
+        ],
+        branches: {
+          acute: {
+            label: "Si hay sospecha de VIH agudo",
+            tone: "red",
+            nodes: [
+              {
+                id: "5A",
+                group: "acute",
+                tone: "red",
+                badge: "Ruta aguda",
+                title: "5A. Sospecha de infección aguda",
+                text: "No descartar VIH con una sola prueba rápida negativa. En los primeros días o semanas puede no haber anticuerpos detectables.",
+                details: [
+                  "Una prueba rápida de anticuerpos o un Western blot negativos no excluyen infección aguda si la exposición fue reciente.",
+                  "Si la sospecha clínica sigue alta, se debe continuar con pruebas más sensibles."
+                ]
+              },
+              {
+                id: "6A",
+                group: "acute",
+                tone: "red",
+                badge: "Prueba clave",
+                title: "6A. Prueba de cuarta generación",
+                text: "Solicitar una prueba de cuarta generación. Detecta el antígeno p24 y anticuerpos contra VIH-1 y VIH-2, por lo que acorta el período de ventana.",
+                details: [
+                  "Es más útil que una prueba rápida simple en infección muy temprana.",
+                  "El antígeno p24 puede aparecer antes de que los anticuerpos sean detectables."
+                ]
+              },
+              {
+                id: "7A",
+                group: "acute",
+                tone: "yellow",
+                badge: "Escalamiento",
+                title: "7A. Si hay resultados discordantes o la sospecha sigue alta",
+                text: "Solicitar una prueba molecular, como NAT, PCR o carga viral. Estas pruebas buscan el ARN del VIH y ayudan a confirmar infección aguda.",
+                details: [
+                  "Escalar si una prueba de cuarta generación sale reactiva, pero otras pruebas son negativas.",
+                  "Escalar si hay síntomas compatibles con seroconversión o exposición reciente con alta probabilidad clínica."
+                ]
+              }
+            ]
+          },
+          screening: {
+            label: "Si no hay sospecha aguda: tamizaje habitual",
+            tone: "green",
+            nodes: [
+              {
+                id: "5B",
+                group: "screening",
+                tone: "green",
+                badge: "Ruta habitual",
+                title: "5B. Tamizaje inicial",
+                text: "Realizar una prueba rápida de VIH o una prueba de cuarta generación, según disponibilidad y el algoritmo nacional.",
+                details: [
+                  "Sirve para tamizaje preventivo o población general.",
+                  "La elección depende del acceso del servicio y la norma local."
+                ]
+              },
+              {
+                id: "6B",
+                group: "screening",
+                tone: "green",
+                badge: "No reactivo",
+                title: "6B. Resultado no reactivo",
+                text: "Si el resultado es no reactivo, informarlo con claridad. Si la exposición fue reciente, repetir la prueba después del período de ventana y reforzar prevención.",
+                details: [
+                  "No siempre cierra el caso si hubo riesgo reciente.",
+                  "Aprovechar para reforzar reducción de riesgo y seguimiento."
+                ]
+              },
+              {
+                id: "7B",
+                group: "screening",
+                tone: "yellow",
+                badge: "Reactivo",
+                title: "7B. Resultado reactivo",
+                text: "Confirmar con una segunda prueba diferente o con el esquema indicado por el país. Entregar el resultado con consejería.",
+                details: [
+                  "Un tamizaje reactivo no es el cierre definitivo sin confirmación.",
+                  "La consejería reduce ansiedad y aclara los siguientes pasos."
+                ]
+              }
+            ]
+          }
+        },
+        finalNodes: [
+          {
+            id: "8",
+            group: "common",
+            tone: "purple",
+            badge: "Confirmación",
+            title: "8. Confirmación diagnóstica y consejería después de la prueba",
+            text: "Registrar el resultado y explicarlo con lenguaje claro. Aclarar confidencialidad, pasos siguientes y qué hacer si las pruebas no coinciden entre sí.",
+            details: [
+              "Interpretar el resultado con lenguaje claro.",
+              "Orientar sobre continuidad de atención y apoyo."
+            ]
+          },
+          {
+            id: "9",
+            group: "common",
+            tone: "orange",
+            badge: "Seguimiento",
+            title: "9. Seguimiento y vinculación",
+            text: "Si el diagnóstico se confirma, vincular de inmediato a atención, valorar tratamiento antirretroviral (TAR), solicitar carga viral y conteo basal de CD4, tamizar otras ITS y ofrecer apoyo psicosocial.",
+            details: [
+              "El conteo de CD4 ayuda a valorar el estado inmunológico inicial.",
+              "Si el resultado es negativo pero hubo riesgo reciente, repetir la prueba según el período de ventana."
+            ]
+          }
+        ],
+        alert: "Una prueba rápida de anticuerpos o un Western blot negativos no descartan infección aguda si hubo exposición reciente o síntomas compatibles. Si la sospecha clínica es alta, se debe pedir una prueba de cuarta generación y, si hace falta, una prueba molecular.",
+        tests: [
+          {
+            tone: "blue",
+            title: "Prueba rápida de anticuerpos",
+            text: "Detecta defensas contra el VIH. Es útil para tamizaje, pero puede salir negativa al inicio de la infección."
+          },
+          {
+            tone: "green",
+            title: "Prueba de cuarta generación",
+            text: "Detecta el antígeno p24 y anticuerpos. Reduce el período de ventana y ayuda más en infección reciente."
+          },
+          {
+            tone: "purple",
+            title: "Prueba molecular: NAT, PCR o carga viral",
+            text: "NAT y PCR son pruebas moleculares que detectan el ARN del VIH. Son claves cuando hay sospecha aguda o resultados discordantes."
+          },
+          {
+            tone: "red",
+            title: "Western blot",
+            text: "Técnica confirmatoria antigua. No debe usarse sola para descartar infección aguda por el riesgo de falsos negativos tempranos."
+          }
+        ],
+        team: [
+          "Jorge Antonio Gutiérrez Martínez",
+          "Jonathan Eliud Lizcano Jinez",
+          "Jesús Gael García Guadarrama",
+          "Stephany Monserrat Fuantos Pena"
+        ],
+        citation: "Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. Near misdiagnosis of acute HIV-infection with ELISA-Western Blot scheme: Time for mindset change. IDCases. 2021;25:e01168. doi:10.1016/j.idcr.2021.e01168.",
+        insight: "Idea central del artículo: en la infección aguda puede haber resultados discordantes. Por eso la sospecha clínica, la consejería y el uso de pruebas de cuarta generación o moleculares son claves para no retrasar el diagnóstico."
       },
-      acute: {
-        title: "Ruta de sospecha aguda",
-        text: "Se resalta el trayecto cuando hay exposición reciente o clínica sugestiva. Aquí una prueba negativa aislada no basta para descartar infección temprana."
+      {
+        id: "cohorte",
+        kind: "research",
+        title: "Protocolo de estudio de cohorte",
+        category: "Investigación observacional",
+        status: "Plantilla",
+        audience: "Diseño longitudinal",
+        summary: "Modelo base para construir protocolos de seguimiento prospectivo o retrospectivo con exposición y desenlace.",
+        subtitle: "Úsalo cuando quieras seguir una población en el tiempo para estimar incidencia, riesgo relativo y temporalidad.",
+        tags: ["cohorte", "longitudinal", "riesgo relativo", "seguimiento"],
+        sections: [
+          {
+            title: "Pregunta de investigación",
+            note: "Punto de partida",
+            text: "Definir claramente la exposición, el desenlace, la población objetivo y el tiempo de seguimiento. Idealmente la pregunta debe permitir comparar grupos expuestos y no expuestos."
+          },
+          {
+            title: "Población y muestra",
+            note: "Marco de selección",
+            text: "Especificar criterios de inclusión y exclusión, fuente de reclutamiento y estrategia para reducir pérdidas en el seguimiento."
+          },
+          {
+            title: "Variables",
+            note: "Definiciones operativas",
+            text: "Separar exposición principal, desenlace, covariables y posibles factores de confusión. Definir cómo y cuándo se medirá cada una."
+          },
+          {
+            title: "Plan de análisis",
+            note: "Estadística",
+            text: "Considerar incidencia acumulada, tasas, riesgo relativo, análisis estratificado o modelos multivariados según el diseño."
+          }
+        ],
+        checklist: [
+          "Definir cohorte expuesta y no expuesta.",
+          "Especificar tiempo de seguimiento y puntos de corte.",
+          "Justificar tamaño de muestra.",
+          "Planear manejo de pérdidas y sesgos.",
+          "Definir análisis univariado, bivariado y multivariado."
+        ],
+        outputs: ["Objetivo general", "Hipótesis", "Cronograma", "Plan estadístico", "Consentimiento informado"]
       },
-      screening: {
-        title: "Ruta de tamizaje habitual",
-        text: "Se resalta el trayecto para tamizaje inicial. Los resultados reactivos requieren confirmación y los no reactivos deben interpretarse según el período de ventana."
+      {
+        id: "casos-controles",
+        kind: "research",
+        title: "Protocolo de casos y controles",
+        category: "Investigación observacional",
+        status: "Plantilla",
+        audience: "Diseño analítico",
+        summary: "Plantilla para investigar asociaciones entre un desenlace ya presente y exposiciones previas relevantes.",
+        subtitle: "Útil cuando el desenlace es poco frecuente y necesitas comparar antecedentes de exposición entre casos y controles.",
+        tags: ["casos y controles", "odds ratio", "sesgo", "retrospectivo"],
+        sections: [
+          {
+            title: "Definición de casos y controles",
+            note: "Comparabilidad",
+            text: "Delimitar criterios diagnósticos de los casos y la fuente de los controles. Ambos grupos deben proceder de poblaciones comparables."
+          },
+          {
+            title: "Exposición de interés",
+            note: "Antecedentes",
+            text: "Definir qué exposición se estudiará, cómo se medirá y qué periodo previo se considerará relevante."
+          },
+          {
+            title: "Sesgos y confusión",
+            note: "Calidad metodológica",
+            text: "Planear estrategias para disminuir sesgo de selección, sesgo de memoria y variables confusoras."
+          },
+          {
+            title: "Análisis",
+            note: "Medida principal",
+            text: "Plantear el uso de razón de momios (odds ratio), análisis estratificado y regresión logística cuando corresponda."
+          }
+        ],
+        checklist: [
+          "Definir claramente el desenlace.",
+          "Seleccionar controles comparables.",
+          "Estandarizar recolección de antecedentes.",
+          "Justificar relación caso-control.",
+          "Identificar variables de confusión."
+        ],
+        outputs: ["Tabla de variables", "Instrumento de recolección", "OR esperada", "Criterios de pareamiento"]
+      },
+      {
+        id: "ensayo",
+        kind: "research",
+        title: "Protocolo de ensayo clínico",
+        category: "Investigación experimental",
+        status: "Plantilla",
+        audience: "Intervención",
+        summary: "Estructura base para estudios con intervención, comparador y evaluación de seguridad y eficacia.",
+        subtitle: "Sirve para planear ensayos con grupo control, aleatorización y desenlaces clínicos o de laboratorio.",
+        tags: ["ensayo clínico", "aleatorización", "intervención", "comparador"],
+        sections: [
+          {
+            title: "Intervención y comparador",
+            note: "Núcleo del diseño",
+            text: "Describir qué recibirá cada grupo, dosis, duración, adherencia esperada y condiciones del comparador."
+          },
+          {
+            title: "Aleatorización y cegamiento",
+            note: "Control de sesgos",
+            text: "Definir método de asignación, ocultamiento y nivel de cegamiento para participantes, investigadores y evaluadores."
+          },
+          {
+            title: "Desenlaces",
+            note: "Qué medirás",
+            text: "Distinguir desenlace primario y secundarios, con tiempos definidos de medición y criterios de seguridad."
+          },
+          {
+            title: "Monitoreo y ética",
+            note: "Seguridad",
+            text: "Planear reporte de eventos adversos, retiro del estudio, comité de monitoreo y aprobación ética."
+          }
+        ],
+        checklist: [
+          "Definir intervención, comparador y desenlace primario.",
+          "Elegir método de aleatorización.",
+          "Establecer criterios de suspensión.",
+          "Planear análisis por intención a tratar si aplica.",
+          "Preparar consentimiento y vigilancia de seguridad."
+        ],
+        outputs: ["Manual operativo", "Calendario de visitas", "Plan de monitorización", "Formato de eventos adversos"]
+      },
+      {
+        id: "revision",
+        kind: "research",
+        title: "Protocolo de revisión sistemática",
+        category: "Síntesis de evidencia",
+        status: "Plantilla",
+        audience: "Búsqueda y síntesis",
+        summary: "Plantilla para organizar una revisión sistemática desde la pregunta hasta la evaluación crítica de la evidencia.",
+        subtitle: "Ideal para ordenar una búsqueda estructurada, criterios de selección y síntesis narrativa o cuantitativa.",
+        tags: ["revisión sistemática", "PRISMA", "PICO", "sesgo"],
+        sections: [
+          {
+            title: "Pregunta estructurada",
+            note: "Marco PICO",
+            text: "Formular la pregunta con población, intervención o exposición, comparador y desenlace para guiar la búsqueda."
+          },
+          {
+            title: "Estrategia de búsqueda",
+            note: "Bases de datos",
+            text: "Definir descriptores, operadores booleanos, bases a consultar, idiomas, años y literatura gris."
+          },
+          {
+            title: "Selección y extracción",
+            note: "Revisión por pares",
+            text: "Detallar proceso de cribado por título, resumen y texto completo, así como formato de extracción de datos."
+          },
+          {
+            title: "Riesgo de sesgo y síntesis",
+            note: "Calidad de evidencia",
+            text: "Elegir herramientas para evaluar sesgo, consistencia y decidir si habrá metaanálisis o síntesis narrativa."
+          }
+        ],
+        checklist: [
+          "Definir pregunta PICO.",
+          "Registrar criterios de inclusión y exclusión.",
+          "Preparar ecuación de búsqueda.",
+          "Planear diagrama PRISMA.",
+          "Definir herramienta de riesgo de sesgo."
+        ],
+        outputs: ["Pregunta PICO", "Ecuación de búsqueda", "Matriz de extracción", "Diagrama PRISMA", "Tabla de evidencia"]
+      },
+      {
+        id: "tesis",
+        kind: "research",
+        title: "Anteproyecto de tesis",
+        category: "Tesis",
+        status: "Plantilla",
+        audience: "Planeación académica",
+        summary: "Esqueleto para convertir una idea inicial en un anteproyecto claro, defendible y listo para revisión académica.",
+        subtitle: "Úsalo como tablero de organización antes de escribir tu protocolo completo o someterlo a revisión.",
+        tags: ["tesis", "anteproyecto", "justificación", "metodología"],
+        sections: [
+          {
+            title: "Título y planteamiento",
+            note: "Enunciado del problema",
+            text: "Delimitar el tema, formular el problema, justificar su relevancia y dejar claro qué vacío intenta resolver."
+          },
+          {
+            title: "Objetivos e hipótesis",
+            note: "Dirección del estudio",
+            text: "Redactar objetivo general, objetivos específicos y, si aplica, hipótesis coherentes con el diseño."
+          },
+          {
+            title: "Marco teórico",
+            note: "Sustento conceptual",
+            text: "Resumir antecedentes, conceptos clave y evidencia previa que apoyen la propuesta."
+          },
+          {
+            title: "Metodología básica",
+            note: "Cómo se ejecutará",
+            text: "Describir tipo de estudio, población, muestra, variables, instrumentos, análisis y consideraciones éticas."
+          }
+        ],
+        checklist: [
+          "Definir problema de investigación.",
+          "Redactar justificación breve y sólida.",
+          "Alinear objetivos con metodología.",
+          "Estimar cronograma realista.",
+          "Preparar bibliografía base."
+        ],
+        outputs: ["Título tentativo", "Justificación", "Objetivos", "Marco teórico inicial", "Cronograma de tesis"]
       }
+    ];
+
+    const state = {
+      search: "",
+      category: "Todos",
+      selectedId: "vih"
     };
 
-    function updateToolbarState() {
-      modeButtons.forEach((button) => {
-        const active = button.dataset.mode === currentMode;
-        button.classList.toggle("active-filter", active);
-        button.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-      playRouteButton.textContent = isPlaying ? "Detener recorrido" : defaultPlayLabel;
+    const filterWrap = document.getElementById("filterWrap");
+    const protocolList = document.getElementById("protocolList");
+    const viewerContent = document.getElementById("viewerContent");
+    const resultCount = document.getElementById("resultCount");
+    const catalogCount = document.getElementById("catalogCount");
+    const workspaceTitle = document.getElementById("workspaceTitle");
+    const workspaceSubtitle = document.getElementById("workspaceSubtitle");
+    const selectedCategory = document.getElementById("selectedCategory");
+    const selectedStatus = document.getElementById("selectedStatus");
+    const selectedAudience = document.getElementById("selectedAudience");
+    const searchInput = document.getElementById("protocolSearch");
+
+    function getCategories() {
+      return ["Todos", ...new Set(protocols.map((protocol) => protocol.category))];
     }
 
-    function updateNodeStyles() {
-      nodes.forEach((node) => {
-        const group = node.dataset.group;
-        const visible = currentMode === "all" || group === "common" || group === currentMode;
-        node.style.opacity = visible ? "1" : "0.28";
-        node.classList.toggle("route-highlight", currentMode !== "all" && group === currentMode);
-        node.classList.toggle("active", visible && node.dataset.id === selectedNodeId);
+    function getFilteredProtocols() {
+      const query = state.search.trim().toLowerCase();
+      return protocols.filter((protocol) => {
+        const matchesCategory = state.category === "Todos" || protocol.category === state.category;
+        if (!matchesCategory) return false;
+
+        if (!query) return true;
+        const haystack = [
+          protocol.title,
+          protocol.summary,
+          protocol.subtitle,
+          protocol.category,
+          protocol.status,
+          protocol.audience,
+          protocol.tags.join(" ")
+        ].join(" ").toLowerCase();
+        return haystack.includes(query);
       });
     }
 
-    function setMode(mode) {
-      currentMode = mode;
-      if (selectedNodeId) {
-        const selectedNode = document.querySelector(`[data-id="${selectedNodeId}"]`);
-        if (selectedNode && selectedNode.dataset.group !== "common" && selectedNode.dataset.group !== currentMode && currentMode !== "all") {
-          selectedNodeId = null;
-        }
-      }
-      updateNodeStyles();
-      updateToolbarState();
-      pillAcute.className = "pill" + (mode === "acute" ? " active-red" : "");
-      pillScreening.className = "pill" + (mode === "screening" ? " active-green" : "");
-      statusTitle.textContent = routeMessages[mode].title;
-      statusText.textContent = routeMessages[mode].text;
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
     }
 
-    function stopPlayback(message) {
-      if (!isPlaying) return;
-      isPlaying = false;
-      playToken += 1;
-      updateToolbarState();
-      if (message) {
-        statusTitle.textContent = "Recorrido detenido";
-        statusText.textContent = message;
-      }
+    function renderFilters() {
+      const categories = getCategories();
+      filterWrap.innerHTML = categories.map((category) => `
+        <button
+          class="filter-chip ${state.category === category ? "active" : ""}"
+          type="button"
+          data-category="${escapeHtml(category)}"
+        >
+          ${escapeHtml(category)}
+        </button>
+      `).join("");
+
+      filterWrap.querySelectorAll("[data-category]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.category = button.dataset.category;
+          renderApp();
+        });
+      });
     }
 
-    modeButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        if (isPlaying) {
-          stopPlayback();
-        }
-        setMode(button.dataset.mode);
-      });
-    });
+    function renderProtocolList(filteredProtocols) {
+      catalogCount.textContent = protocols.length + " módulos";
+      resultCount.textContent = filteredProtocols.length + (filteredProtocols.length === 1 ? " resultado" : " resultados");
 
-    nodes.forEach((node) => {
-      const button = node.querySelector(".toggle");
-      button.addEventListener("click", (event) => {
-        event.stopPropagation();
-        if (isPlaying) {
-          stopPlayback();
-        }
-        const open = node.classList.toggle("open");
-        button.textContent = open ? "Ocultar detalles" : "Ver detalles";
-        selectedNodeId = node.dataset.id;
-        updateNodeStyles();
-        statusTitle.textContent = "Bloque " + node.dataset.id + " seleccionado";
-        statusText.textContent = node.querySelector("p").textContent;
-      });
-
-      node.addEventListener("click", (event) => {
-        if (event.target.tagName === "BUTTON") return;
-        if (isPlaying) {
-          stopPlayback();
-        }
-        selectedNodeId = node.dataset.id;
-        updateNodeStyles();
-        statusTitle.textContent = "Bloque " + node.dataset.id + " en foco";
-        statusText.textContent = node.querySelector("p").textContent;
-      });
-    });
-
-    playRouteButton.addEventListener("click", async () => {
-      if (isPlaying) {
-        stopPlayback("Puedes seleccionar otra ruta o abrir los detalles de cualquier bloque.");
+      if (!filteredProtocols.length) {
+        protocolList.innerHTML = `
+          <div class="protocol-card selected" role="status">
+            <h3>Sin coincidencias</h3>
+            <p>Prueba otra palabra clave o cambia de filtro para volver a ver la biblioteca.</p>
+          </div>
+        `;
         return;
       }
 
-      isPlaying = true;
-      playToken += 1;
-      const localToken = playToken;
-      updateToolbarState();
-      const selectedRoute = currentMode === "all" ? "acute" : currentMode;
-      const sequence = routeSequences[selectedRoute];
-      setMode(selectedRoute);
-      for (const id of sequence) {
-        if (localToken !== playToken) return;
-        const node = document.querySelector(`[data-id="${id}"]`);
-        selectedNodeId = id;
-        updateNodeStyles();
-        node.scrollIntoView({ behavior: "smooth", block: "center" });
-        statusTitle.textContent = "Recorriendo paso " + id;
-        statusText.textContent = node.querySelector("p").textContent;
-        await new Promise((resolve) => setTimeout(resolve, 950));
+      if (!filteredProtocols.some((protocol) => protocol.id === state.selectedId)) {
+        state.selectedId = filteredProtocols[0].id;
       }
-      isPlaying = false;
-      updateToolbarState();
-      statusTitle.textContent = "Recorrido completado";
-      statusText.textContent = "Puedes cambiar de ruta, volver a reproducir o abrir los detalles de cualquier bloque.";
+
+      protocolList.innerHTML = filteredProtocols.map((protocol) => `
+        <button
+          class="protocol-card ${protocol.id === state.selectedId ? "selected" : ""}"
+          type="button"
+          data-protocol-id="${protocol.id}"
+        >
+          <div class="card-meta">
+            <span class="mini-tag category">${escapeHtml(protocol.category)}</span>
+            <span class="mini-tag status">${escapeHtml(protocol.status)}</span>
+          </div>
+          <h3>${escapeHtml(protocol.title)}</h3>
+          <p>${escapeHtml(protocol.summary)}</p>
+        </button>
+      `).join("");
+
+      protocolList.querySelectorAll("[data-protocol-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedId = button.dataset.protocolId;
+          renderApp();
+        });
+      });
+    }
+
+    function renderNode(node) {
+      return `
+        <article class="node node--${node.tone}" data-id="${node.id}" data-group="${node.group}">
+          <div class="node-top">
+            <div>
+              <h3>${node.title}</h3>
+              <p>${node.text}</p>
+            </div>
+            <span class="badge">${node.badge}</span>
+          </div>
+          <button class="toggle" type="button">Ver detalles</button>
+          <div class="extra">
+            <strong>Detalles útiles:</strong>
+            <ul>
+              ${node.details.map((detail) => `<li>${detail}</li>`).join("")}
+            </ul>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderAlgorithm(protocol) {
+      const commonNodes = protocol.commonNodes.map((node, index) => {
+        const connector = index < protocol.commonNodes.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+        return renderNode(node) + connector;
+      }).join("");
+
+      const acuteNodes = protocol.branches.acute.nodes.map((node, index, items) => {
+        const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+        return renderNode(node) + connector;
+      }).join("");
+
+      const screeningNodes = protocol.branches.screening.nodes.map((node, index, items) => {
+        const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+        return renderNode(node) + connector;
+      }).join("");
+
+      const finalNodes = protocol.finalNodes.map((node, index) => {
+        const connector = index < protocol.finalNodes.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+        return renderNode(node) + connector;
+      }).join("");
+
+      return `
+        <div class="viewer-shell">
+          <section class="module-card">
+            <div class="meta-strip">
+              ${protocol.tags.map((tag) => `<span class="meta-chip">${tag}</span>`).join("")}
+            </div>
+            <h2>${protocol.title}</h2>
+            <p>${protocol.subtitle}</p>
+
+            <div class="overview-grid" style="margin-top: 18px;">
+              ${protocol.quickFacts.map((fact) => `
+                <article class="overview-card">
+                  <span>${fact.label}</span>
+                  <strong>${fact.value}</strong>
+                </article>
+              `).join("")}
+            </div>
+          </section>
+
+          <section class="module-card algorithm-module">
+            <div class="algorithm-toolbar">
+              <button class="toolbar-button primary play-button" type="button">Recorrer algoritmo</button>
+              <button class="toolbar-button secondary active" type="button" data-mode="all" aria-pressed="true">Mostrar todo</button>
+              <button class="toolbar-button secondary" type="button" data-mode="acute" aria-pressed="false">Ruta aguda</button>
+              <button class="toolbar-button secondary" type="button" data-mode="screening" aria-pressed="false">Ruta habitual</button>
+            </div>
+
+            <div class="status-card" aria-live="polite">
+              <strong class="status-title">Vista general activa</strong>
+              <p class="status-text">Estás viendo el algoritmo completo. Puedes elegir una ruta específica o reproducir el recorrido paso a paso.</p>
+              <div class="pill-row">
+                <span class="pill">Entrada</span>
+                <span class="pill">Solicitud</span>
+                <span class="pill">Consejería</span>
+                <span class="pill">Decisión clínica</span>
+                <span class="pill pill-acute">Sospecha aguda</span>
+                <span class="pill pill-screening">Tamizaje habitual</span>
+                <span class="pill">Confirmación</span>
+                <span class="pill">Seguimiento</span>
+              </div>
+            </div>
+
+            <div class="diagram-stack">
+              ${commonNodes}
+
+              <section class="branch-grid">
+                <div>
+                  <span class="branch-label red">${protocol.branches.acute.label}</span>
+                  ${acuteNodes}
+                </div>
+                <div>
+                  <span class="branch-label green">${protocol.branches.screening.label}</span>
+                  ${screeningNodes}
+                </div>
+              </section>
+
+              <section class="merge-line" aria-hidden="true">
+                <div class="bar"></div>
+                <div class="down"></div>
+                <div class="bar"></div>
+              </section>
+
+              ${finalNodes}
+
+              <section class="alert-banner">
+                <h3>Alerta clave</h3>
+                <p>${protocol.alert}</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="test-grid">
+            ${protocol.tests.map((test) => `
+              <article class="test-card ${test.tone}">
+                <h4>${test.title}</h4>
+                <p>${test.text}</p>
+              </article>
+            `).join("")}
+          </section>
+
+          <section class="reference-grid">
+            <article class="info-card">
+              <h3>Equipo</h3>
+              <ol>
+                ${protocol.team.map((member) => `<li>${member}</li>`).join("")}
+              </ol>
+            </article>
+            <article class="info-card">
+              <h3>Artículo base / cita</h3>
+              <p>${protocol.citation}</p>
+              <p style="margin-top: 12px;">${protocol.insight}</p>
+            </article>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderResearchTemplate(protocol) {
+      return `
+        <div class="viewer-shell">
+          <section class="template-hero">
+            <div>
+              <div class="meta-strip">
+                ${protocol.tags.map((tag) => `<span class="meta-chip">${tag}</span>`).join("")}
+              </div>
+              <h2 style="margin-top: 16px;">${protocol.title}</h2>
+              <p>${protocol.subtitle}</p>
+            </div>
+            <span class="template-badge">${protocol.status}</span>
+          </section>
+
+          <section class="template-grid">
+            <div class="template-main">
+              <div class="module-card">
+                <h2>Qué resuelve este protocolo</h2>
+                <p>${protocol.summary}</p>
+              </div>
+
+              <div class="template-sections">
+                ${protocol.sections.map((section) => `
+                  <article class="template-section">
+                    <small>${section.note}</small>
+                    <h3>${section.title}</h3>
+                    <p>${section.text}</p>
+                  </article>
+                `).join("")}
+              </div>
+            </div>
+
+            <aside class="template-side">
+              <article class="template-side-card">
+                <small>Checklist rápido</small>
+                <h3>Antes de redactarlo</h3>
+                <ul>
+                  ${protocol.checklist.map((item) => `<li>${item}</li>`).join("")}
+                </ul>
+              </article>
+
+              <article class="template-side-card">
+                <small>Entregables</small>
+                <h3>Qué debería salir de aquí</h3>
+                <div class="deliverable-list">
+                  ${protocol.outputs.map((item) => `<span class="deliverable">${item}</span>`).join("")}
+                </div>
+              </article>
+            </aside>
+          </section>
+        </div>
+      `;
+    }
+
+    function updateWorkspaceHeader(protocol) {
+      workspaceTitle.textContent = protocol.title;
+      workspaceSubtitle.textContent = protocol.summary;
+      selectedCategory.textContent = protocol.category;
+      selectedStatus.textContent = protocol.status;
+      selectedAudience.textContent = protocol.audience;
+    }
+
+    function setupAlgorithmModule(protocol) {
+      const container = viewerContent.querySelector(".algorithm-module");
+      if (!container) return;
+
+      const nodes = [...container.querySelectorAll(".node")];
+      const playButton = container.querySelector(".play-button");
+      const modeButtons = [...container.querySelectorAll("[data-mode]")];
+      const statusTitle = container.querySelector(".status-title");
+      const statusText = container.querySelector(".status-text");
+      const acutePill = container.querySelector(".pill-acute");
+      const screeningPill = container.querySelector(".pill-screening");
+      const defaultPlayLabel = "Recorrer algoritmo";
+
+      let currentMode = "all";
+      let selectedNodeId = null;
+      let isPlaying = false;
+      let playToken = 0;
+
+      const routeSequences = {
+        all: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+        acute: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+        screening: ["1", "2", "3", "4", "5B", "6B", "7B", "8", "9"]
+      };
+
+      function updateToolbarState() {
+        modeButtons.forEach((button) => {
+          const active = button.dataset.mode === currentMode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        playButton.textContent = isPlaying ? "Detener recorrido" : defaultPlayLabel;
+      }
+
+      function updateNodeStyles() {
+        nodes.forEach((node) => {
+          const group = node.dataset.group;
+          const visible = currentMode === "all" || group === "common" || group === currentMode;
+          node.style.opacity = visible ? "1" : "0.3";
+          node.classList.toggle("route-highlight", currentMode !== "all" && group === currentMode);
+          node.classList.toggle("active", visible && node.dataset.id === selectedNodeId);
+        });
+      }
+
+      function setMode(mode) {
+        currentMode = mode;
+        if (selectedNodeId) {
+          const currentNode = container.querySelector(`[data-id="${selectedNodeId}"]`);
+          if (currentNode && currentNode.dataset.group !== "common" && currentNode.dataset.group !== currentMode && currentMode !== "all") {
+            selectedNodeId = null;
+          }
+        }
+        updateNodeStyles();
+        updateToolbarState();
+        acutePill.className = "pill pill-acute" + (mode === "acute" ? " active-red" : "");
+        screeningPill.className = "pill pill-screening" + (mode === "screening" ? " active-green" : "");
+        statusTitle.textContent = protocol.routeMessages[mode].title;
+        statusText.textContent = protocol.routeMessages[mode].text;
+      }
+
+      function stopPlayback(message) {
+        if (!isPlaying) return;
+        isPlaying = false;
+        playToken += 1;
+        updateToolbarState();
+        if (message) {
+          statusTitle.textContent = "Recorrido detenido";
+          statusText.textContent = message;
+        }
+      }
+
+      modeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (isPlaying) {
+            stopPlayback();
+          }
+          setMode(button.dataset.mode);
+        });
+      });
+
+      nodes.forEach((node) => {
+        const toggle = node.querySelector(".toggle");
+        toggle.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (isPlaying) {
+            stopPlayback();
+          }
+          const open = node.classList.toggle("open");
+          toggle.textContent = open ? "Ocultar detalles" : "Ver detalles";
+          selectedNodeId = node.dataset.id;
+          updateNodeStyles();
+          statusTitle.textContent = "Bloque " + node.dataset.id + " seleccionado";
+          statusText.textContent = node.querySelector("p").textContent;
+        });
+
+        node.addEventListener("click", (event) => {
+          if (event.target.tagName === "BUTTON") return;
+          if (isPlaying) {
+            stopPlayback();
+          }
+          selectedNodeId = node.dataset.id;
+          updateNodeStyles();
+          statusTitle.textContent = "Bloque " + node.dataset.id + " en foco";
+          statusText.textContent = node.querySelector("p").textContent;
+        });
+      });
+
+      playButton.addEventListener("click", async () => {
+        if (isPlaying) {
+          stopPlayback("Puedes cambiar de ruta o explorar cualquier bloque manualmente.");
+          return;
+        }
+
+        isPlaying = true;
+        playToken += 1;
+        const localToken = playToken;
+        updateToolbarState();
+
+        const chosenRoute = currentMode === "all" ? "acute" : currentMode;
+        setMode(chosenRoute);
+        const sequence = routeSequences[chosenRoute];
+
+        for (const id of sequence) {
+          if (localToken !== playToken) return;
+          const node = container.querySelector(`[data-id="${id}"]`);
+          selectedNodeId = id;
+          updateNodeStyles();
+          node.scrollIntoView({ behavior: "smooth", block: "center" });
+          statusTitle.textContent = "Recorriendo paso " + id;
+          statusText.textContent = node.querySelector("p").textContent;
+          await new Promise((resolve) => setTimeout(resolve, 950));
+        }
+
+        isPlaying = false;
+        updateToolbarState();
+        statusTitle.textContent = "Recorrido completado";
+        statusText.textContent = "Puedes cambiar de ruta, volver a reproducir o abrir los detalles de cualquier bloque.";
+      });
+
+      setMode("all");
+    }
+
+    function renderViewer(filteredProtocols) {
+      if (!filteredProtocols.length) {
+        workspaceTitle.textContent = "Biblioteca sin coincidencias";
+        workspaceSubtitle.textContent = "No hubo resultados con ese filtro. Cambia la búsqueda o regresa a la vista general.";
+        selectedCategory.textContent = "Sin resultados";
+        selectedStatus.textContent = "Ajusta la búsqueda";
+        selectedAudience.textContent = "Prueba por nombre, área o palabra clave.";
+        viewerContent.innerHTML = `
+          <section class="empty-state">
+            <h2>No se encontraron protocolos</h2>
+            <p>Prueba con términos como <strong>VIH</strong>, <strong>cohorte</strong>, <strong>ensayo</strong> o <strong>revisión</strong> para volver a poblar la biblioteca.</p>
+          </section>
+        `;
+        return;
+      }
+
+      const protocol = filteredProtocols.find((item) => item.id === state.selectedId) || filteredProtocols[0];
+      state.selectedId = protocol.id;
+      updateWorkspaceHeader(protocol);
+
+      viewerContent.innerHTML = protocol.kind === "algorithm"
+        ? renderAlgorithm(protocol)
+        : renderResearchTemplate(protocol);
+
+      if (protocol.kind === "algorithm") {
+        setupAlgorithmModule(protocol);
+      }
+    }
+
+    function renderApp() {
+      const filteredProtocols = getFilteredProtocols();
+      renderFilters();
+      renderProtocolList(filteredProtocols);
+      renderViewer(filteredProtocols);
+    }
+
+    searchInput.addEventListener("input", () => {
+      state.search = searchInput.value;
+      renderApp();
     });
 
-    setMode("all");
+    renderApp();
   </script>
 </body>
 </html>
