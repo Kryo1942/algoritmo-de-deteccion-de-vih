@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deteccion Temprana de VIH</title>
+  <title>Detección Temprana de VIH</title>
   <style>
     :root {
       --bg: #eef2f7;
@@ -459,28 +459,28 @@
 <body>
   <main class="page">
     <section class="hero">
-      <h1>Algoritmo interactivo de deteccion temprana de VIH</h1>
-      <p class="subtitle">Version educativa basada en el diagrama: quien solicita, consentimiento, pruebas, confirmacion y seguimiento.</p>
+      <h1>Algoritmo interactivo para detección temprana de VIH</h1>
+      <p class="subtitle">Versión educativa basada en el artículo de Medina-De la Garza y colaboradores sobre infección aguda, pruebas discordantes y consejería diagnóstica.</p>
     </section>
 
     <section class="toolbar" aria-label="Controles">
       <button class="primary" id="playRoute">Recorrer algoritmo</button>
       <button class="ghost" data-mode="all">Mostrar todo</button>
-      <button class="ghost" data-mode="acute">Ruta sospecha aguda</button>
-      <button class="ghost" data-mode="screening">Ruta tamizaje habitual</button>
+      <button class="ghost" data-mode="acute">Ruta de sospecha aguda</button>
+      <button class="ghost" data-mode="screening">Ruta de tamizaje habitual</button>
     </section>
 
     <section class="status" aria-live="polite">
       <strong id="statusTitle">Vista general activa</strong>
-      <div id="statusText">Haz clic en cualquier bloque para ampliar la explicacion. Tambien puedes resaltar una ruta completa desde los botones superiores.</div>
+      <div id="statusText">Haz clic en cualquier bloque para ampliar la explicación. También puedes resaltar una ruta completa desde los botones superiores.</div>
       <div class="path-pills">
         <span class="pill">Entrada</span>
         <span class="pill">Solicitud</span>
-        <span class="pill">Consejeria</span>
-        <span class="pill">Decision clinica</span>
+        <span class="pill">Consejería</span>
+        <span class="pill">Decisión clínica</span>
         <span class="pill" id="pillAcute">Sospecha aguda</span>
         <span class="pill" id="pillScreening">Tamizaje habitual</span>
-        <span class="pill">Confirmacion</span>
+        <span class="pill">Confirmación</span>
         <span class="pill">Seguimiento</span>
       </div>
     </section>
@@ -490,16 +490,16 @@
         <div class="node-top">
           <div>
             <h2>1. Entrada al algoritmo</h2>
-            <p>Persona con exposicion de riesgo, sintomas compatibles, embarazo, ITS, control preventivo o solicitud voluntaria de prueba.</p>
+            <p>Persona con exposición de riesgo, síntomas compatibles, embarazo, infecciones de transmisión sexual (ITS), control preventivo o solicitud voluntaria de la prueba.</p>
           </div>
           <span class="tag">Inicio</span>
         </div>
         <button class="toggle" type="button">Ver detalles</button>
         <div class="extra">
-          <strong>Idea clave:</strong> el algoritmo puede iniciar por sospecha clinica o por tamizaje preventivo.
+          <strong>Idea clave:</strong> el algoritmo puede iniciar por síntomas sugestivos o por tamizaje preventivo.
           <ul>
-            <li>Incluye personas sintomaticas y asintomaticas.</li>
-            <li>Tambien aplica en campanas comunitarias o control prenatal.</li>
+            <li>Incluye personas sintomáticas y asintomáticas.</li>
+            <li>También aplica en campañas comunitarias o control prenatal.</li>
           </ul>
         </div>
       </article>
@@ -509,16 +509,16 @@
       <article class="node blue-node" data-id="2" data-group="common">
         <div class="node-top">
           <div>
-            <h2>2. Quien solicita la prueba</h2>
-            <p>La puede solicitar la persona usuaria o indicarla personal medico, salud publica, banco de sangre, control prenatal, programa ITS/VIH o campana comunitaria.</p>
+            <h2>2. Quién solicita la prueba</h2>
+            <p>La prueba puede solicitarla la persona usuaria o indicarla personal médico, salud pública, banco de sangre, control prenatal o programas de VIH e ITS.</p>
           </div>
           <span class="tag">Solicitud</span>
         </div>
         <button class="toggle" type="button">Ver detalles</button>
         <div class="extra">
-          <strong>Importa porque:</strong> define el contexto de atencion y la oportunidad del diagnostico.
+          <strong>Importa porque:</strong> define el contexto de atención y la oportunidad del diagnóstico.
           <ul>
-            <li>El acceso puede ser por decision personal o por indicacion clinica.</li>
+            <li>El acceso puede ser por decisión personal o por indicación clínica.</li>
             <li>La solicitud no sustituye el consentimiento informado.</li>
           </ul>
         </div>
@@ -529,18 +529,18 @@
       <article class="node teal-node" data-id="3" data-group="common">
         <div class="node-top">
           <div>
-            <h2>3. Consentimiento informado y consejeria preprueba</h2>
-            <p>Explicar objetivo, confidencialidad, voluntariedad, beneficios, limites, periodo ventana y posibles resultados antes de tomar la muestra.</p>
+            <h2>3. Consentimiento informado y consejería antes de la prueba</h2>
+            <p>Antes de tomar la muestra, explicar el objetivo de la prueba, la confidencialidad, la voluntariedad, el período de ventana y el posible significado de cada resultado.</p>
           </div>
-          <span class="tag">Consejeria</span>
+          <span class="tag">Consejería</span>
         </div>
         <button class="toggle" type="button">Ver detalles</button>
         <div class="extra">
           <strong>Puntos a cubrir:</strong>
           <ul>
-            <li>Que significa un resultado reactivo y uno no reactivo.</li>
-            <li>Por que una prueba negativa temprana puede no descartar infeccion reciente.</li>
-            <li>Como se protege la privacidad y que pasos siguen despues.</li>
+            <li>Qué significa un resultado reactivo y uno no reactivo.</li>
+            <li>Por qué una prueba negativa temprana puede no descartar una infección reciente.</li>
+            <li>Qué es el período de ventana y qué pasos siguen después.</li>
           </ul>
         </div>
       </article>
@@ -550,16 +550,16 @@
       <article class="node yellow-node" data-id="4" data-group="common">
         <div class="node-top">
           <div>
-            <h2>4. Decision clinica inicial</h2>
-            <p>Se define si hubo exposicion reciente o sintomas compatibles con infeccion aguda por VIH, o si se trata de tamizaje habitual.</p>
+            <h2>4. Decisión clínica inicial</h2>
+            <p>Valorar si hubo exposición reciente o síntomas compatibles con infección aguda por VIH. Si no los hay, seguir la ruta de tamizaje habitual.</p>
           </div>
-          <span class="tag">Decision</span>
+          <span class="tag">Decisión</span>
         </div>
         <button class="toggle" type="button">Ver detalles</button>
         <div class="extra">
-          <strong>Aqui se abren dos rutas:</strong>
+          <strong>Aquí se abren dos rutas:</strong>
           <ul>
-            <li><strong>Sospecha aguda:</strong> prioriza pruebas utiles en fase temprana.</li>
+            <li><strong>Sospecha aguda:</strong> prioriza pruebas útiles para detectar infección reciente.</li>
             <li><strong>Tamizaje habitual:</strong> sigue la ruta usual de cribado inicial.</li>
           </ul>
         </div>
@@ -571,17 +571,17 @@
           <article class="node red-node" data-id="5A" data-group="acute">
             <div class="node-top">
               <div>
-                <h2>5A. Sospecha de infeccion aguda</h2>
-                <p>No descartar VIH con una sola prueba rapida negativa. En fase aguda puede no haber anticuerpos detectables.</p>
+                <h2>5A. Sospecha de infección aguda</h2>
+                <p>No descartar VIH con una sola prueba rápida negativa. En los primeros días o semanas puede no haber anticuerpos detectables.</p>
               </div>
               <span class="tag">Ruta roja</span>
             </div>
             <button class="toggle" type="button">Ver detalles</button>
             <div class="extra">
-              <strong>Mensaje critico:</strong>
+              <strong>Mensaje crítico:</strong>
               <ul>
-                <li>El riesgo reciente cambia la interpretacion de una prueba negativa.</li>
-                <li>Si la sospecha clinica es fuerte, se continua con pruebas de mayor sensibilidad temprana.</li>
+                <li>Una prueba rápida de anticuerpos o un Western blot negativos no excluyen infección aguda si la exposición fue reciente.</li>
+                <li>Si la sospecha clínica sigue alta, se debe continuar con pruebas más sensibles.</li>
               </ul>
             </div>
           </article>
@@ -589,17 +589,17 @@
           <article class="node red-node" data-id="6A" data-group="acute">
             <div class="node-top">
               <div>
-                <h2>6A. Prueba de 4a generacion</h2>
-                <p>Solicitar inmunoensayo Ag/Ac: detecta antigeno p24 y anticuerpos VIH-1/VIH-2.</p>
+                <h2>6A. Prueba de cuarta generación</h2>
+                <p>Solicitar una prueba de cuarta generación. Detecta el antígeno p24 y anticuerpos contra VIH-1 y VIH-2, por lo que acorta el período de ventana.</p>
               </div>
               <span class="tag">Prueba</span>
             </div>
             <button class="toggle" type="button">Ver detalles</button>
             <div class="extra">
-              <strong>Ventaja:</strong> acorta el periodo ventana frente a pruebas solo de anticuerpos.
+              <strong>Ventaja:</strong> acorta el período de ventana frente a pruebas solo de anticuerpos.
               <ul>
-                <li>Es mas util que una prueba rapida simple en infeccion muy temprana.</li>
-                <li>Un resultado se interpreta junto con sintomas y fecha de exposicion.</li>
+                <li>Es más útil que una prueba rápida simple en infección muy temprana.</li>
+                <li>El antígeno p24 puede aparecer antes de que los anticuerpos sean detectables.</li>
               </ul>
             </div>
           </article>
@@ -607,8 +607,8 @@
           <article class="node yellow-node" data-id="7A" data-group="acute">
             <div class="node-top">
               <div>
-                <h2>7A. Resultado discordante o clinica fuerte</h2>
-                <p>Si la prueba de 4a generacion es reactiva, discordante o la sospecha persiste: solicitar NAT/PCR/carga viral VIH-1. ARN positivo apoya infeccion aguda.</p>
+                <h2>7A. Si hay resultados discordantes o la sospecha sigue alta</h2>
+                <p>Solicitar una prueba molecular, como NAT, PCR o carga viral. Estas pruebas buscan el ARN del VIH y ayudan a confirmar infección aguda.</p>
               </div>
               <span class="tag">Escalamiento</span>
             </div>
@@ -616,9 +616,9 @@
             <div class="extra">
               <strong>Cuando escalar:</strong>
               <ul>
-                <li>Resultados incongruentes.</li>
-                <li>Sintomas compatibles con seroconversion.</li>
-                <li>Exposicion reciente con alta probabilidad clinica.</li>
+                <li>Si una prueba de cuarta generación sale reactiva, pero otras pruebas son negativas.</li>
+                <li>Si hay síntomas compatibles con seroconversión.</li>
+                <li>Si la exposición reciente mantiene una alta probabilidad clínica.</li>
               </ul>
             </div>
           </article>
@@ -630,7 +630,7 @@
             <div class="node-top">
               <div>
                 <h2>5B. Tamizaje inicial</h2>
-                <p>Realizar prueba rapida de VIH o inmunoensayo Ag/Ac segun disponibilidad y algoritmo nacional.</p>
+                <p>Realizar una prueba rápida de VIH o una prueba de cuarta generación, según disponibilidad y el algoritmo nacional.</p>
               </div>
               <span class="tag">Ruta verde</span>
             </div>
@@ -638,8 +638,8 @@
             <div class="extra">
               <strong>Objetivo:</strong>
               <ul>
-                <li>Identificar resultados no reactivos y reactivos en poblacion general o tamizaje preventivo.</li>
-                <li>Elegir la prueba segun normas locales y acceso del servicio.</li>
+                <li>Identificar resultados no reactivos y reactivos en población general o en tamizaje preventivo.</li>
+                <li>Elegir la prueba según normas locales y acceso del servicio.</li>
               </ul>
             </div>
           </article>
@@ -648,7 +648,7 @@
             <div class="node-top">
               <div>
                 <h2>6B. Resultado no reactivo</h2>
-                <p>Informar resultado. Si hubo exposicion dentro del periodo ventana, repetir prueba posteriormente y reforzar prevencion.</p>
+                <p>Si el resultado es no reactivo, informarlo con claridad. Si la exposición fue reciente, repetir la prueba después del período de ventana y reforzar prevención.</p>
               </div>
               <span class="tag">No reactivo</span>
             </div>
@@ -656,8 +656,8 @@
             <div class="extra">
               <strong>No siempre cierra el caso:</strong>
               <ul>
-                <li>Si la exposicion fue reciente, aun puede requerirse repeticion.</li>
-                <li>Se aprovecha para reforzar reduccion de riesgo y seguimiento.</li>
+                <li>Si la exposición fue reciente, aún puede requerirse repetición.</li>
+                <li>Se aprovecha para reforzar reducción de riesgo y seguimiento.</li>
               </ul>
             </div>
           </article>
@@ -666,7 +666,7 @@
             <div class="node-top">
               <div>
                 <h2>7B. Resultado reactivo</h2>
-                <p>Confirmar con una segunda prueba diferente o con el esquema indicado por el pais. Entregar con consejeria.</p>
+                <p>Confirmar con una segunda prueba diferente o con el esquema indicado por el país. Entregar el resultado con consejería.</p>
               </div>
               <span class="tag">Reactivo</span>
             </div>
@@ -674,8 +674,8 @@
             <div class="extra">
               <strong>Punto clave:</strong>
               <ul>
-                <li>Un tamizaje reactivo no es el cierre definitivo sin confirmacion.</li>
-                <li>La consejeria reduce ansiedad y aclara siguientes pasos.</li>
+                <li>Un tamizaje reactivo no es el cierre definitivo sin confirmación.</li>
+                <li>La consejería reduce ansiedad y aclara los siguientes pasos.</li>
               </ul>
             </div>
           </article>
@@ -691,17 +691,17 @@
       <article class="node purple-node" data-id="8" data-group="common">
         <div class="node-top">
           <div>
-            <h2>8. Confirmacion diagnostica y consejeria postprueba</h2>
-            <p>Registrar resultado y entregarlo con consejeria postprueba. Explicar significado, confidencialidad, pasos siguientes y manejo de resultados discordantes.</p>
+            <h2>8. Confirmación diagnóstica y consejería después de la prueba</h2>
+            <p>Registrar el resultado y explicarlo con lenguaje claro. Aclarar confidencialidad, pasos siguientes y qué hacer si las pruebas no coinciden entre sí.</p>
           </div>
-          <span class="tag">Confirmacion</span>
+          <span class="tag">Confirmación</span>
         </div>
         <button class="toggle" type="button">Ver detalles</button>
         <div class="extra">
           <strong>Incluye:</strong>
           <ul>
-            <li>Interpretacion del resultado en lenguaje claro.</li>
-            <li>Orientacion sobre notificacion, apoyo y continuidad de atencion.</li>
+            <li>Interpretación del resultado en lenguaje claro.</li>
+            <li>Orientación sobre notificación, apoyo y continuidad de atención.</li>
             <li>Manejo especial si existen pruebas conflictivas o indeterminadas.</li>
           </ul>
         </div>
@@ -712,8 +712,8 @@
       <article class="node orange-node" data-id="9" data-group="common">
         <div class="node-top">
           <div>
-            <h2>9. Seguimiento y vinculacion</h2>
-            <p>Si VIH positivo: vincular de inmediato a atencion, valorar inicio de TAR, solicitar carga viral y CD4 basales, tamizar ITS, evaluar contactos/parejas y dar apoyo psicosocial. Si negativo con riesgo reciente: repetir segun periodo ventana y reforzar prevencion.</p>
+            <h2>9. Seguimiento y vinculación</h2>
+            <p>Si el diagnóstico se confirma, vincular de inmediato a atención, valorar tratamiento antirretroviral (TAR), solicitar carga viral y conteo basal de CD4, tamizar otras ITS y ofrecer apoyo psicosocial. Si el resultado es negativo pero hubo riesgo reciente, repetir la prueba según el período de ventana.</p>
           </div>
           <span class="tag">Seguimiento</span>
         </div>
@@ -722,33 +722,34 @@
           <strong>Meta final:</strong>
           <ul>
             <li>No quedarse solo en el resultado del laboratorio.</li>
-            <li>Conectar a tratamiento, prevencion y acompanamiento oportunos.</li>
+            <li>El conteo de CD4 ayuda a valorar el estado inmunológico inicial.</li>
+            <li>Conectar a tratamiento, prevención y acompañamiento oportunos.</li>
           </ul>
         </div>
       </article>
 
       <section class="alert">
         <h3>Alerta clave</h3>
-        <p>Un resultado negativo no descarta VIH agudo si hay exposicion reciente, sintomas compatibles o una prueba de 4a generacion reactiva seguida de resultados discordantes. En ese contexto, se requiere interpretacion clinica y pruebas complementarias.</p>
+        <p>Una prueba rápida de anticuerpos o un Western blot negativos no descartan infección aguda si hubo exposición reciente o síntomas compatibles. Si la sospecha clínica es alta, se debe pedir una prueba de cuarta generación y, si hace falta, una prueba molecular.</p>
       </section>
     </section>
 
-    <section class="cards" aria-label="Tipos de pruebas">
+    <section class="cards" aria-label="Tipos de pruebas y siglas clave">
       <article class="card blue">
-        <h4>Prueba rapida Ac</h4>
-        <p>Detecta anticuerpos. Util en tamizaje, pero puede ser negativa en infeccion aguda.</p>
+        <h4>Prueba rápida de anticuerpos</h4>
+        <p>Detecta defensas contra el VIH. Es útil para tamizaje, pero puede salir negativa al inicio de la infección.</p>
       </article>
       <article class="card green">
-        <h4>4a generacion Ag/Ac</h4>
-        <p>Detecta antigeno p24 y anticuerpos. Reduce el periodo ventana.</p>
+        <h4>Prueba de cuarta generación</h4>
+        <p>Detecta el antígeno p24 y anticuerpos. Reduce el período de ventana y ayuda más en infección reciente.</p>
       </article>
       <article class="card purple">
-        <h4>NAT / PCR / carga viral</h4>
-        <p>Detecta ARN viral. Es clave cuando hay sospecha aguda o resultados discordantes.</p>
+        <h4>Prueba molecular: NAT, PCR o carga viral</h4>
+        <p>NAT y PCR son pruebas moleculares que detectan el ARN del VIH, es decir, material genético del virus. Son claves cuando hay sospecha aguda o resultados discordantes.</p>
       </article>
       <article class="card red">
         <h4>Western blot</h4>
-        <p>Metodo clasico. No debe definir por si solo infeccion aguda debido al riesgo de falsos negativos tempranos.</p>
+        <p>Técnica confirmatoria antigua. No debe usarse sola para descartar infección aguda por el riesgo de falsos negativos tempranos.</p>
       </article>
     </section>
 
@@ -756,15 +757,16 @@
       <article class="info-box">
         <h3>Equipo</h3>
         <ol>
-          <li>Jorge Antonio Gutierrez Martinez</li>
+          <li>Jorge Antonio Gutiérrez Martínez</li>
           <li>Jonathan Eliud Lizcano Jinez</li>
-          <li>Jesus Gael Garcia Guadarrama</li>
+          <li>Jesús Gael García Guadarrama</li>
           <li>Stephany Monserrat Fuantos Pena</li>
         </ol>
       </article>
       <article class="info-box">
-        <h3>Articulo base / cita</h3>
-        <p>Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. Usa esta seccion como referencia visual del articulo que origino el diagrama y ajusta la cita exacta segun el formato que te hayan pedido.</p>
+        <h3>Artículo base / cita</h3>
+        <p>Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. <em>Near misdiagnosis of acute HIV-infection with ELISA-Western Blot scheme: Time for mindset change</em>. IDCases. 2021;25:e01168. doi:10.1016/j.idcr.2021.e01168.</p>
+        <p>Idea central del artículo: en la infección aguda puede haber resultados discordantes. Por eso la sospecha clínica, la consejería y el uso de pruebas de cuarta generación o moleculares son claves para no retrasar el diagnóstico.</p>
       </article>
     </section>
   </main>
@@ -780,15 +782,15 @@
     const routeMessages = {
       all: {
         title: "Vista general activa",
-        text: "Estas viendo el algoritmo completo. Selecciona una ruta para resaltar la sospecha aguda o el tamizaje habitual."
+        text: "Estás viendo el algoritmo completo. Selecciona una ruta para resaltar la sospecha aguda o el tamizaje habitual."
       },
       acute: {
         title: "Ruta de sospecha aguda",
-        text: "Se resalta el trayecto cuando hay exposicion reciente o clinica sugestiva. Aqui una prueba negativa aislada no basta para descartar infeccion temprana."
+        text: "Se resalta el trayecto cuando hay exposición reciente o clínica sugestiva. Aquí una prueba negativa aislada no basta para descartar infección temprana."
       },
       screening: {
         title: "Ruta de tamizaje habitual",
-        text: "Se resalta el trayecto para tamizaje inicial. Los resultados reactivos requieren confirmacion y los no reactivos deben interpretarse segun periodo ventana."
+        text: "Se resalta el trayecto para tamizaje inicial. Los resultados reactivos requieren confirmación y los no reactivos deben interpretarse según el período de ventana."
       }
     };
 
