@@ -3,43 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Protocolos Med - Plataforma de protocolos</title>
+  <title>Protocolos Clínicos - Biblioteca de enfermedades</title>
   <style>
     :root {
-      --bg: #f4f0e8;
+      --bg: #f4efe7;
       --bg-soft: #fbf8f3;
       --ink: #172033;
-      --muted: #5f6d84;
+      --muted: #5d6b80;
+      --line: rgba(23, 32, 51, 0.1);
       --panel: rgba(255, 255, 255, 0.9);
       --panel-strong: #ffffff;
-      --line: rgba(23, 32, 51, 0.12);
-      --navy: #10213c;
-      --navy-soft: #1f355c;
-      --gold: #df8d2f;
-      --red: #d95b52;
-      --green: #2b9d63;
-      --teal: #1998a3;
-      --purple: #7559d9;
-      --orange: #ef7b2d;
-      --blue-fill: #dbe8ff;
-      --blue-stroke: #3e73ff;
-      --teal-fill: #daf7f5;
-      --teal-stroke: #1998a3;
-      --yellow-fill: #fff3c8;
-      --yellow-stroke: #d7a21b;
-      --green-fill: #dcf8e4;
-      --green-stroke: #2b9d63;
-      --red-fill: #ffe0dc;
-      --red-stroke: #d95b52;
-      --purple-fill: #efe7ff;
-      --purple-stroke: #7559d9;
-      --orange-fill: #ffe8d0;
-      --orange-stroke: #ef7b2d;
-      --shadow-lg: 0 24px 60px rgba(16, 33, 60, 0.12);
-      --shadow-md: 0 14px 30px rgba(16, 33, 60, 0.1);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --navy: #11213d;
+      --navy-2: #243c66;
+      --gold: #df8f34;
+      --gold-soft: #fff0d6;
+      --blue: #3f74ff;
+      --blue-soft: #dbe6ff;
+      --green: #2b9c64;
+      --green-soft: #dcf5e5;
+      --red: #d85a51;
+      --red-soft: #ffe1dd;
+      --purple: #7758d8;
+      --purple-soft: #efe8ff;
+      --teal: #1a96a1;
+      --teal-soft: #daf7f4;
+      --orange: #ec7e2f;
+      --orange-soft: #ffe8d1;
+      --shadow-lg: 0 24px 60px rgba(17, 33, 61, 0.12);
+      --shadow-md: 0 14px 30px rgba(17, 33, 61, 0.1);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
       --radius-pill: 999px;
     }
 
@@ -56,9 +50,9 @@
       color: var(--ink);
       font-family: "Avenir Next", "Helvetica Neue", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(223, 141, 47, 0.18), transparent 26%),
-        radial-gradient(circle at top right, rgba(62, 115, 255, 0.16), transparent 24%),
-        linear-gradient(180deg, #fcfaf6 0%, var(--bg) 58%, #eee8de 100%);
+        radial-gradient(circle at top left, rgba(223, 143, 52, 0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(63, 116, 255, 0.14), transparent 22%),
+        linear-gradient(180deg, #fcfaf6 0%, var(--bg) 56%, #efe8de 100%);
     }
 
     body::before {
@@ -67,19 +61,24 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(23, 32, 51, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(23, 32, 51, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(23, 32, 51, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 51, 0.025) 1px, transparent 1px);
       background-size: 34px 34px;
-      mask-image: radial-gradient(circle at center, black 54%, transparent 100%);
+      mask-image: radial-gradient(circle at center, black 58%, transparent 100%);
     }
 
     h1,
     h2,
     h3,
     h4 {
-      font-family: "Avenir Next Condensed", "Avenir Next", "Helvetica Neue", sans-serif;
-      letter-spacing: -0.03em;
       margin: 0;
+      letter-spacing: -0.03em;
+      font-family: "Avenir Next Condensed", "Avenir Next", "Helvetica Neue", sans-serif;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
     }
 
     button,
@@ -87,28 +86,24 @@
       font: inherit;
     }
 
-    .app-shell {
-      width: min(1440px, calc(100% - 28px));
-      margin: 18px auto;
+    .page {
+      width: min(1420px, calc(100% - 28px));
+      margin: 18px auto 28px;
       display: grid;
-      grid-template-columns: 340px minmax(0, 1fr);
       gap: 18px;
-      min-height: calc(100vh - 36px);
     }
 
-    .sidebar {
-      background: linear-gradient(180deg, rgba(16, 33, 60, 0.96), rgba(13, 25, 46, 0.98));
-      color: #fff;
-      border-radius: 34px;
-      padding: 24px 20px;
-      box-shadow: var(--shadow-lg);
-      display: grid;
-      gap: 16px;
-      align-self: start;
-      position: sticky;
-      top: 18px;
-      max-height: calc(100vh - 36px);
-      overflow: hidden;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 24px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(14px);
     }
 
     .brand {
@@ -118,12 +113,12 @@
     }
 
     .brand-mark {
-      width: 52px;
-      height: 52px;
-      border-radius: 18px;
+      width: 50px;
+      height: 50px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #fff0d4, #f4b75c);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff0d6, #f0b65e);
       color: var(--navy);
       font-size: 1.4rem;
       font-weight: 800;
@@ -132,303 +127,110 @@
 
     .brand small {
       display: block;
-      color: rgba(255, 255, 255, 0.68);
-      font-size: 0.9rem;
       margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
 
-    .sidebar-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 22px;
-      padding: 16px;
-      backdrop-filter: blur(12px);
-    }
-
-    .search-label,
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .search-input {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.92);
-      padding: 14px 16px;
-      color: var(--ink);
-      outline: none;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
-    }
-
-    .search-input:focus {
-      border-color: rgba(62, 115, 255, 0.55);
-      box-shadow: 0 0 0 4px rgba(62, 115, 255, 0.12);
-    }
-
-    .search-hint {
-      margin: 10px 0 0;
-      color: rgba(255, 255, 255, 0.68);
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    .filter-wrap {
+    .nav-links {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .filter-chip {
+    .nav-link {
       border: none;
       border-radius: var(--radius-pill);
       padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
+      background: rgba(17, 33, 61, 0.08);
+      color: var(--navy);
       cursor: pointer;
       transition: transform 0.18s ease, background 0.18s ease;
     }
 
-    .filter-chip:hover {
+    .nav-link:hover {
       transform: translateY(-1px);
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(17, 33, 61, 0.12);
     }
 
-    .filter-chip.active {
-      background: linear-gradient(135deg, #fff0d4, #f4b75c);
-      color: var(--navy);
-      font-weight: 700;
-    }
-
-    .protocol-list {
+    .hero {
       display: grid;
-      gap: 12px;
-      max-height: min(56vh, 760px);
-      overflow: auto;
-      padding-right: 6px;
+      grid-template-columns: minmax(0, 1.25fr) 360px;
+      gap: 18px;
     }
 
-    .protocol-card {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
-      padding: 14px;
-      text-align: left;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .protocol-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(244, 183, 92, 0.44);
-    }
-
-    .protocol-card.selected {
-      background: rgba(255, 240, 212, 0.12);
-      border-color: rgba(244, 183, 92, 0.54);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-    }
-
-    .protocol-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
-
-    .protocol-card p {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.72);
-      line-height: 1.5;
-      font-size: 0.92rem;
-    }
-
-    .card-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .mini-tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: var(--radius-pill);
-      padding: 6px 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    .mini-tag.category {
-      background: rgba(62, 115, 255, 0.2);
-      color: #cfe0ff;
-    }
-
-    .mini-tag.status {
-      background: rgba(244, 183, 92, 0.18);
-      color: #ffe1ab;
-    }
-
-    .sidebar-foot {
-      margin-top: auto;
-      padding: 0 4px;
-      color: rgba(255, 255, 255, 0.62);
-      font-size: 0.86rem;
-      line-height: 1.5;
-    }
-
-    .workspace {
-      background: rgba(255, 255, 255, 0.58);
-      border: 1px solid rgba(255, 255, 255, 0.64);
-      border-radius: 34px;
-      padding: 22px;
+    .hero-main,
+    .hero-side,
+    .section-card,
+    .viewer-card,
+    .protocol-card,
+    .category-card,
+    .stat-card,
+    .test-card,
+    .detail-card,
+    .info-card {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow-lg);
       backdrop-filter: blur(14px);
     }
 
-    .workspace-top {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 243, 235, 0.9));
-      border-radius: 28px;
-      padding: 22px 24px;
-      box-shadow: var(--shadow-md);
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 18px;
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(17, 33, 61, 0.97), rgba(38, 60, 102, 0.95));
+      color: #fff;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -30px;
+      top: -70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 136, 0.45), rgba(255, 209, 136, 0));
     }
 
     .eyebrow {
-      margin: 0 0 8px;
-      font-size: 0.84rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--navy-soft);
-      font-weight: 800;
-    }
-
-    .workspace-top h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .workspace-top p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-      max-width: 70ch;
-    }
-
-    .hero-summary {
-      min-width: 230px;
-      background: var(--navy);
-      color: #fff;
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: 0 16px 34px rgba(16, 33, 60, 0.18);
-    }
-
-    .hero-summary strong {
-      display: block;
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-
-    .hero-summary span,
-    .hero-summary small {
-      color: rgba(255, 255, 255, 0.74);
-      display: block;
-      line-height: 1.45;
-    }
-
-    .viewer {
-      min-height: 64vh;
-    }
-
-    .viewer-shell {
-      display: grid;
-      gap: 18px;
-    }
-
-    .meta-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       border-radius: var(--radius-pill);
-      padding: 9px 14px;
-      background: rgba(16, 33, 60, 0.08);
-      color: var(--navy);
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .overview-card {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 245, 237, 0.92));
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--line);
-    }
-
-    .overview-card span {
-      display: block;
-      font-size: 0.82rem;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-      font-weight: 700;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 18px;
     }
 
-    .overview-card strong {
-      font-size: 1.05rem;
-      line-height: 1.35;
+    .hero-main h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 0.96;
+      max-width: 12ch;
+      margin-bottom: 14px;
     }
 
-    .module-card {
-      background: rgba(255, 255, 255, 0.82);
-      border: 1px solid rgba(23, 32, 51, 0.09);
-      border-radius: 28px;
-      padding: 22px;
-      box-shadow: var(--shadow-md);
+    .hero-main p {
+      max-width: 66ch;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.04rem;
     }
 
-    .module-card h2 {
-      font-size: clamp(1.55rem, 2vw, 2rem);
-      margin-bottom: 8px;
-    }
-
-    .module-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .algorithm-toolbar {
+    .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 22px;
     }
 
-    .toolbar-button {
+    .cta {
       border: none;
       border-radius: var(--radius-pill);
       padding: 12px 18px;
@@ -436,49 +238,418 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
 
-    .toolbar-button:hover {
+    .cta:hover {
       transform: translateY(-1px);
     }
 
-    .toolbar-button:disabled {
-      opacity: 0.65;
-      transform: none;
-      cursor: not-allowed;
+    .cta.primary {
+      background: linear-gradient(135deg, #fff0d6, #f0b65e);
+      color: var(--navy);
+      font-weight: 800;
+      box-shadow: 0 14px 28px rgba(223, 143, 52, 0.22);
     }
 
-    .toolbar-button.primary {
-      background: var(--navy);
+    .cta.secondary {
+      background: rgba(255, 255, 255, 0.1);
       color: #fff;
-      box-shadow: 0 12px 22px rgba(16, 33, 60, 0.16);
     }
 
-    .toolbar-button.secondary {
-      background: rgba(16, 33, 60, 0.08);
+    .hero-side {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-self: stretch;
+    }
+
+    .hero-side h3 {
+      font-size: 1.45rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-side ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero-side li + li {
+      margin-top: 6px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 18px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .stat-card strong {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .section-card {
+      padding: 22px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 74ch;
+    }
+
+    .section-head small {
+      color: var(--navy-2);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .category-card {
+      border: 1px solid var(--line);
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .category-card.active {
+      border-color: rgba(17, 33, 61, 0.35);
+      box-shadow: 0 16px 32px rgba(17, 33, 61, 0.12);
+    }
+
+    .category-card h3 {
+      font-size: 1.22rem;
+      margin-bottom: 8px;
+    }
+
+    .category-card p {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-bottom: 14px;
+    }
+
+    .category-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-pill);
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: rgba(17, 33, 61, 0.08);
       color: var(--navy);
     }
 
-    .toolbar-button.secondary.active {
+    .category-accent {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .accent-its { background: linear-gradient(135deg, #d95b52, #ef8d74); }
+    .accent-respiratorias { background: linear-gradient(135deg, #3f74ff, #72a0ff); }
+    .accent-gastrointestinales { background: linear-gradient(135deg, #2b9c64, #5fc38a); }
+    .accent-neurologicas { background: linear-gradient(135deg, #7758d8, #9e84f1); }
+    .accent-metabolicas { background: linear-gradient(135deg, #df8f34, #f2bc68); }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .search-input,
+    .sort-select {
+      width: 100%;
+      border: 1px solid rgba(17, 33, 61, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .search-input:focus,
+    .sort-select:focus {
+      border-color: rgba(63, 116, 255, 0.45);
+      box-shadow: 0 0 0 4px rgba(63, 116, 255, 0.12);
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-pill {
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 11px 14px;
+      background: rgba(17, 33, 61, 0.08);
+      color: var(--navy);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .filter-pill:hover {
+      transform: translateY(-1px);
+    }
+
+    .filter-pill.active {
       background: var(--navy);
       color: #fff;
-      box-shadow: 0 12px 22px rgba(16, 33, 60, 0.14);
+      font-weight: 700;
+    }
+
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .protocol-card {
+      border: 1px solid var(--line);
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .protocol-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .protocol-card.selected {
+      border-color: rgba(17, 33, 61, 0.34);
+      box-shadow: 0 16px 34px rgba(17, 33, 61, 0.12);
+    }
+
+    .protocol-card h3 {
+      font-size: 1.28rem;
+      margin: 10px 0 8px;
+    }
+
+    .protocol-card p {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .protocol-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-pill);
+      padding: 7px 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .tag.category {
+      background: rgba(63, 116, 255, 0.12);
+      color: var(--blue);
+    }
+
+    .tag.status {
+      background: rgba(223, 143, 52, 0.14);
+      color: #9a5a0a;
+    }
+
+    .tag.sort {
+      background: rgba(43, 156, 100, 0.12);
+      color: #186840;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .viewer-card {
+      padding: 22px;
+    }
+
+    .viewer-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .viewer-head h2 {
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      margin-bottom: 8px;
+    }
+
+    .viewer-head p {
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .quick-access {
+      display: grid;
+      gap: 12px;
+    }
+
+    .quick-box {
+      background: linear-gradient(135deg, rgba(17, 33, 61, 0.96), rgba(36, 60, 102, 0.95));
+      color: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+      min-width: 240px;
+    }
+
+    .quick-box strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .quick-box span,
+    .quick-box small {
+      display: block;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.45;
+    }
+
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .detail-card {
+      border: 1px solid var(--line);
+      padding: 18px;
+    }
+
+    .detail-card span {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .detail-card strong {
+      font-size: 1.04rem;
+      line-height: 1.45;
+    }
+
+    .module-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .tool-btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .tool-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .tool-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.68;
+      transform: none;
+    }
+
+    .tool-btn.primary {
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(17, 33, 61, 0.16);
+    }
+
+    .tool-btn.secondary {
+      background: rgba(17, 33, 61, 0.08);
+      color: var(--navy);
+    }
+
+    .tool-btn.secondary.active {
+      background: var(--navy);
+      color: #fff;
     }
 
     .status-card {
-      margin-top: 16px;
       display: grid;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.74);
-      border-radius: 24px;
+      gap: 10px;
       padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.76);
       border: 1px solid var(--line);
+      margin-bottom: 18px;
     }
 
     .status-card strong {
-      font-size: 1.06rem;
-    }
-
-    .status-card p {
-      margin: 0;
+      font-size: 1.05rem;
     }
 
     .pill-row {
@@ -490,34 +661,33 @@
     .pill {
       padding: 8px 14px;
       border-radius: var(--radius-pill);
-      background: rgba(16, 33, 60, 0.08);
+      background: rgba(17, 33, 61, 0.08);
       color: var(--ink);
       font-size: 0.9rem;
     }
 
     .pill.active-red {
-      background: rgba(217, 91, 82, 0.16);
-      color: #a3352d;
+      background: rgba(216, 90, 81, 0.16);
+      color: #a43129;
     }
 
     .pill.active-green {
-      background: rgba(43, 157, 99, 0.16);
-      color: #196b42;
+      background: rgba(43, 156, 100, 0.16);
+      color: #166c42;
     }
 
     .diagram-stack {
       display: grid;
       gap: 16px;
-      margin-top: 18px;
     }
 
     .connector {
       width: 4px;
       height: 24px;
       margin: 0 auto;
-      background: linear-gradient(180deg, rgba(95, 109, 132, 0.45), rgba(95, 109, 132, 0.9));
+      background: linear-gradient(180deg, rgba(93, 107, 128, 0.45), rgba(93, 107, 128, 0.9));
+      border-radius: var(--radius-pill);
       position: relative;
-      border-radius: 99px;
     }
 
     .connector::after {
@@ -528,19 +698,19 @@
       transform: translateX(-50%);
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-top: 12px solid rgba(95, 109, 132, 0.95);
+      border-top: 12px solid rgba(93, 107, 128, 0.96);
     }
 
     .node {
-      width: min(840px, 100%);
+      width: min(860px, 100%);
       margin: 0 auto;
       border-radius: 24px;
       padding: 18px 20px;
       border: 3px solid transparent;
       box-shadow: var(--shadow-md);
       background: #fff;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
       cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
     }
 
     .node:hover {
@@ -549,39 +719,32 @@
 
     .node.active {
       border-color: var(--navy);
-      box-shadow: 0 18px 36px rgba(16, 33, 60, 0.16);
+      box-shadow: 0 18px 36px rgba(17, 33, 61, 0.16);
     }
 
     .node.route-highlight {
-      border-color: rgba(16, 33, 60, 0.28);
+      border-color: rgba(17, 33, 61, 0.28);
     }
 
     .node-top {
       display: flex;
       justify-content: space-between;
       gap: 14px;
-      align-items: flex-start;
+      align-items: start;
     }
 
     .node h3 {
-      font-size: clamp(1.12rem, 1.8vw, 1.4rem);
-      line-height: 1.2;
+      font-size: clamp(1.12rem, 1.8vw, 1.38rem);
       margin-bottom: 8px;
     }
 
-    .node .badge {
-      border-radius: var(--radius-pill);
-      padding: 8px 12px;
-      font-size: 0.8rem;
-      background: rgba(255, 255, 255, 0.62);
-      font-weight: 800;
-      white-space: nowrap;
+    .node p {
+      color: var(--muted);
     }
 
-    .node p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
+    .node .badge {
+      background: rgba(255, 255, 255, 0.58);
+      white-space: nowrap;
     }
 
     .node .toggle {
@@ -589,7 +752,7 @@
       border: none;
       border-radius: var(--radius-pill);
       padding: 10px 14px;
-      background: rgba(16, 33, 60, 0.08);
+      background: rgba(17, 33, 61, 0.08);
       color: var(--navy);
       cursor: pointer;
     }
@@ -598,7 +761,7 @@
       display: none;
       margin-top: 14px;
       padding-top: 14px;
-      border-top: 1px solid rgba(95, 109, 132, 0.16);
+      border-top: 1px solid rgba(93, 107, 128, 0.16);
     }
 
     .node.open .extra {
@@ -617,38 +780,38 @@
     }
 
     .node--blue {
-      background: linear-gradient(180deg, var(--blue-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--blue-stroke);
+      background: linear-gradient(180deg, var(--blue-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--blue);
     }
 
     .node--teal {
-      background: linear-gradient(180deg, var(--teal-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--teal-stroke);
+      background: linear-gradient(180deg, var(--teal-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--teal);
     }
 
     .node--yellow {
-      background: linear-gradient(180deg, var(--yellow-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--yellow-stroke);
+      background: linear-gradient(180deg, #fff3c8, rgba(255, 255, 255, 0.95));
+      border-color: #d6a21a;
     }
 
     .node--green {
-      background: linear-gradient(180deg, var(--green-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--green-stroke);
+      background: linear-gradient(180deg, var(--green-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--green);
     }
 
     .node--red {
-      background: linear-gradient(180deg, var(--red-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--red-stroke);
+      background: linear-gradient(180deg, var(--red-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--red);
     }
 
     .node--purple {
-      background: linear-gradient(180deg, var(--purple-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--purple-stroke);
+      background: linear-gradient(180deg, var(--purple-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--purple);
     }
 
     .node--orange {
-      background: linear-gradient(180deg, var(--orange-fill), rgba(255, 255, 255, 0.94));
-      border-color: var(--orange-stroke);
+      background: linear-gradient(180deg, var(--orange-soft), rgba(255, 255, 255, 0.95));
+      border-color: var(--orange);
     }
 
     .branch-grid {
@@ -662,12 +825,12 @@
 
     .branch-label {
       display: inline-block;
-      color: #fff;
+      margin-bottom: 10px;
       padding: 8px 12px;
       border-radius: var(--radius-pill);
+      color: #fff;
       font-size: 0.84rem;
       font-weight: 800;
-      margin-bottom: 10px;
     }
 
     .branch-label.red {
@@ -683,23 +846,23 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 120px 1fr;
-      align-items: center;
       gap: 14px;
+      align-items: center;
     }
 
     .merge-line .bar {
       height: 4px;
-      background: rgba(95, 109, 132, 0.84);
-      border-radius: 99px;
+      background: rgba(93, 107, 128, 0.82);
+      border-radius: var(--radius-pill);
     }
 
     .merge-line .down {
       width: 4px;
       height: 42px;
       margin: 0 auto;
+      background: rgba(93, 107, 128, 0.86);
+      border-radius: var(--radius-pill);
       position: relative;
-      background: rgba(95, 109, 132, 0.84);
-      border-radius: 99px;
     }
 
     .merge-line .down::after {
@@ -710,17 +873,17 @@
       transform: translateX(-50%);
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-top: 12px solid rgba(95, 109, 132, 0.95);
+      border-top: 12px solid rgba(93, 107, 128, 0.96);
     }
 
     .alert-banner {
-      background: linear-gradient(135deg, #8f1a1d, #b93131);
-      color: #fff;
-      border-radius: 24px;
-      padding: 20px 22px;
-      box-shadow: var(--shadow-md);
       width: min(1080px, 100%);
       margin: 0 auto;
+      padding: 20px 22px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #931a1f, #ba3537);
+      color: #fff;
+      box-shadow: var(--shadow-md);
     }
 
     .alert-banner h3 {
@@ -732,161 +895,83 @@
       color: rgba(255, 255, 255, 0.9);
     }
 
-    .test-grid,
-    .reference-grid,
-    .template-grid {
-      display: grid;
-      gap: 16px;
-    }
-
     .test-grid {
+      display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
     }
 
-    .test-card,
-    .info-card,
-    .template-section,
-    .template-side-card,
-    .empty-state {
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(23, 32, 51, 0.09);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: var(--shadow-md);
+    .test-card {
+      padding: 18px;
+      border: 1px solid var(--line);
     }
 
-    .test-card h4,
-    .info-card h3,
-    .template-section h3,
-    .template-side-card h3 {
+    .test-card h4 {
       margin-bottom: 10px;
-      font-size: 1.2rem;
+      font-size: 1.12rem;
     }
 
-    .test-card p,
-    .info-card p,
-    .template-section p,
-    .template-side-card p {
-      margin: 0;
-      line-height: 1.6;
+    .test-card p {
       color: var(--muted);
     }
 
-    .test-card.blue {
-      border-color: rgba(62, 115, 255, 0.4);
-    }
+    .test-card.blue { border-color: rgba(63, 116, 255, 0.36); }
+    .test-card.green { border-color: rgba(43, 156, 100, 0.36); }
+    .test-card.purple { border-color: rgba(119, 88, 216, 0.36); }
+    .test-card.red { border-color: rgba(216, 90, 81, 0.36); }
 
-    .test-card.green {
-      border-color: rgba(43, 157, 99, 0.4);
-    }
-
-    .test-card.purple {
-      border-color: rgba(117, 89, 217, 0.42);
-    }
-
-    .test-card.red {
-      border-color: rgba(217, 91, 82, 0.42);
-    }
-
-    .reference-grid {
+    .info-grid {
+      display: grid;
       grid-template-columns: 0.9fr 1.1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .info-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+    }
+
+    .info-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.34rem;
     }
 
     .info-card ol,
-    .info-card ul,
-    .template-side-card ul {
+    .info-card ul {
       margin: 0;
       padding-left: 18px;
       color: var(--muted);
       line-height: 1.55;
     }
 
-    .info-card li + li,
-    .template-side-card li + li {
+    .info-card li + li {
       margin-top: 6px;
     }
 
-    .template-layout {
+    .clinical-layout {
       display: grid;
-      gap: 18px;
-    }
-
-    .template-hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1.15fr) 320px;
       gap: 16px;
-      align-items: start;
-      background: linear-gradient(135deg, rgba(16, 33, 60, 0.96), rgba(31, 53, 92, 0.94));
-      color: #fff;
-      border-radius: 28px;
-      padding: 22px;
-      box-shadow: var(--shadow-md);
+      margin-top: 18px;
     }
 
-    .template-hero p {
-      color: rgba(255, 255, 255, 0.78);
-      margin-top: 8px;
-    }
-
-    .template-badge {
-      align-self: start;
-      background: rgba(255, 240, 212, 0.16);
-      color: #ffe1ab;
-      border-radius: var(--radius-pill);
-      padding: 10px 14px;
-      font-weight: 800;
-      font-size: 0.86rem;
-    }
-
-    .template-grid {
-      grid-template-columns: minmax(0, 1.25fr) 340px;
-      align-items: start;
-    }
-
-    .template-main {
+    .clinical-main {
       display: grid;
       gap: 16px;
     }
 
-    .template-sections {
+    .clinical-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
-    .template-side {
+    .clinical-side {
       display: grid;
       gap: 16px;
       align-self: start;
-      position: sticky;
-      top: 22px;
-    }
-
-    .template-section small,
-    .template-side-card small {
-      display: block;
-      margin-bottom: 10px;
-      color: var(--navy-soft);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.78rem;
-    }
-
-    .deliverable-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .deliverable {
-      border-radius: var(--radius-pill);
-      padding: 8px 12px;
-      background: rgba(16, 33, 60, 0.08);
-      color: var(--navy);
-      font-weight: 700;
-      font-size: 0.9rem;
     }
 
     .empty-state {
@@ -901,42 +986,50 @@
 
     .empty-state p {
       margin: 0 auto;
-      max-width: 56ch;
+      max-width: 54ch;
       color: var(--muted);
-      line-height: 1.6;
     }
 
-    @media (max-width: 1180px) {
-      .app-shell {
+    @media (max-width: 1220px) {
+      .hero,
+      .clinical-layout,
+      .info-grid {
         grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        position: static;
-        max-height: none;
-      }
-
-      .workspace-top,
-      .template-grid,
-      .reference-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .template-side {
-        position: static;
-      }
-
-      .overview-grid,
-      .test-grid {
+      .category-grid,
+      .protocol-grid,
+      .stats,
+      .test-grid,
+      .fact-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quick-box {
+        min-width: auto;
       }
     }
 
     @media (max-width: 900px) {
-      .branch-grid,
-      .template-sections,
+      .topbar,
+      .section-head,
+      .viewer-head,
+      .controls {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .topbar {
+        justify-content: initial;
+      }
+
+      .category-grid,
+      .protocol-grid,
+      .stats,
       .test-grid,
-      .overview-grid {
+      .fact-grid,
+      .clinical-grid,
+      .branch-grid {
         grid-template-columns: 1fr;
       }
 
@@ -950,25 +1043,27 @@
     }
 
     @media (max-width: 680px) {
-      .app-shell {
-        width: min(100% - 16px, 1440px);
-        margin: 8px auto 18px;
+      .page {
+        width: min(100% - 14px, 1420px);
+        margin-top: 8px;
       }
 
-      .sidebar,
-      .workspace {
-        padding: 16px;
-        border-radius: 26px;
+      .hero-main,
+      .hero-side,
+      .section-card,
+      .viewer-card,
+      .protocol-card,
+      .category-card,
+      .stat-card,
+      .test-card,
+      .detail-card,
+      .info-card {
+        padding: 18px;
+        border-radius: 24px;
       }
 
-      .workspace-top,
-      .module-card,
-      .template-hero,
-      .template-section,
-      .template-side-card,
-      .info-card,
-      .test-card {
-        border-radius: 22px;
+      .topbar {
+        padding: 14px;
       }
 
       .node {
@@ -982,66 +1077,142 @@
   </style>
 </head>
 <body>
-  <main class="app-shell">
-    <aside class="sidebar">
+  <main class="page">
+    <header class="topbar">
       <div class="brand">
-        <div class="brand-mark">P</div>
+        <div class="brand-mark">PC</div>
         <div>
-          <h2>Protocolos Med</h2>
-          <small>Plataforma para búsqueda, consulta y toma de decisiones</small>
+          <h2>Protocolos Clínicos</h2>
+          <small>Biblioteca digital de protocolos por enfermedad y categoría clínica</small>
         </div>
       </div>
 
-      <section class="sidebar-card">
-        <label class="search-label" for="protocolSearch">
-          <span>Buscar protocolos</span>
-        </label>
-        <input
-          id="protocolSearch"
-          class="search-input"
-          type="search"
-          placeholder="VIH, cohorte, revisión sistemática..."
-          autocomplete="off"
-        >
-        <p class="search-hint">Busca por nombre, categoría o palabra clave. La biblioteca mezcla protocolos clínicos y plantillas de investigación.</p>
-      </section>
+      <nav class="nav-links">
+        <button class="nav-link" type="button" data-scroll="#inicio">Inicio</button>
+        <button class="nav-link" type="button" data-scroll="#categorias">Categorías</button>
+        <button class="nav-link" type="button" data-scroll="#biblioteca">Biblioteca</button>
+        <button class="nav-link" type="button" data-scroll="#visor">Protocolo abierto</button>
+      </nav>
+    </header>
 
-      <section class="sidebar-card">
-        <div class="section-heading">
-          <span>Filtros</span>
-          <span id="resultCount">0 resultados</span>
+    <section class="hero" id="inicio">
+      <article class="hero-main">
+        <div class="eyebrow">Solo protocolos clínicos</div>
+        <h1>Una plataforma para consultar protocolos clínicos de distintas enfermedades</h1>
+        <p>Esta página está pensada como una biblioteca clínica. Aquí puedes buscar protocolos por tipo de enfermedad, explorar los más recientes o entrar por categorías como ITS, respiratorias, gastrointestinales, neurológicas y metabólicas. Desde la página principal puedes abrir directamente el protocolo de VIH dentro de la categoría de infecciones de transmisión sexual.</p>
+        <div class="hero-actions">
+          <button class="cta primary" type="button" data-open-protocol="vih">Abrir protocolo de VIH</button>
+          <button class="cta secondary" type="button" data-filter-category="ITS">Ir a categoría ITS</button>
         </div>
-        <div class="filter-wrap" id="filterWrap"></div>
-      </section>
+      </article>
 
-      <section class="sidebar-card">
-        <div class="section-heading">
-          <span>Biblioteca</span>
-          <span id="catalogCount"></span>
-        </div>
-        <div class="protocol-list" id="protocolList"></div>
-      </section>
-
-      <div class="sidebar-foot">
-        Base inicial para organizar protocolos de decisión clínica y diferentes tipos de protocolos de investigación en una sola plataforma.
-      </div>
-    </aside>
-
-    <section class="workspace">
-      <header class="workspace-top">
+      <aside class="hero-side">
         <div>
-          <p class="eyebrow">Plataforma de protocolos</p>
-          <h1 id="workspaceTitle">Biblioteca de protocolos</h1>
-          <p id="workspaceSubtitle">Explora, filtra y compara protocolos clínicos e investigación dentro de una misma interfaz.</p>
+          <h3>Qué encontrarás aquí</h3>
+          <ul>
+            <li>Protocolos clínicos agrupados por tipo de enfermedad.</li>
+            <li>Orden de consulta de más nuevos a más antiguos o al revés.</li>
+            <li>Buscador para encontrar una enfermedad específica.</li>
+            <li>Acceso rápido al protocolo de VIH dentro de ITS.</li>
+          </ul>
         </div>
-        <div class="hero-summary">
-          <strong id="selectedCategory">Selecciona un protocolo</strong>
-          <span id="selectedStatus">Biblioteca inicial</span>
-          <small id="selectedAudience">Diseñada para consulta rápida y navegación por módulos.</small>
+        <div>
+          <h3>Cómo usarla</h3>
+          <ul>
+            <li>Explora por categorías desde la portada.</li>
+            <li>Haz clic en un protocolo para abrir su visor.</li>
+            <li>En el caso de VIH, usa el algoritmo interactivo para recorrer decisiones clínicas.</li>
+          </ul>
         </div>
-      </header>
+      </aside>
+    </section>
 
-      <div id="viewerContent" class="viewer"></div>
+    <section class="stats" id="resumen">
+      <article class="stat-card">
+        <span>Módulos clínicos</span>
+        <strong id="statProtocols">0</strong>
+        <p>Protocolos visibles en la biblioteca clínica.</p>
+      </article>
+      <article class="stat-card">
+        <span>Categorías</span>
+        <strong id="statCategories">0</strong>
+        <p>Tipos de enfermedades organizadas para navegar mejor.</p>
+      </article>
+      <article class="stat-card">
+        <span>Protocolos activos</span>
+        <strong id="statAvailable">0</strong>
+        <p>Material listo para consulta inmediata.</p>
+      </article>
+      <article class="stat-card">
+        <span>Acceso destacado</span>
+        <strong>VIH / ITS</strong>
+        <p>Protocolo accesible desde la portada y la categoría ITS.</p>
+      </article>
+    </section>
+
+    <section class="section-card" id="categorias">
+      <div class="section-head">
+        <div>
+          <small>Categorías clínicas</small>
+          <h2>Tipos de enfermedades</h2>
+        </div>
+        <p>Selecciona una categoría para reorganizar la biblioteca principal. La portada está orientada a enfermedades y protocolos clínicos, no a protocolos metodológicos de investigación.</p>
+      </div>
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <section class="section-card" id="recientes">
+      <div class="section-head">
+        <div>
+          <small>Portada clínica</small>
+          <h2>Protocolos recientes</h2>
+        </div>
+        <p>Esta sección ordena los protocolos de más nuevos a más antiguos o al revés. Así puedes priorizar lo último agregado a la plataforma.</p>
+      </div>
+      <div class="protocol-grid" id="recentGrid"></div>
+    </section>
+
+    <section class="section-card" id="biblioteca">
+      <div class="section-head">
+        <div>
+          <small>Biblioteca completa</small>
+          <h2>Buscar protocolos por enfermedad</h2>
+        </div>
+        <p id="librarySummary">Explora la biblioteca principal y abre el protocolo que quieras estudiar.</p>
+      </div>
+
+      <div class="controls">
+        <input id="searchInput" class="search-input" type="search" placeholder="Buscar por enfermedad, categoría o palabra clave...">
+        <select id="sortSelect" class="sort-select" aria-label="Ordenar protocolos">
+          <option value="newest">Más nuevos primero</option>
+          <option value="oldest">Más antiguos primero</option>
+          <option value="az">Orden alfabético</option>
+        </select>
+        <div class="badge" id="resultBadge">0 resultados</div>
+      </div>
+
+      <div class="filter-pills" id="filterPills"></div>
+
+      <div class="protocol-grid" id="libraryGrid"></div>
+    </section>
+
+    <section class="viewer-card" id="visor">
+      <div class="viewer-head">
+        <div>
+          <div class="tag category" id="viewerCategory">Categoría</div>
+          <h2 id="viewerTitle">Selecciona un protocolo</h2>
+          <p id="viewerSubtitle">Abre un protocolo desde la portada, la categoría o la biblioteca.</p>
+        </div>
+        <div class="quick-access">
+          <div class="quick-box">
+            <strong id="viewerStatus">Biblioteca clínica</strong>
+            <span id="viewerAudience">Consulta orientada a estudiante de medicina y médico general.</span>
+            <small id="viewerUpdated">Última actualización</small>
+          </div>
+        </div>
+      </div>
+
+      <div id="viewerContent"></div>
     </section>
   </main>
 
@@ -1051,26 +1222,26 @@
         id: "vih",
         kind: "algorithm",
         title: "Detección temprana de VIH",
-        category: "Clínico",
-        status: "Basado en artículo",
-        audience: "Toma de decisiones clínicas",
-        summary: "Algoritmo interactivo para decidir qué hacer ante exposición reciente, pruebas discordantes y seguimiento diagnóstico.",
-        subtitle: "Versión interactiva basada en el artículo de Medina-De la Garza y colaboradores sobre casi diagnóstico erróneo en infección aguda.",
-        tags: ["VIH", "infección aguda", "tamizaje", "consejería", "diagnóstico"],
+        category: "ITS",
+        status: "Disponible",
+        updatedAt: "2026-04-24",
+        summary: "Algoritmo clínico para exposición reciente, pruebas discordantes, tamizaje y confirmación diagnóstica en VIH.",
+        subtitle: "Protocolo clínico dentro de la categoría ITS, con enfoque en sospecha de infección aguda y toma de decisiones diagnósticas.",
+        tags: ["VIH", "ITS", "infección aguda", "tamizaje", "consejería"],
         quickFacts: [
-          { label: "Enfoque", value: "Sospecha clínica + pruebas" },
-          { label: "Punto crítico", value: "Un negativo aislado no basta" },
+          { label: "Categoría", value: "ITS" },
+          { label: "Enfoque", value: "Clínico-diagnóstico" },
           { label: "Prueba clave", value: "Cuarta generación" },
           { label: "Escalamiento", value: "NAT, PCR o carga viral" }
         ],
         routeMessages: {
           all: {
             title: "Vista general activa",
-            text: "Estás viendo el algoritmo completo. Puedes elegir una ruta específica o reproducir el recorrido paso a paso."
+            text: "Estás viendo el protocolo completo. Puedes abrir una ruta específica o recorrerlo paso a paso."
           },
           acute: {
             title: "Ruta de sospecha aguda",
-            text: "Aquí la clínica pesa mucho. Una prueba rápida o un Western blot negativos no descartan infección aguda si la exposición fue reciente."
+            text: "Aquí la clínica manda. Una prueba rápida o un Western blot negativos no descartan infección aguda si hubo exposición reciente."
           },
           screening: {
             title: "Ruta de tamizaje habitual",
@@ -1086,7 +1257,7 @@
             title: "1. Entrada al algoritmo",
             text: "Persona con exposición de riesgo, síntomas compatibles, embarazo, infecciones de transmisión sexual (ITS), control preventivo o solicitud voluntaria de la prueba.",
             details: [
-              "Puede iniciar tanto por sospecha clínica como por tamizaje preventivo.",
+              "Puede iniciar por sospecha clínica o por tamizaje preventivo.",
               "Incluye personas sintomáticas y asintomáticas."
             ]
           },
@@ -1108,10 +1279,10 @@
             tone: "teal",
             badge: "Consejería",
             title: "3. Consentimiento informado y consejería antes de la prueba",
-            text: "Antes de tomar la muestra, explicar el objetivo de la prueba, la confidencialidad, la voluntariedad, el período de ventana y el posible significado de cada resultado.",
+            text: "Antes de tomar la muestra, explicar el objetivo de la prueba, la confidencialidad, la voluntariedad, el período de ventana y el significado probable de cada resultado.",
             details: [
               "Explicar qué significa un resultado reactivo y uno no reactivo.",
-              "Dejar claro que una prueba negativa temprana puede no descartar infección reciente."
+              "Aclarar que una prueba negativa temprana puede no descartar infección reciente."
             ]
           },
           {
@@ -1122,8 +1293,8 @@
             title: "4. Decisión clínica inicial",
             text: "Valorar si hubo exposición reciente o síntomas compatibles con infección aguda por VIH. Si no los hay, seguir la ruta de tamizaje habitual.",
             details: [
-              "La sospecha aguda prioriza pruebas útiles en infección reciente.",
-              "Si no hay sospecha aguda, seguir la ruta habitual de tamizaje."
+              "La sospecha aguda prioriza pruebas útiles para detectar infección reciente.",
+              "Si no hay sospecha aguda, seguir la ruta habitual."
             ]
           }
         ],
@@ -1183,7 +1354,7 @@
                 text: "Realizar una prueba rápida de VIH o una prueba de cuarta generación, según disponibilidad y el algoritmo nacional.",
                 details: [
                   "Sirve para tamizaje preventivo o población general.",
-                  "La elección depende del acceso del servicio y la norma local."
+                  "La elección depende de la norma local y del acceso del servicio."
                 ]
               },
               {
@@ -1269,293 +1440,455 @@
           "Stephany Monserrat Fuantos Pena"
         ],
         citation: "Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. Near misdiagnosis of acute HIV-infection with ELISA-Western Blot scheme: Time for mindset change. IDCases. 2021;25:e01168. doi:10.1016/j.idcr.2021.e01168.",
-        insight: "Idea central del artículo: en la infección aguda puede haber resultados discordantes. Por eso la sospecha clínica, la consejería y el uso de pruebas de cuarta generación o moleculares son claves para no retrasar el diagnóstico."
+        insight: "El punto central de este protocolo es que un resultado negativo aislado no basta para descartar infección aguda si la clínica y la exposición reciente siguen siendo sugestivas."
       },
       {
-        id: "cohorte",
-        kind: "research",
-        title: "Protocolo de estudio de cohorte",
-        category: "Investigación observacional",
-        status: "Plantilla",
-        audience: "Diseño longitudinal",
-        summary: "Modelo base para construir protocolos de seguimiento prospectivo o retrospectivo con exposición y desenlace.",
-        subtitle: "Úsalo cuando quieras seguir una población en el tiempo para estimar incidencia, riesgo relativo y temporalidad.",
-        tags: ["cohorte", "longitudinal", "riesgo relativo", "seguimiento"],
+        id: "sifilis",
+        kind: "clinical",
+        title: "Sífilis adquirida",
+        category: "ITS",
+        status: "Disponible",
+        updatedAt: "2026-04-18",
+        summary: "Abordaje inicial ante sospecha de sífilis, interpretación de pruebas treponémicas y no treponémicas y seguimiento serológico.",
+        subtitle: "Protocolo clínico orientado a tamizaje, diagnóstico y control posterior al tratamiento.",
+        tags: ["ITS", "sífilis", "VDRL", "tratamiento", "seguimiento"],
+        facts: [
+          { label: "Categoría", value: "ITS" },
+          { label: "Sospecha", value: "Úlcera, exantema, riesgo sexual" },
+          { label: "Pruebas", value: "VDRL/RPR + prueba treponémica" },
+          { label: "Seguimiento", value: "Control serológico" }
+        ],
         sections: [
           {
-            title: "Pregunta de investigación",
-            note: "Punto de partida",
-            text: "Definir claramente la exposición, el desenlace, la población objetivo y el tiempo de seguimiento. Idealmente la pregunta debe permitir comparar grupos expuestos y no expuestos."
+            label: "Cuándo sospechar",
+            title: "Manifestaciones que deben hacerte pensar en sífilis",
+            text: "Úlcera genital indolora, exantema palmoplantar, adenopatías, antecedente sexual de riesgo o hallazgo positivo en tamizaje prenatal o de ITS."
           },
           {
-            title: "Población y muestra",
-            note: "Marco de selección",
-            text: "Especificar criterios de inclusión y exclusión, fuente de reclutamiento y estrategia para reducir pérdidas en el seguimiento."
+            label: "Pruebas",
+            title: "Evaluación inicial",
+            text: "Solicitar una prueba no treponémica como VDRL o RPR y confirmarla con una prueba treponémica. Interpretar el resultado según el contexto clínico."
           },
           {
-            title: "Variables",
-            note: "Definiciones operativas",
-            text: "Separar exposición principal, desenlace, covariables y posibles factores de confusión. Definir cómo y cuándo se medirá cada una."
+            label: "Conducta",
+            title: "Manejo clínico",
+            text: "Tratar según el estadio clínico, valorar coinfecciones de transmisión sexual y considerar estudio de contactos sexuales."
           },
           {
-            title: "Plan de análisis",
-            note: "Estadística",
-            text: "Considerar incidencia acumulada, tasas, riesgo relativo, análisis estratificado o modelos multivariados según el diseño."
+            label: "Seguimiento",
+            title: "Qué revisar después",
+            text: "Dar seguimiento con títulos no treponémicos, vigilar respuesta al tratamiento y educar sobre prevención y notificación de pareja."
           }
         ],
-        checklist: [
-          "Definir cohorte expuesta y no expuesta.",
-          "Especificar tiempo de seguimiento y puntos de corte.",
-          "Justificar tamaño de muestra.",
-          "Planear manejo de pérdidas y sesgos.",
-          "Definir análisis univariado, bivariado y multivariado."
+        sideChecklist: [
+          "Definir estadio clínico.",
+          "Correlacionar laboratorio con síntomas.",
+          "Investigar coinfecciones ITS.",
+          "Documentar tratamiento y seguimiento."
         ],
-        outputs: ["Objetivo general", "Hipótesis", "Cronograma", "Plan estadístico", "Consentimiento informado"]
+        alert: "Una prueba aislada no debe interpretarse sin contexto clínico. Correlaciona siempre estadio, síntomas y serología."
       },
       {
-        id: "casos-controles",
-        kind: "research",
-        title: "Protocolo de casos y controles",
-        category: "Investigación observacional",
-        status: "Plantilla",
-        audience: "Diseño analítico",
-        summary: "Plantilla para investigar asociaciones entre un desenlace ya presente y exposiciones previas relevantes.",
-        subtitle: "Útil cuando el desenlace es poco frecuente y necesitas comparar antecedentes de exposición entre casos y controles.",
-        tags: ["casos y controles", "odds ratio", "sesgo", "retrospectivo"],
+        id: "neumonia",
+        kind: "clinical",
+        title: "Neumonía adquirida en la comunidad",
+        category: "Respiratorias",
+        status: "Disponible",
+        updatedAt: "2026-04-16",
+        summary: "Protocolo clínico para evaluación inicial, datos de alarma, estudios básicos y orientación terapéutica en neumonía adquirida en la comunidad.",
+        subtitle: "Útil para priorizar gravedad, necesidad de referencia y abordaje inicial en primer contacto.",
+        tags: ["respiratorias", "neumonía", "CURB-65", "antibióticos", "urgencias"],
+        facts: [
+          { label: "Categoría", value: "Respiratorias" },
+          { label: "Sospecha", value: "Fiebre, tos, disnea, estertores" },
+          { label: "Evaluación", value: "Signos vitales y gravedad" },
+          { label: "Decisión", value: "Ambulatorio o referencia" }
+        ],
         sections: [
           {
-            title: "Definición de casos y controles",
-            note: "Comparabilidad",
-            text: "Delimitar criterios diagnósticos de los casos y la fuente de los controles. Ambos grupos deben proceder de poblaciones comparables."
+            label: "Cuándo sospechar",
+            title: "Clínica inicial",
+            text: "Pensar en neumonía ante fiebre, tos, expectoración, dolor pleurítico, taquipnea, hipoxemia o auscultación sugestiva."
           },
           {
-            title: "Exposición de interés",
-            note: "Antecedentes",
-            text: "Definir qué exposición se estudiará, cómo se medirá y qué periodo previo se considerará relevante."
+            label: "Estudios",
+            title: "Valoración básica",
+            text: "Revisar signos vitales, saturación, estado general y solicitar estudios de imagen o laboratorio según gravedad y disponibilidad."
           },
           {
-            title: "Sesgos y confusión",
-            note: "Calidad metodológica",
-            text: "Planear estrategias para disminuir sesgo de selección, sesgo de memoria y variables confusoras."
+            label: "Decisión",
+            title: "Sitio de manejo",
+            text: "Valorar si la persona puede tratarse en forma ambulatoria o si necesita referencia por gravedad, comorbilidad o deterioro respiratorio."
           },
           {
-            title: "Análisis",
-            note: "Medida principal",
-            text: "Plantear el uso de razón de momios (odds ratio), análisis estratificado y regresión logística cuando corresponda."
+            label: "Tratamiento",
+            title: "Conducta inicial",
+            text: "Indicar antibiótico según guías locales, controlar fiebre, hidratación y seguimiento estrecho si el manejo es ambulatorio."
           }
         ],
-        checklist: [
-          "Definir claramente el desenlace.",
-          "Seleccionar controles comparables.",
-          "Estandarizar recolección de antecedentes.",
-          "Justificar relación caso-control.",
-          "Identificar variables de confusión."
+        sideChecklist: [
+          "Tomar signos vitales completos.",
+          "Valorar dificultad respiratoria y saturación.",
+          "Identificar comorbilidades.",
+          "Definir criterios de referencia."
         ],
-        outputs: ["Tabla de variables", "Instrumento de recolección", "OR esperada", "Criterios de pareamiento"]
+        alert: "Taquipnea, hipoxemia, hipotensión o alteración del estado mental obligan a reevaluar gravedad y nivel de atención."
       },
       {
-        id: "ensayo",
-        kind: "research",
-        title: "Protocolo de ensayo clínico",
-        category: "Investigación experimental",
-        status: "Plantilla",
-        audience: "Intervención",
-        summary: "Estructura base para estudios con intervención, comparador y evaluación de seguridad y eficacia.",
-        subtitle: "Sirve para planear ensayos con grupo control, aleatorización y desenlaces clínicos o de laboratorio.",
-        tags: ["ensayo clínico", "aleatorización", "intervención", "comparador"],
+        id: "asma",
+        kind: "clinical",
+        title: "Crisis asmática aguda",
+        category: "Respiratorias",
+        status: "Disponible",
+        updatedAt: "2026-04-12",
+        summary: "Protocolo para reconocer gravedad, estabilizar una exacerbación asmática y decidir observación, egreso o referencia.",
+        subtitle: "Enfocado en primer contacto y urgencias básicas.",
+        tags: ["asma", "respiratorias", "sibilancias", "salbutamol", "gravedad"],
+        facts: [
+          { label: "Categoría", value: "Respiratorias" },
+          { label: "Prioridad", value: "Evaluar gravedad rápido" },
+          { label: "Manejo", value: "Broncodilatador y oxígeno" },
+          { label: "Salida", value: "Egreso o referencia" }
+        ],
         sections: [
           {
-            title: "Intervención y comparador",
-            note: "Núcleo del diseño",
-            text: "Describir qué recibirá cada grupo, dosis, duración, adherencia esperada y condiciones del comparador."
+            label: "Triage",
+            title: "Clasifica la gravedad",
+            text: "Evaluar habla, frecuencia respiratoria, saturación, uso de músculos accesorios, frecuencia cardiaca y respuesta al tratamiento previo."
           },
           {
-            title: "Aleatorización y cegamiento",
-            note: "Control de sesgos",
-            text: "Definir método de asignación, ocultamiento y nivel de cegamiento para participantes, investigadores y evaluadores."
+            label: "Intervención",
+            title: "Manejo inicial",
+            text: "Iniciar broncodilatador inhalado o nebulizado, considerar oxígeno suplementario y antiinflamatorio sistémico según gravedad."
           },
           {
-            title: "Desenlaces",
-            note: "Qué medirás",
-            text: "Distinguir desenlace primario y secundarios, con tiempos definidos de medición y criterios de seguridad."
+            label: "Reevaluación",
+            title: "Respuesta clínica",
+            text: "Revalorar síntomas, auscultación, saturación y esfuerzo respiratorio tras la primera intervención."
           },
           {
-            title: "Monitoreo y ética",
-            note: "Seguridad",
-            text: "Planear reporte de eventos adversos, retiro del estudio, comité de monitoreo y aprobación ética."
+            label: "Decisión final",
+            title: "Destino del paciente",
+            text: "Dar egreso con plan claro si mejora, o referir si persiste la dificultad respiratoria, la hipoxemia o el deterioro."
           }
         ],
-        checklist: [
-          "Definir intervención, comparador y desenlace primario.",
-          "Elegir método de aleatorización.",
-          "Establecer criterios de suspensión.",
-          "Planear análisis por intención a tratar si aplica.",
-          "Preparar consentimiento y vigilancia de seguridad."
+        sideChecklist: [
+          "Evaluar gravedad al ingreso.",
+          "Revalorar tras broncodilatador.",
+          "Dar educación de egreso.",
+          "Referir si no hay respuesta adecuada."
         ],
-        outputs: ["Manual operativo", "Calendario de visitas", "Plan de monitorización", "Formato de eventos adversos"]
+        alert: "Silencio auscultatorio, cianosis, agotamiento o dificultad para hablar sugieren crisis grave."
       },
       {
-        id: "revision",
-        kind: "research",
-        title: "Protocolo de revisión sistemática",
-        category: "Síntesis de evidencia",
-        status: "Plantilla",
-        audience: "Búsqueda y síntesis",
-        summary: "Plantilla para organizar una revisión sistemática desde la pregunta hasta la evaluación crítica de la evidencia.",
-        subtitle: "Ideal para ordenar una búsqueda estructurada, criterios de selección y síntesis narrativa o cuantitativa.",
-        tags: ["revisión sistemática", "PRISMA", "PICO", "sesgo"],
+        id: "diarrea",
+        kind: "clinical",
+        title: "Diarrea aguda infecciosa",
+        category: "Gastrointestinales",
+        status: "Disponible",
+        updatedAt: "2026-04-10",
+        summary: "Protocolo para valorar deshidratación, signos de alarma y conducta inicial en diarrea aguda infecciosa.",
+        subtitle: "Pensado para triage, hidratación y decisión de estudios o referencia.",
+        tags: ["diarrea", "gastrointestinales", "deshidratación", "rehidratación"],
+        facts: [
+          { label: "Categoría", value: "Gastrointestinales" },
+          { label: "Prioridad", value: "Estado de hidratación" },
+          { label: "Conducta", value: "Rehidratación" },
+          { label: "Vigilancia", value: "Datos de alarma" }
+        ],
         sections: [
           {
-            title: "Pregunta estructurada",
-            note: "Marco PICO",
-            text: "Formular la pregunta con población, intervención o exposición, comparador y desenlace para guiar la búsqueda."
+            label: "Evaluación",
+            title: "Qué revisar primero",
+            text: "Determinar número de evacuaciones, vómito, fiebre, sangre en heces, tiempo de evolución y estado de hidratación."
           },
           {
-            title: "Estrategia de búsqueda",
-            note: "Bases de datos",
-            text: "Definir descriptores, operadores booleanos, bases a consultar, idiomas, años y literatura gris."
+            label: "Hidratación",
+            title: "Manejo inicial",
+            text: "Corregir pérdidas con solución oral o intravenosa según el grado de deshidratación y tolerancia a la vía oral."
           },
           {
-            title: "Selección y extracción",
-            note: "Revisión por pares",
-            text: "Detallar proceso de cribado por título, resumen y texto completo, así como formato de extracción de datos."
+            label: "Estudios",
+            title: "Cuándo ampliar abordaje",
+            text: "Solicitar estudios si hay sangre en heces, sospecha de sepsis, inmunosupresión, cuadro prolongado o deshidratación importante."
           },
           {
-            title: "Riesgo de sesgo y síntesis",
-            note: "Calidad de evidencia",
-            text: "Elegir herramientas para evaluar sesgo, consistencia y decidir si habrá metaanálisis o síntesis narrativa."
+            label: "Seguimiento",
+            title: "Qué explicar al egreso",
+            text: "Dar medidas de hidratación, signos de alarma y orientación sobre higiene y alimentación."
           }
         ],
-        checklist: [
-          "Definir pregunta PICO.",
-          "Registrar criterios de inclusión y exclusión.",
-          "Preparar ecuación de búsqueda.",
-          "Planear diagrama PRISMA.",
-          "Definir herramienta de riesgo de sesgo."
+        sideChecklist: [
+          "Valorar deshidratación.",
+          "Buscar sangre en heces o fiebre alta.",
+          "Decidir si necesita referencia.",
+          "Explicar signos de alarma."
         ],
-        outputs: ["Pregunta PICO", "Ecuación de búsqueda", "Matriz de extracción", "Diagrama PRISMA", "Tabla de evidencia"]
+        alert: "Choque, deshidratación grave, deterioro neurológico o intolerancia total a vía oral requieren atención urgente."
       },
       {
-        id: "tesis",
-        kind: "research",
-        title: "Anteproyecto de tesis",
-        category: "Tesis",
-        status: "Plantilla",
-        audience: "Planeación académica",
-        summary: "Esqueleto para convertir una idea inicial en un anteproyecto claro, defendible y listo para revisión académica.",
-        subtitle: "Úsalo como tablero de organización antes de escribir tu protocolo completo o someterlo a revisión.",
-        tags: ["tesis", "anteproyecto", "justificación", "metodología"],
+        id: "cetoacidosis",
+        kind: "clinical",
+        title: "Cetoacidosis diabética",
+        category: "Metabólicas",
+        status: "En revisión",
+        updatedAt: "2026-04-04",
+        summary: "Protocolo para identificar datos sugestivos de cetoacidosis diabética, estudios iniciales y prioridades de estabilización.",
+        subtitle: "Módulo clínico orientado a urgencias metabólicas.",
+        tags: ["metabólicas", "diabetes", "cetoacidosis", "urgencias"],
+        facts: [
+          { label: "Categoría", value: "Metabólicas" },
+          { label: "Sospecha", value: "Hiperglucemia y acidosis" },
+          { label: "Prioridad", value: "Líquidos y vigilancia" },
+          { label: "Estado", value: "En revisión" }
+        ],
         sections: [
           {
-            title: "Título y planteamiento",
-            note: "Enunciado del problema",
-            text: "Delimitar el tema, formular el problema, justificar su relevancia y dejar claro qué vacío intenta resolver."
+            label: "Sospecha",
+            title: "Datos clínicos",
+            text: "Pensar en cetoacidosis ante poliuria, polidipsia, vómito, dolor abdominal, respiración de Kussmaul, deshidratación y alteración del estado mental."
           },
           {
-            title: "Objetivos e hipótesis",
-            note: "Dirección del estudio",
-            text: "Redactar objetivo general, objetivos específicos y, si aplica, hipótesis coherentes con el diseño."
+            label: "Estudios",
+            title: "Confirmación inicial",
+            text: "Glucosa, electrólitos, cetonas, gasometría y valoración del estado hemodinámico son parte del abordaje inicial."
           },
           {
-            title: "Marco teórico",
-            note: "Sustento conceptual",
-            text: "Resumir antecedentes, conceptos clave y evidencia previa que apoyen la propuesta."
+            label: "Estabilización",
+            title: "Conducta inicial",
+            text: "Priorizar líquidos, corrección de alteraciones metabólicas, vigilancia estrecha y referencia o manejo hospitalario."
           },
           {
-            title: "Metodología básica",
-            note: "Cómo se ejecutará",
-            text: "Describir tipo de estudio, población, muestra, variables, instrumentos, análisis y consideraciones éticas."
+            label: "Seguridad",
+            title: "Qué no olvidar",
+            text: "Buscar factor desencadenante, vigilar potasio y controlar el estado neurológico de forma seriada."
           }
         ],
-        checklist: [
-          "Definir problema de investigación.",
-          "Redactar justificación breve y sólida.",
-          "Alinear objetivos con metodología.",
-          "Estimar cronograma realista.",
-          "Preparar bibliografía base."
+        sideChecklist: [
+          "Evaluar estado hemodinámico.",
+          "Pedir estudios metabólicos completos.",
+          "Vigilar potasio.",
+          "Identificar desencadenante."
         ],
-        outputs: ["Título tentativo", "Justificación", "Objetivos", "Marco teórico inicial", "Cronograma de tesis"]
+        alert: "Toda persona con sospecha de cetoacidosis diabética requiere manejo urgente y monitorización estrecha."
+      },
+      {
+        id: "migraña",
+        kind: "clinical",
+        title: "Migraña aguda",
+        category: "Neurológicas",
+        status: "Disponible",
+        updatedAt: "2026-03-29",
+        summary: "Abordaje clínico básico de cefalea compatible con migraña y signos de alarma que obligan a descartar causas secundarias.",
+        subtitle: "Protocolo clínico de primer contacto para cefalea aguda recurrente compatible con migraña.",
+        tags: ["neurológicas", "migraña", "cefalea", "alarma"],
+        facts: [
+          { label: "Categoría", value: "Neurológicas" },
+          { label: "Objetivo", value: "Distinguir alarma vs migraña" },
+          { label: "Manejo", value: "Tratamiento sintomático" },
+          { label: "Seguridad", value: "Identificar cefalea secundaria" }
+        ],
+        sections: [
+          {
+            label: "Sospecha",
+            title: "Cuándo pensar en migraña",
+            text: "Cefalea pulsátil, recurrente, unilateral o bilateral, con náusea, fotofobia, fonofobia o antecedentes similares."
+          },
+          {
+            label: "Descartar alarma",
+            title: "Lo primero es no perder gravedad",
+            text: "Buscar fiebre, rigidez de nuca, déficit neurológico, inicio súbito, inmunosupresión o cambio marcado en el patrón habitual."
+          },
+          {
+            label: "Manejo",
+            title: "Conducta inicial",
+            text: "Ofrecer tratamiento sintomático, reposo, hidratación y seguimiento según intensidad y respuesta."
+          },
+          {
+            label: "Seguimiento",
+            title: "Cuándo derivar o estudiar más",
+            text: "Si aparecen signos de alarma, no hay mejoría o el cuadro cambia de patrón, ampliar abordaje."
+          }
+        ],
+        sideChecklist: [
+          "Buscar banderas rojas.",
+          "Valorar patrón previo de cefalea.",
+          "Dar tratamiento y revalorar.",
+          "Referir si hay alarma."
+        ],
+        alert: "Una cefalea súbita intensa, con déficit neurológico o fiebre, no debe asumirse como migraña hasta descartar causas secundarias."
       }
     ];
 
+    const categoryDescriptions = {
+      "Todas": "Vista general de toda la biblioteca clínica.",
+      "ITS": "Protocolos de infecciones de transmisión sexual, incluido VIH.",
+      "Respiratorias": "Protocolos de enfermedades respiratorias agudas y crónicas frecuentes.",
+      "Gastrointestinales": "Protocolos digestivos con enfoque de primer contacto.",
+      "Neurológicas": "Protocolos clínicos de síntomas y enfermedades neurológicas frecuentes.",
+      "Metabólicas": "Protocolos de urgencias y descompensaciones metabólicas."
+    };
+
     const state = {
       search: "",
-      category: "Todos",
+      category: "Todas",
+      sort: "newest",
       selectedId: "vih"
     };
 
-    const filterWrap = document.getElementById("filterWrap");
-    const protocolList = document.getElementById("protocolList");
+    const categoryGrid = document.getElementById("categoryGrid");
+    const recentGrid = document.getElementById("recentGrid");
+    const libraryGrid = document.getElementById("libraryGrid");
+    const filterPills = document.getElementById("filterPills");
     const viewerContent = document.getElementById("viewerContent");
-    const resultCount = document.getElementById("resultCount");
-    const catalogCount = document.getElementById("catalogCount");
-    const workspaceTitle = document.getElementById("workspaceTitle");
-    const workspaceSubtitle = document.getElementById("workspaceSubtitle");
-    const selectedCategory = document.getElementById("selectedCategory");
-    const selectedStatus = document.getElementById("selectedStatus");
-    const selectedAudience = document.getElementById("selectedAudience");
-    const searchInput = document.getElementById("protocolSearch");
+    const librarySummary = document.getElementById("librarySummary");
+    const resultBadge = document.getElementById("resultBadge");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const viewerCategory = document.getElementById("viewerCategory");
+    const viewerTitle = document.getElementById("viewerTitle");
+    const viewerSubtitle = document.getElementById("viewerSubtitle");
+    const viewerStatus = document.getElementById("viewerStatus");
+    const viewerAudience = document.getElementById("viewerAudience");
+    const viewerUpdated = document.getElementById("viewerUpdated");
+    const statProtocols = document.getElementById("statProtocols");
+    const statCategories = document.getElementById("statCategories");
+    const statAvailable = document.getElementById("statAvailable");
+
+    function formatDate(dateString) {
+      const date = new Date(dateString + "T12:00:00");
+      return date.toLocaleDateString("es-MX", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
 
     function getCategories() {
-      return ["Todos", ...new Set(protocols.map((protocol) => protocol.category))];
+      return ["Todas", ...new Set(protocols.map((protocol) => protocol.category))];
+    }
+
+    function getCategoryClass(category) {
+      return {
+        "ITS": "its",
+        "Respiratorias": "respiratorias",
+        "Gastrointestinales": "gastrointestinales",
+        "Neurológicas": "neurologicas",
+        "Metabólicas": "metabolicas"
+      }[category] || "its";
+    }
+
+    function compareProtocols(a, b) {
+      if (state.sort === "az") return a.title.localeCompare(b.title, "es");
+      if (state.sort === "oldest") return new Date(a.updatedAt) - new Date(b.updatedAt);
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
     }
 
     function getFilteredProtocols() {
       const query = state.search.trim().toLowerCase();
-      return protocols.filter((protocol) => {
-        const matchesCategory = state.category === "Todos" || protocol.category === state.category;
-        if (!matchesCategory) return false;
+      return protocols
+        .filter((protocol) => {
+          const matchesCategory = state.category === "Todas" || protocol.category === state.category;
+          if (!matchesCategory) return false;
 
-        if (!query) return true;
-        const haystack = [
-          protocol.title,
-          protocol.summary,
-          protocol.subtitle,
-          protocol.category,
-          protocol.status,
-          protocol.audience,
-          protocol.tags.join(" ")
-        ].join(" ").toLowerCase();
-        return haystack.includes(query);
+          if (!query) return true;
+          const haystack = [
+            protocol.title,
+            protocol.summary,
+            protocol.subtitle,
+            protocol.category,
+            protocol.status,
+            protocol.tags.join(" ")
+          ].join(" ").toLowerCase();
+          return haystack.includes(query);
+        })
+        .sort(compareProtocols);
+    }
+
+    function renderStats() {
+      statProtocols.textContent = protocols.length;
+      statCategories.textContent = new Set(protocols.map((protocol) => protocol.category)).size;
+      statAvailable.textContent = protocols.filter((protocol) => protocol.status === "Disponible").length;
+    }
+
+    function renderCategories() {
+      const categories = getCategories().filter((category) => category !== "Todas");
+      categoryGrid.innerHTML = categories.map((category) => {
+        const count = protocols.filter((protocol) => protocol.category === category).length;
+        const accent = getCategoryClass(category);
+        const active = state.category === category;
+        return `
+          <button class="category-card ${active ? "active" : ""}" type="button" data-category="${category}">
+            <h3>${category}</h3>
+            <p>${categoryDescriptions[category]}</p>
+            <div class="category-meta">
+              <span class="badge">${count} protocolos</span>
+              <span class="category-accent accent-${accent}">${category.slice(0, 2).toUpperCase()}</span>
+            </div>
+          </button>
+        `;
+      }).join("");
+
+      categoryGrid.querySelectorAll("[data-category]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.category = button.dataset.category;
+          renderApp();
+          document.querySelector("#biblioteca").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
       });
     }
 
-    function escapeHtml(text) {
-      return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
+    function renderRecent() {
+      const recentProtocols = [...protocols]
+        .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+        .slice(0, 3);
+
+      recentGrid.innerHTML = recentProtocols.map((protocol) => `
+        <button class="protocol-card ${protocol.id === state.selectedId ? "selected" : ""}" type="button" data-open="${protocol.id}">
+          <div class="protocol-top">
+            <span class="tag category">${protocol.category}</span>
+            <span class="tag status">${protocol.status}</span>
+            <span class="tag sort">${formatDate(protocol.updatedAt)}</span>
+          </div>
+          <h3>${protocol.title}</h3>
+          <p>${protocol.summary}</p>
+          <div class="meta-row">
+            <span>${protocol.tags.slice(0, 3).join(" · ")}</span>
+          </div>
+        </button>
+      `).join("");
+
+      recentGrid.querySelectorAll("[data-open]").forEach((button) => {
+        button.addEventListener("click", () => openProtocol(button.dataset.open));
+      });
     }
 
     function renderFilters() {
       const categories = getCategories();
-      filterWrap.innerHTML = categories.map((category) => `
-        <button
-          class="filter-chip ${state.category === category ? "active" : ""}"
-          type="button"
-          data-category="${escapeHtml(category)}"
-        >
-          ${escapeHtml(category)}
+      filterPills.innerHTML = categories.map((category) => `
+        <button class="filter-pill ${state.category === category ? "active" : ""}" type="button" data-filter="${category}">
+          ${category}
         </button>
       `).join("");
 
-      filterWrap.querySelectorAll("[data-category]").forEach((button) => {
+      filterPills.querySelectorAll("[data-filter]").forEach((button) => {
         button.addEventListener("click", () => {
-          state.category = button.dataset.category;
+          state.category = button.dataset.filter;
           renderApp();
         });
       });
     }
 
-    function renderProtocolList(filteredProtocols) {
-      catalogCount.textContent = protocols.length + " módulos";
-      resultCount.textContent = filteredProtocols.length + (filteredProtocols.length === 1 ? " resultado" : " resultados");
+    function renderLibrary(filteredProtocols) {
+      const categoryText = state.category === "Todas" ? "todas las categorías" : "la categoría " + state.category;
+      librarySummary.textContent = "Mostrando protocolos clínicos de " + categoryText + " con orden " + sortSelect.options[sortSelect.selectedIndex].text.toLowerCase() + ".";
+      resultBadge.textContent = filteredProtocols.length + (filteredProtocols.length === 1 ? " resultado" : " resultados");
 
       if (!filteredProtocols.length) {
-        protocolList.innerHTML = `
-          <div class="protocol-card selected" role="status">
-            <h3>Sin coincidencias</h3>
-            <p>Prueba otra palabra clave o cambia de filtro para volver a ver la biblioteca.</p>
+        libraryGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <h2>Sin coincidencias</h2>
+            <p>No encontramos protocolos con ese filtro. Prueba con otra enfermedad, otra categoría o cambia el orden de la biblioteca.</p>
           </div>
         `;
         return;
@@ -1565,26 +1898,22 @@
         state.selectedId = filteredProtocols[0].id;
       }
 
-      protocolList.innerHTML = filteredProtocols.map((protocol) => `
-        <button
-          class="protocol-card ${protocol.id === state.selectedId ? "selected" : ""}"
-          type="button"
-          data-protocol-id="${protocol.id}"
-        >
-          <div class="card-meta">
-            <span class="mini-tag category">${escapeHtml(protocol.category)}</span>
-            <span class="mini-tag status">${escapeHtml(protocol.status)}</span>
+      libraryGrid.innerHTML = filteredProtocols.map((protocol) => `
+        <button class="protocol-card ${protocol.id === state.selectedId ? "selected" : ""}" type="button" data-open="${protocol.id}">
+          <div class="protocol-top">
+            <span class="tag category">${protocol.category}</span>
+            <span class="tag status">${protocol.status}</span>
           </div>
-          <h3>${escapeHtml(protocol.title)}</h3>
-          <p>${escapeHtml(protocol.summary)}</p>
+          <h3>${protocol.title}</h3>
+          <p>${protocol.summary}</p>
+          <div class="meta-row">
+            <span>Actualizado: ${formatDate(protocol.updatedAt)}</span>
+          </div>
         </button>
       `).join("");
 
-      protocolList.querySelectorAll("[data-protocol-id]").forEach((button) => {
-        button.addEventListener("click", () => {
-          state.selectedId = button.dataset.protocolId;
-          renderApp();
-        });
+      libraryGrid.querySelectorAll("[data-open]").forEach((button) => {
+        button.addEventListener("click", () => openProtocol(button.dataset.open));
       });
     }
 
@@ -1610,219 +1939,185 @@
     }
 
     function renderAlgorithm(protocol) {
-      const commonNodes = protocol.commonNodes.map((node, index) => {
-        const connector = index < protocol.commonNodes.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
-        return renderNode(node) + connector;
-      }).join("");
-
-      const acuteNodes = protocol.branches.acute.nodes.map((node, index, items) => {
+      const common = protocol.commonNodes.map((node, index, items) => {
         const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
         return renderNode(node) + connector;
       }).join("");
 
-      const screeningNodes = protocol.branches.screening.nodes.map((node, index, items) => {
+      const acute = protocol.branches.acute.nodes.map((node, index, items) => {
         const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
         return renderNode(node) + connector;
       }).join("");
 
-      const finalNodes = protocol.finalNodes.map((node, index) => {
-        const connector = index < protocol.finalNodes.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+      const screening = protocol.branches.screening.nodes.map((node, index, items) => {
+        const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
+        return renderNode(node) + connector;
+      }).join("");
+
+      const final = protocol.finalNodes.map((node, index, items) => {
+        const connector = index < items.length - 1 ? '<div class="connector" aria-hidden="true"></div>' : "";
         return renderNode(node) + connector;
       }).join("");
 
       return `
-        <div class="viewer-shell">
-          <section class="module-card">
-            <div class="meta-strip">
-              ${protocol.tags.map((tag) => `<span class="meta-chip">${tag}</span>`).join("")}
-            </div>
-            <h2>${protocol.title}</h2>
-            <p>${protocol.subtitle}</p>
+        <div class="fact-grid">
+          ${protocol.quickFacts.map((fact) => `
+            <article class="detail-card">
+              <span>${fact.label}</span>
+              <strong>${fact.value}</strong>
+            </article>
+          `).join("")}
+        </div>
 
-            <div class="overview-grid" style="margin-top: 18px;">
-              ${protocol.quickFacts.map((fact) => `
-                <article class="overview-card">
-                  <span>${fact.label}</span>
-                  <strong>${fact.value}</strong>
+        <section class="module-tools">
+          <button class="tool-btn primary play-btn" type="button">Recorrer protocolo</button>
+          <button class="tool-btn secondary active" type="button" data-mode="all" aria-pressed="true">Mostrar todo</button>
+          <button class="tool-btn secondary" type="button" data-mode="acute" aria-pressed="false">Ruta aguda</button>
+          <button class="tool-btn secondary" type="button" data-mode="screening" aria-pressed="false">Ruta habitual</button>
+        </section>
+
+        <section class="status-card" aria-live="polite">
+          <strong class="status-title">${protocol.routeMessages.all.title}</strong>
+          <p class="status-text">${protocol.routeMessages.all.text}</p>
+          <div class="pill-row">
+            <span class="pill">Entrada</span>
+            <span class="pill">Solicitud</span>
+            <span class="pill">Consejería</span>
+            <span class="pill">Decisión clínica</span>
+            <span class="pill pill-acute">Sospecha aguda</span>
+            <span class="pill pill-screening">Tamizaje habitual</span>
+            <span class="pill">Confirmación</span>
+            <span class="pill">Seguimiento</span>
+          </div>
+        </section>
+
+        <section class="diagram-stack protocol-algorithm">
+          ${common}
+
+          <section class="branch-grid">
+            <div>
+              <span class="branch-label red">${protocol.branches.acute.label}</span>
+              ${acute}
+            </div>
+            <div>
+              <span class="branch-label green">${protocol.branches.screening.label}</span>
+              ${screening}
+            </div>
+          </section>
+
+          <section class="merge-line" aria-hidden="true">
+            <div class="bar"></div>
+            <div class="down"></div>
+            <div class="bar"></div>
+          </section>
+
+          ${final}
+
+          <section class="alert-banner">
+            <h3>Alerta clínica</h3>
+            <p>${protocol.alert}</p>
+          </section>
+        </section>
+
+        <section class="test-grid">
+          ${protocol.tests.map((test) => `
+            <article class="test-card ${test.tone}">
+              <h4>${test.title}</h4>
+              <p>${test.text}</p>
+            </article>
+          `).join("")}
+        </section>
+
+        <section class="info-grid">
+          <article class="info-card">
+            <h3>Equipo</h3>
+            <ol>
+              ${protocol.team.map((member) => `<li>${member}</li>`).join("")}
+            </ol>
+          </article>
+          <article class="info-card">
+            <h3>Artículo base / cita</h3>
+            <p>${protocol.citation}</p>
+            <p style="margin-top: 12px;">${protocol.insight}</p>
+          </article>
+        </section>
+      `;
+    }
+
+    function renderClinical(protocol) {
+      return `
+        <div class="fact-grid">
+          ${protocol.facts.map((fact) => `
+            <article class="detail-card">
+              <span>${fact.label}</span>
+              <strong>${fact.value}</strong>
+            </article>
+          `).join("")}
+        </div>
+
+        <section class="clinical-layout">
+          <div class="clinical-main">
+            <div class="clinical-grid">
+              ${protocol.sections.map((section) => `
+                <article class="detail-card">
+                  <span>${section.label}</span>
+                  <h3 style="margin-bottom: 8px; font-size: 1.2rem;">${section.title}</h3>
+                  <p>${section.text}</p>
                 </article>
               `).join("")}
             </div>
-          </section>
+          </div>
 
-          <section class="module-card algorithm-module">
-            <div class="algorithm-toolbar">
-              <button class="toolbar-button primary play-button" type="button">Recorrer algoritmo</button>
-              <button class="toolbar-button secondary active" type="button" data-mode="all" aria-pressed="true">Mostrar todo</button>
-              <button class="toolbar-button secondary" type="button" data-mode="acute" aria-pressed="false">Ruta aguda</button>
-              <button class="toolbar-button secondary" type="button" data-mode="screening" aria-pressed="false">Ruta habitual</button>
-            </div>
-
-            <div class="status-card" aria-live="polite">
-              <strong class="status-title">Vista general activa</strong>
-              <p class="status-text">Estás viendo el algoritmo completo. Puedes elegir una ruta específica o reproducir el recorrido paso a paso.</p>
-              <div class="pill-row">
-                <span class="pill">Entrada</span>
-                <span class="pill">Solicitud</span>
-                <span class="pill">Consejería</span>
-                <span class="pill">Decisión clínica</span>
-                <span class="pill pill-acute">Sospecha aguda</span>
-                <span class="pill pill-screening">Tamizaje habitual</span>
-                <span class="pill">Confirmación</span>
-                <span class="pill">Seguimiento</span>
-              </div>
-            </div>
-
-            <div class="diagram-stack">
-              ${commonNodes}
-
-              <section class="branch-grid">
-                <div>
-                  <span class="branch-label red">${protocol.branches.acute.label}</span>
-                  ${acuteNodes}
-                </div>
-                <div>
-                  <span class="branch-label green">${protocol.branches.screening.label}</span>
-                  ${screeningNodes}
-                </div>
-              </section>
-
-              <section class="merge-line" aria-hidden="true">
-                <div class="bar"></div>
-                <div class="down"></div>
-                <div class="bar"></div>
-              </section>
-
-              ${finalNodes}
-
-              <section class="alert-banner">
-                <h3>Alerta clave</h3>
-                <p>${protocol.alert}</p>
-              </section>
-            </div>
-          </section>
-
-          <section class="test-grid">
-            ${protocol.tests.map((test) => `
-              <article class="test-card ${test.tone}">
-                <h4>${test.title}</h4>
-                <p>${test.text}</p>
-              </article>
-            `).join("")}
-          </section>
-
-          <section class="reference-grid">
+          <aside class="clinical-side">
             <article class="info-card">
-              <h3>Equipo</h3>
-              <ol>
-                ${protocol.team.map((member) => `<li>${member}</li>`).join("")}
-              </ol>
+              <h3>Puntos rápidos</h3>
+              <ul>
+                ${protocol.sideChecklist.map((item) => `<li>${item}</li>`).join("")}
+              </ul>
             </article>
+
             <article class="info-card">
-              <h3>Artículo base / cita</h3>
-              <p>${protocol.citation}</p>
-              <p style="margin-top: 12px;">${protocol.insight}</p>
+              <h3>Alerta clínica</h3>
+              <p>${protocol.alert}</p>
             </article>
-          </section>
-        </div>
+          </aside>
+        </section>
       `;
     }
 
-    function renderResearchTemplate(protocol) {
-      return `
-        <div class="viewer-shell">
-          <section class="template-hero">
-            <div>
-              <div class="meta-strip">
-                ${protocol.tags.map((tag) => `<span class="meta-chip">${tag}</span>`).join("")}
-              </div>
-              <h2 style="margin-top: 16px;">${protocol.title}</h2>
-              <p>${protocol.subtitle}</p>
-            </div>
-            <span class="template-badge">${protocol.status}</span>
-          </section>
-
-          <section class="template-grid">
-            <div class="template-main">
-              <div class="module-card">
-                <h2>Qué resuelve este protocolo</h2>
-                <p>${protocol.summary}</p>
-              </div>
-
-              <div class="template-sections">
-                ${protocol.sections.map((section) => `
-                  <article class="template-section">
-                    <small>${section.note}</small>
-                    <h3>${section.title}</h3>
-                    <p>${section.text}</p>
-                  </article>
-                `).join("")}
-              </div>
-            </div>
-
-            <aside class="template-side">
-              <article class="template-side-card">
-                <small>Checklist rápido</small>
-                <h3>Antes de redactarlo</h3>
-                <ul>
-                  ${protocol.checklist.map((item) => `<li>${item}</li>`).join("")}
-                </ul>
-              </article>
-
-              <article class="template-side-card">
-                <small>Entregables</small>
-                <h3>Qué debería salir de aquí</h3>
-                <div class="deliverable-list">
-                  ${protocol.outputs.map((item) => `<span class="deliverable">${item}</span>`).join("")}
-                </div>
-              </article>
-            </aside>
-          </section>
-        </div>
-      `;
-    }
-
-    function updateWorkspaceHeader(protocol) {
-      workspaceTitle.textContent = protocol.title;
-      workspaceSubtitle.textContent = protocol.summary;
-      selectedCategory.textContent = protocol.category;
-      selectedStatus.textContent = protocol.status;
-      selectedAudience.textContent = protocol.audience;
-    }
-
-    function setupAlgorithmModule(protocol) {
-      const container = viewerContent.querySelector(".algorithm-module");
+    function setupAlgorithm(protocol) {
+      const container = viewerContent.querySelector(".protocol-algorithm");
       if (!container) return;
 
       const nodes = [...container.querySelectorAll(".node")];
-      const playButton = container.querySelector(".play-button");
-      const modeButtons = [...container.querySelectorAll("[data-mode]")];
-      const statusTitle = container.querySelector(".status-title");
-      const statusText = container.querySelector(".status-text");
-      const acutePill = container.querySelector(".pill-acute");
-      const screeningPill = container.querySelector(".pill-screening");
-      const defaultPlayLabel = "Recorrer algoritmo";
+      const playButton = document.querySelector(".play-btn");
+      const modeButtons = [...document.querySelectorAll("[data-mode]")];
+      const statusTitle = document.querySelector(".status-title");
+      const statusText = document.querySelector(".status-text");
+      const acutePill = document.querySelector(".pill-acute");
+      const screeningPill = document.querySelector(".pill-screening");
+      const defaultLabel = "Recorrer protocolo";
+      const sequences = {
+        all: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+        acute: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
+        screening: ["1", "2", "3", "4", "5B", "6B", "7B", "8", "9"]
+      };
 
       let currentMode = "all";
       let selectedNodeId = null;
       let isPlaying = false;
       let playToken = 0;
 
-      const routeSequences = {
-        all: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
-        acute: ["1", "2", "3", "4", "5A", "6A", "7A", "8", "9"],
-        screening: ["1", "2", "3", "4", "5B", "6B", "7B", "8", "9"]
-      };
-
-      function updateToolbarState() {
+      function updateToolbar() {
         modeButtons.forEach((button) => {
           const active = button.dataset.mode === currentMode;
           button.classList.toggle("active", active);
           button.setAttribute("aria-pressed", active ? "true" : "false");
         });
-        playButton.textContent = isPlaying ? "Detener recorrido" : defaultPlayLabel;
+        playButton.textContent = isPlaying ? "Detener recorrido" : defaultLabel;
       }
 
-      function updateNodeStyles() {
+      function updateNodes() {
         nodes.forEach((node) => {
           const group = node.dataset.group;
           const visible = currentMode === "all" || group === "common" || group === currentMode;
@@ -1835,13 +2130,13 @@
       function setMode(mode) {
         currentMode = mode;
         if (selectedNodeId) {
-          const currentNode = container.querySelector(`[data-id="${selectedNodeId}"]`);
-          if (currentNode && currentNode.dataset.group !== "common" && currentNode.dataset.group !== currentMode && currentMode !== "all") {
+          const selectedNode = container.querySelector(`[data-id="${selectedNodeId}"]`);
+          if (selectedNode && selectedNode.dataset.group !== "common" && selectedNode.dataset.group !== currentMode && currentMode !== "all") {
             selectedNodeId = null;
           }
         }
-        updateNodeStyles();
-        updateToolbarState();
+        updateNodes();
+        updateToolbar();
         acutePill.className = "pill pill-acute" + (mode === "acute" ? " active-red" : "");
         screeningPill.className = "pill pill-screening" + (mode === "screening" ? " active-green" : "");
         statusTitle.textContent = protocol.routeMessages[mode].title;
@@ -1852,7 +2147,7 @@
         if (!isPlaying) return;
         isPlaying = false;
         playToken += 1;
-        updateToolbarState();
+        updateToolbar();
         if (message) {
           statusTitle.textContent = "Recorrido detenido";
           statusText.textContent = message;
@@ -1861,9 +2156,7 @@
 
       modeButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          if (isPlaying) {
-            stopPlayback();
-          }
+          if (isPlaying) stopPlayback();
           setMode(button.dataset.mode);
         });
       });
@@ -1872,24 +2165,19 @@
         const toggle = node.querySelector(".toggle");
         toggle.addEventListener("click", (event) => {
           event.stopPropagation();
-          if (isPlaying) {
-            stopPlayback();
-          }
+          if (isPlaying) stopPlayback();
           const open = node.classList.toggle("open");
           toggle.textContent = open ? "Ocultar detalles" : "Ver detalles";
           selectedNodeId = node.dataset.id;
-          updateNodeStyles();
+          updateNodes();
           statusTitle.textContent = "Bloque " + node.dataset.id + " seleccionado";
           statusText.textContent = node.querySelector("p").textContent;
         });
 
-        node.addEventListener("click", (event) => {
-          if (event.target.tagName === "BUTTON") return;
-          if (isPlaying) {
-            stopPlayback();
-          }
+        node.addEventListener("click", () => {
+          if (isPlaying) stopPlayback();
           selectedNodeId = node.dataset.id;
-          updateNodeStyles();
+          updateNodes();
           statusTitle.textContent = "Bloque " + node.dataset.id + " en foco";
           statusText.textContent = node.querySelector("p").textContent;
         });
@@ -1897,24 +2185,24 @@
 
       playButton.addEventListener("click", async () => {
         if (isPlaying) {
-          stopPlayback("Puedes cambiar de ruta o explorar cualquier bloque manualmente.");
+          stopPlayback("Puedes cambiar de ruta o abrir cualquier bloque manualmente.");
           return;
         }
 
         isPlaying = true;
         playToken += 1;
         const localToken = playToken;
-        updateToolbarState();
+        updateToolbar();
 
-        const chosenRoute = currentMode === "all" ? "acute" : currentMode;
-        setMode(chosenRoute);
-        const sequence = routeSequences[chosenRoute];
+        const targetMode = currentMode === "all" ? "acute" : currentMode;
+        setMode(targetMode);
+        const sequence = sequences[targetMode];
 
         for (const id of sequence) {
           if (localToken !== playToken) return;
           const node = container.querySelector(`[data-id="${id}"]`);
           selectedNodeId = id;
-          updateNodeStyles();
+          updateNodes();
           node.scrollIntoView({ behavior: "smooth", block: "center" });
           statusTitle.textContent = "Recorriendo paso " + id;
           statusText.textContent = node.querySelector("p").textContent;
@@ -1922,7 +2210,7 @@
         }
 
         isPlaying = false;
-        updateToolbarState();
+        updateToolbar();
         statusTitle.textContent = "Recorrido completado";
         statusText.textContent = "Puedes cambiar de ruta, volver a reproducir o abrir los detalles de cualquier bloque.";
       });
@@ -1932,15 +2220,16 @@
 
     function renderViewer(filteredProtocols) {
       if (!filteredProtocols.length) {
-        workspaceTitle.textContent = "Biblioteca sin coincidencias";
-        workspaceSubtitle.textContent = "No hubo resultados con ese filtro. Cambia la búsqueda o regresa a la vista general.";
-        selectedCategory.textContent = "Sin resultados";
-        selectedStatus.textContent = "Ajusta la búsqueda";
-        selectedAudience.textContent = "Prueba por nombre, área o palabra clave.";
+        viewerCategory.textContent = "Sin resultados";
+        viewerTitle.textContent = "No hay protocolos con este filtro";
+        viewerSubtitle.textContent = "Cambia la búsqueda, la categoría o el orden para volver a poblar el visor.";
+        viewerStatus.textContent = "Biblioteca vacía";
+        viewerAudience.textContent = "Ajusta los filtros para continuar.";
+        viewerUpdated.textContent = "Sin actualización visible";
         viewerContent.innerHTML = `
           <section class="empty-state">
-            <h2>No se encontraron protocolos</h2>
-            <p>Prueba con términos como <strong>VIH</strong>, <strong>cohorte</strong>, <strong>ensayo</strong> o <strong>revisión</strong> para volver a poblar la biblioteca.</p>
+            <h2>No encontramos protocolos</h2>
+            <p>Prueba con VIH, neumonía, crisis asmática o cambia a otra categoría clínica.</p>
           </section>
         `;
         return;
@@ -1948,26 +2237,65 @@
 
       const protocol = filteredProtocols.find((item) => item.id === state.selectedId) || filteredProtocols[0];
       state.selectedId = protocol.id;
-      updateWorkspaceHeader(protocol);
+      viewerCategory.textContent = protocol.category;
+      viewerTitle.textContent = protocol.title;
+      viewerSubtitle.textContent = protocol.subtitle;
+      viewerStatus.textContent = protocol.status;
+      viewerAudience.textContent = "Categoría: " + protocol.category + " · Palabras clave: " + protocol.tags.slice(0, 3).join(", ");
+      viewerUpdated.textContent = "Actualizado: " + formatDate(protocol.updatedAt);
 
       viewerContent.innerHTML = protocol.kind === "algorithm"
         ? renderAlgorithm(protocol)
-        : renderResearchTemplate(protocol);
+        : renderClinical(protocol);
 
       if (protocol.kind === "algorithm") {
-        setupAlgorithmModule(protocol);
+        setupAlgorithm(protocol);
       }
     }
 
+    function openProtocol(protocolId) {
+      state.selectedId = protocolId;
+      renderApp();
+      document.querySelector("#visor").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     function renderApp() {
-      const filteredProtocols = getFilteredProtocols();
+      renderStats();
+      renderCategories();
+      renderRecent();
       renderFilters();
-      renderProtocolList(filteredProtocols);
+
+      const filteredProtocols = getFilteredProtocols();
+      renderLibrary(filteredProtocols);
       renderViewer(filteredProtocols);
     }
 
+    document.querySelectorAll("[data-scroll]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = document.querySelector(button.dataset.scroll);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    document.querySelectorAll("[data-open-protocol]").forEach((button) => {
+      button.addEventListener("click", () => openProtocol(button.dataset.openProtocol));
+    });
+
+    document.querySelectorAll("[data-filter-category]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.category = button.dataset.filterCategory;
+        renderApp();
+        document.querySelector("#biblioteca").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
     searchInput.addEventListener("input", () => {
       state.search = searchInput.value;
+      renderApp();
+    });
+
+    sortSelect.addEventListener("change", () => {
+      state.sort = sortSelect.value;
       renderApp();
     });
 
