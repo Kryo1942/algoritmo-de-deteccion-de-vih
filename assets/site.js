@@ -62,7 +62,7 @@
           <span class="brand-mark">PC</span>
           <span class="brand-copy">
             <strong>Protocolos Clínicos</strong>
-            <small>Biblioteca clínica por enfermedad y categoría</small>
+            <small>Consulta por categoría, enfermedad y fecha de actualización</small>
           </span>
         </a>
         <nav class="nav-row">
@@ -91,22 +91,22 @@
         <article class="stat-card">
           <span>Módulos clínicos</span>
           <strong>${site.protocols.length}</strong>
-          <p>Protocolos disponibles dentro de la biblioteca clínica.</p>
+          <p>Protocolos clínicos disponibles para consulta en línea.</p>
         </article>
         <article class="stat-card">
           <span>Categorías</span>
           <strong>${site.categories.length}</strong>
-          <p>Tipos de enfermedades organizados por área clínica.</p>
+          <p>Áreas clínicas organizadas para acceso rápido.</p>
         </article>
         <article class="stat-card">
           <span>Protocolos activos</span>
           <strong>${availableCount}</strong>
-          <p>Material listo para consulta inmediata.</p>
+          <p>Contenido disponible para revisión inmediata.</p>
         </article>
         <article class="stat-card">
           <span>Acceso destacado</span>
           <strong>VIH / ITS</strong>
-          <p>Ruta directa desde el inicio y desde la categoría de ITS.</p>
+          <p>Ingreso directo al algoritmo de detección temprana.</p>
         </article>
       </section>
     `;
@@ -158,7 +158,7 @@
             <small>Portada clínica</small>
             <h2>Protocolos más recientes</h2>
           </div>
-          <p>Biblioteca ordenada de más nuevos a más antiguos, para priorizar lo último agregado a la plataforma.</p>
+          <p>Ordenados por fecha de actualización para revisar primero los cambios recientes.</p>
         </div>
         <div class="protocol-grid three-up">
           ${recent.map(renderProtocolCard).join("")}
@@ -173,18 +173,18 @@
       <main class="page-shell">
         <section class="hero-grid">
           <article class="hero-main">
-            <div class="eyebrow">Solo protocolos clínicos</div>
-            <h1>Una plataforma para consultar protocolos clínicos de distintas enfermedades</h1>
-            <p>Esta página funciona como biblioteca digital de protocolos clínicos. Desde aquí puedes entrar por categoría, explorar los más recientes o abrir directamente el protocolo de VIH dentro de infecciones de transmisión sexual.</p>
+            <div class="eyebrow">Portal de consulta clínica</div>
+            <h1>Protocolos clínicos organizados por enfermedad y categoría</h1>
+            <p>Reúne algoritmos y guías de consulta rápida para distintas enfermedades, con acceso por áreas clínicas, búsqueda por tema y navegación por fecha de actualización.</p>
             ${renderHeroActions()}
           </article>
           <aside class="hero-side">
-            <h3>Qué hace esta plataforma</h3>
+            <h3>Recorrido recomendado</h3>
             <ul>
-              <li>Agrupa protocolos clínicos por tipo de enfermedad.</li>
-              <li>Permite navegar de más nuevos a más antiguos.</li>
-              <li>Te deja entrar desde la portada al protocolo de VIH dentro de ITS.</li>
-              <li>Evita tener todo amontonado en una sola página de inicio.</li>
+              <li>Explora primero por categoría clínica.</li>
+              <li>Revisa las actualizaciones más recientes.</li>
+              <li>Busca una enfermedad o palabra clave específica.</li>
+              <li>Accede al algoritmo de VIH desde la categoría de ITS.</li>
             </ul>
           </aside>
         </section>
@@ -197,7 +197,7 @@
               <small>Categorías</small>
               <h2>Tipos de enfermedades</h2>
             </div>
-            <p>Explora la biblioteca por categoría clínica. Cada grupo abre su propia página y desde ahí puedes entrar a los protocolos individuales.</p>
+            <p>Selecciona un grupo clínico para revisar los protocolos disponibles en cada área.</p>
           </div>
           <div class="categories-grid">
             ${site.categories.map(renderCategoryCard).join("")}
@@ -297,7 +297,7 @@
             </div>
           </article>
           <aside class="hero-side">
-            <h3>Qué incluye esta categoría</h3>
+            <h3>Protocolos disponibles</h3>
             <ul>
               ${protocols.map((protocol) => `<li>${protocol.title}</li>`).join("")}
             </ul>
@@ -310,7 +310,7 @@
               <small>Biblioteca por categoría</small>
               <h2>Protocolos de ${category.title}</h2>
             </div>
-            <p>Estos protocolos ya no están amontonados en la página principal. Cada uno abre su propia página para consulta individual.</p>
+            <p>Consulta los protocolos disponibles en esta categoría y abre el módulo que necesites.</p>
           </div>
           <div class="protocol-grid">
             ${protocols.map(renderProtocolCard).join("")}
@@ -496,7 +496,7 @@
             <small>Misma categoría</small>
             <h2>Otros protocolos de ${protocol.category}</h2>
           </div>
-          <p>Desde aquí puedes seguir explorando la categoría sin volver a la portada.</p>
+          <p>Continúa con otros protocolos disponibles dentro de la misma categoría clínica.</p>
         </div>
         <div class="protocol-grid">
           ${related.map(renderProtocolCard).join("")}
@@ -531,11 +531,11 @@
             </div>
           </div>
           <aside class="protocol-hero-side">
-            <h3>Acceso rápido</h3>
+            <h3>Orientación rápida</h3>
             <ul>
-              <li>Este protocolo tiene su propia página y ya no depende de la portada.</li>
+              <li>Revisa el resumen clínico y los puntos de alarma principales.</li>
               <li>Pertenece a la categoría <strong>${protocol.category}</strong>.</li>
-              <li>Puedes volver a la categoría o seguir explorando otros protocolos después.</li>
+              <li>Al final encontrarás protocolos relacionados para ampliar la consulta.</li>
             </ul>
           </aside>
         </section>
