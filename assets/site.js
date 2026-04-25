@@ -56,6 +56,10 @@
   }
 
   function renderTopbar(activeCategorySlug) {
+    const activeCategory = activeCategorySlug ? getCategoryBySlug(activeCategorySlug) : null;
+    const currentLabel = activeCategory ? activeCategory.short : "Inicio";
+    const currentDetail = activeCategory ? activeCategory.title : "Portal clínico";
+
     return `
       <header class="topbar">
         <a class="brand" href="${homeUrl()}">
@@ -65,12 +69,40 @@
             <small>Consulta por categoría, enfermedad y fecha de actualización</small>
           </span>
         </a>
-        <nav class="nav-row">
-          <a class="nav-pill ${!activeCategorySlug ? "active" : ""}" href="${homeUrl()}">Inicio</a>
-          ${site.categories.map((category) => `
-            <a class="nav-pill ${activeCategorySlug === category.slug ? "active" : ""}" href="${categoryUrl(category.slug)}">${category.short}</a>
-          `).join("")}
-        </nav>
+        <div class="topbar-tools">
+          <div class="menu-shell">
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="siteMenu">
+              <span class="menu-toggle-copy">
+                <small>Menú</small>
+                <strong>${currentLabel}</strong>
+              </span>
+              <span class="menu-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </button>
+            <div class="menu-panel" id="siteMenu" hidden>
+              <div class="menu-panel-head">
+                <small>Sección actual</small>
+                <strong>${currentDetail}</strong>
+              </div>
+              <nav class="menu-list" aria-label="Navegación principal">
+                <a class="menu-link ${!activeCategorySlug ? "active" : ""}" href="${homeUrl()}">
+                  <span>Inicio</span>
+                  <small>Portada clínica</small>
+                </a>
+                ${site.categories.map((category) => `
+                  <a class="menu-link ${activeCategorySlug === category.slug ? "active" : ""}" href="${categoryUrl(category.slug)}">
+                    <span>${category.title}</span>
+                    <small>${getProtocolsByCategorySlug(category.slug).length} protocolos</small>
+                  </a>
+                `).join("")}
+              </nav>
+              <a class="menu-featured" href="${protocolUrl("vih")}">Abrir protocolo de VIH</a>
+            </div>
+          </div>
+        </div>
       </header>
     `;
   }
@@ -269,6 +301,39 @@
 
     searchInput.addEventListener("input", renderLibrary);
     sortSelect.addEventListener("change", renderLibrary);
+  }
+
+  function setupTopbarMenu() {
+    const shell = document.querySelector(".menu-shell");
+    const toggle = document.querySelector(".menu-toggle");
+    const panel = document.querySelector(".menu-panel");
+
+    if (!shell || !toggle || !panel) return;
+
+    function setOpen(open) {
+      shell.classList.toggle("open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      panel.hidden = !open;
+    }
+
+    toggle.addEventListener("click", function (event) {
+      event.stopPropagation();
+      setOpen(!shell.classList.contains("open"));
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!shell.contains(event.target)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") setOpen(false);
+    });
+
+    panel.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        setOpen(false);
+      });
+    });
   }
 
   function renderCategoryPage(categorySlug) {
@@ -693,14 +758,18 @@
 
   if (page === "home") {
     app.innerHTML = renderHomePage();
+    setupTopbarMenu();
     setupHomeInteractions();
   } else if (page === "category") {
     app.innerHTML = renderCategoryPage(value);
+    setupTopbarMenu();
   } else if (page === "protocol") {
     app.innerHTML = renderProtocolPage(value);
+    setupTopbarMenu();
     const protocol = getProtocolBySlug(value);
     if (protocol && protocol.kind === "algorithm") setupAlgorithm(protocol);
   } else {
     app.innerHTML = renderNotFound("No se pudo cargar la vista solicitada.");
+    setupTopbarMenu();
   }
 })();
