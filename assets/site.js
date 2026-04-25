@@ -55,6 +55,11 @@
       .sort(sortByDateDesc);
   }
 
+  function formatProtocolCount(count) {
+    if (count === 0) return "Sin protocolos";
+    return count + (count === 1 ? " protocolo" : " protocolos");
+  }
+
   function renderTopbar(activeCategorySlug) {
     const activeCategory = activeCategorySlug ? getCategoryBySlug(activeCategorySlug) : null;
     const currentLabel = activeCategory ? activeCategory.short : "Inicio";
@@ -95,11 +100,10 @@
                 ${site.categories.map((category) => `
                   <a class="menu-link ${activeCategorySlug === category.slug ? "active" : ""}" href="${categoryUrl(category.slug)}">
                     <span>${category.title}</span>
-                    <small>${getProtocolsByCategorySlug(category.slug).length} protocolos</small>
+                    <small>${formatProtocolCount(getProtocolsByCategorySlug(category.slug).length)}</small>
                   </a>
                 `).join("")}
               </nav>
-              <a class="menu-featured" href="${protocolUrl("vih")}">Abrir protocolo de VIH</a>
             </div>
           </div>
         </div>
@@ -110,14 +114,15 @@
   function renderHeroActions() {
     return `
       <div class="hero-actions">
-        <a class="cta primary" href="${protocolUrl("vih")}">Abrir protocolo de VIH</a>
-        <a class="cta secondary" href="${categoryUrl("its")}">Entrar a categoría ITS</a>
+        <a class="cta primary" href="#categoriesSection">Explorar categorías</a>
+        <a class="cta secondary" href="#librarySection">Ver biblioteca</a>
       </div>
     `;
   }
 
   function renderStats() {
     const availableCount = site.protocols.filter((protocol) => protocol.status === "Disponible").length;
+    const activeCategoriesCount = site.categories.filter((category) => getProtocolsByCategorySlug(category.slug).length > 0).length;
     return `
       <section class="stats-grid">
         <article class="stat-card">
@@ -136,9 +141,9 @@
           <p>Contenido disponible para revisión inmediata.</p>
         </article>
         <article class="stat-card">
-          <span>Acceso destacado</span>
-          <strong>VIH / ITS</strong>
-          <p>Ingreso directo al algoritmo de detección temprana.</p>
+          <span>Categorías con contenido</span>
+          <strong>${activeCategoriesCount}</strong>
+          <p>Categorías que ya cuentan con al menos un protocolo clínico cargado.</p>
         </article>
       </section>
     `;
@@ -152,7 +157,7 @@
         <h3>${category.title}</h3>
         <p>${category.description}</p>
         <div class="card-meta">
-          <span class="badge">${count} protocolos</span>
+          <span class="badge">${formatProtocolCount(count)}</span>
           <span class="card-helper">${category.helper}</span>
         </div>
       </a>
@@ -182,15 +187,17 @@
   }
 
   function renderRecentSection() {
+    if (site.protocols.length < 2) return "";
+
     const recent = [...site.protocols].sort(sortByDateDesc).slice(0, 3);
     return `
       <section class="section-card">
         <div class="section-head">
           <div>
             <small>Portada clínica</small>
-            <h2>Protocolos más recientes</h2>
+            <h2>Protocolos disponibles</h2>
           </div>
-          <p>Ordenados por fecha de actualización para revisar primero los cambios recientes.</p>
+          <p>Ordenados por fecha de actualización para revisar primero las incorporaciones más recientes.</p>
         </div>
         <div class="protocol-grid three-up">
           ${recent.map(renderProtocolCard).join("")}
@@ -207,23 +214,23 @@
           <article class="hero-main">
             <div class="eyebrow">Portal de consulta clínica</div>
             <h1>Protocolos clínicos organizados por enfermedad y categoría</h1>
-            <p>Reúne algoritmos y guías de consulta rápida para distintas enfermedades, con acceso por áreas clínicas, búsqueda por tema y navegación por fecha de actualización.</p>
+            <p>Reúne protocolos clínicos sustentados en artículos de referencia, organizados por área clínica para facilitar su consulta y expansión progresiva.</p>
             ${renderHeroActions()}
           </article>
           <aside class="hero-side">
             <h3>Recorrido recomendado</h3>
             <ul>
               <li>Explora primero por categoría clínica.</li>
-              <li>Revisa las actualizaciones más recientes.</li>
+              <li>Ubica las áreas que ya tienen protocolos cargados.</li>
               <li>Busca una enfermedad o palabra clave específica.</li>
-              <li>Accede al algoritmo de VIH desde la categoría de ITS.</li>
+              <li>Revisa cada protocolo dentro de su categoría correspondiente.</li>
             </ul>
           </aside>
         </section>
 
         ${renderStats()}
 
-        <section class="section-card">
+        <section class="section-card" id="categoriesSection">
           <div class="section-head">
             <div>
               <small>Categorías</small>
@@ -248,7 +255,7 @@
           </div>
 
           <div class="controls-row">
-            <input id="homeSearch" class="search-input" type="search" placeholder="Buscar VIH, neumonía, diarrea, migraña...">
+            <input id="homeSearch" class="search-input" type="search" placeholder="Buscar VIH, ITS, tamizaje, diagnóstico...">
             <select id="homeSort" class="sort-select" aria-label="Ordenar protocolos">
               <option value="newest">Más nuevos primero</option>
               <option value="oldest">Más antiguos primero</option>
@@ -340,6 +347,7 @@
     const category = getCategoryBySlug(categorySlug);
     if (!category) return renderNotFound("No encontramos esa categoría clínica.");
     const protocols = getProtocolsByCategorySlug(categorySlug);
+    const hasProtocols = protocols.length > 0;
     const featured = protocols[0];
 
     return `
@@ -357,15 +365,19 @@
             <h1>${category.title}</h1>
             <p>${category.description} ${category.helper}</p>
             <div class="hero-actions">
-              ${featured ? `<a class="cta primary" href="${protocolUrl(featured.slug)}">Abrir protocolo destacado</a>` : ""}
+              ${featured ? `<a class="cta primary" href="${protocolUrl(featured.slug)}">Abrir protocolo disponible</a>` : ""}
               <a class="cta secondary" href="${homeUrl()}">Volver al inicio</a>
             </div>
           </article>
           <aside class="hero-side">
-            <h3>Protocolos disponibles</h3>
-            <ul>
-              ${protocols.map((protocol) => `<li>${protocol.title}</li>`).join("")}
-            </ul>
+            <h3>${hasProtocols ? "Protocolos disponibles" : "Estado de la categoría"}</h3>
+            ${hasProtocols ? `
+              <ul>
+                ${protocols.map((protocol) => `<li>${protocol.title}</li>`).join("")}
+              </ul>
+            ` : `
+              <p>Aún no hay protocolos publicados en esta categoría.</p>
+            `}
           </aside>
         </section>
 
@@ -375,11 +387,18 @@
               <small>Biblioteca por categoría</small>
               <h2>Protocolos de ${category.title}</h2>
             </div>
-            <p>Consulta los protocolos disponibles en esta categoría y abre el módulo que necesites.</p>
+            <p>${hasProtocols ? "Consulta los protocolos disponibles en esta categoría y abre el módulo que necesites." : "Esta categoría queda lista para integrar nuevos protocolos clínicos basados en artículos."}</p>
           </div>
-          <div class="protocol-grid">
-            ${protocols.map(renderProtocolCard).join("")}
-          </div>
+          ${hasProtocols ? `
+            <div class="protocol-grid">
+              ${protocols.map(renderProtocolCard).join("")}
+            </div>
+          ` : `
+            <div class="empty-state">
+              <h2>Sin protocolos cargados</h2>
+              <p>Cuando agregues nuevos artículos, esta categoría podrá mostrar sus protocolos aquí.</p>
+            </div>
+          `}
         </section>
       </main>
     `;

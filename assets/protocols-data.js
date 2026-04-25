@@ -6,7 +6,7 @@ window.PROTOCOLOS_SITE = {
       short: "ITS",
       title: "Infecciones de transmisión sexual",
       description: "Protocolos clínicos para sospecha, tamizaje, confirmación y seguimiento de enfermedades transmitidas por contacto sexual.",
-      helper: "Incluye VIH y sífilis.",
+      helper: "Actualmente incluye el protocolo de VIH.",
       accent: "red"
     },
     {
@@ -15,7 +15,7 @@ window.PROTOCOLOS_SITE = {
       short: "RS",
       title: "Enfermedades respiratorias",
       description: "Protocolos clínicos para cuadros respiratorios agudos y crónicos frecuentes en primer contacto y urgencias.",
-      helper: "Incluye neumonía y crisis asmática.",
+      helper: "Categoría disponible para integrar protocolos basados en artículos.",
       accent: "blue"
     },
     {
@@ -24,7 +24,7 @@ window.PROTOCOLOS_SITE = {
       short: "GI",
       title: "Enfermedades gastrointestinales",
       description: "Protocolos clínicos para síntomas digestivos, hidratación, signos de alarma y conducta inicial.",
-      helper: "Incluye diarrea aguda infecciosa.",
+      helper: "Categoría disponible para integrar protocolos basados en artículos.",
       accent: "green"
     },
     {
@@ -33,7 +33,7 @@ window.PROTOCOLOS_SITE = {
       short: "NE",
       title: "Enfermedades neurológicas",
       description: "Protocolos clínicos orientados a identificación de datos de alarma y decisiones de referencia.",
-      helper: "Incluye migraña aguda.",
+      helper: "Categoría disponible para integrar protocolos basados en artículos.",
       accent: "purple"
     },
     {
@@ -42,7 +42,7 @@ window.PROTOCOLOS_SITE = {
       short: "MB",
       title: "Enfermedades metabólicas",
       description: "Protocolos para urgencias metabólicas y descompensaciones que requieren reconocimiento temprano.",
-      helper: "Incluye cetoacidosis diabética.",
+      helper: "Categoría disponible para integrar protocolos basados en artículos.",
       accent: "gold"
     }
   ],
@@ -275,324 +275,6 @@ window.PROTOCOLOS_SITE = {
       ],
       citation: "Medina-De la Garza CE, Castro-Corona MA, Salinas-Carmona MC. Near misdiagnosis of acute HIV-infection with ELISA-Western Blot scheme: Time for mindset change. IDCases. 2021;25:e01168. doi:10.1016/j.idcr.2021.e01168.",
       insight: "El punto central de este protocolo es que un resultado negativo aislado no basta para descartar infección aguda si la exposición reciente y la sospecha clínica siguen altas."
-    },
-    {
-      id: "sifilis",
-      slug: "sifilis",
-      kind: "clinical",
-      title: "Sífilis adquirida",
-      category: "ITS",
-      categorySlug: "its",
-      status: "Disponible",
-      updatedAt: "2026-04-18",
-      summary: "Abordaje inicial ante sospecha de sífilis, interpretación de pruebas treponémicas y no treponémicas y seguimiento serológico.",
-      subtitle: "Protocolo clínico orientado a tamizaje, diagnóstico y control posterior al tratamiento.",
-      tags: ["ITS", "sífilis", "VDRL", "tratamiento", "seguimiento"],
-      facts: [
-        { label: "Categoría", value: "ITS" },
-        { label: "Sospecha", value: "Úlcera, exantema, riesgo sexual" },
-        { label: "Pruebas", value: "VDRL o RPR + prueba treponémica" },
-        { label: "Seguimiento", value: "Control serológico" }
-      ],
-      quickSummary: [
-        "Correlaciona clínica con serología.",
-        "No interpretes VDRL o RPR sin el contexto del estadio clínico.",
-        "Incluye siempre orientación sobre contactos sexuales y prevención."
-      ],
-      sections: [
-        {
-          label: "Cuándo sospechar",
-          title: "Manifestaciones que deben hacerte pensar en sífilis",
-          text: "Úlcera genital indolora, exantema palmoplantar, adenopatías, antecedente sexual de riesgo o hallazgo positivo en tamizaje prenatal o de ITS."
-        },
-        {
-          label: "Pruebas",
-          title: "Evaluación inicial",
-          text: "Solicitar una prueba no treponémica como VDRL o RPR y confirmarla con una prueba treponémica. Interpretar el resultado según el contexto clínico."
-        },
-        {
-          label: "Conducta",
-          title: "Manejo clínico",
-          text: "Tratar según el estadio clínico, valorar coinfecciones de transmisión sexual y considerar estudio de contactos sexuales."
-        },
-        {
-          label: "Seguimiento",
-          title: "Qué revisar después",
-          text: "Dar seguimiento con títulos no treponémicos, vigilar respuesta al tratamiento y educar sobre prevención y notificación de pareja."
-        }
-      ],
-      checklist: [
-        "Definir el estadio clínico.",
-        "Correlacionar laboratorio con síntomas.",
-        "Investigar coinfecciones de transmisión sexual.",
-        "Documentar tratamiento y seguimiento."
-      ],
-      alert: "Una prueba aislada no debe interpretarse sin contexto clínico. Correlaciona siempre estadio, síntomas y serología."
-    },
-    {
-      id: "neumonia",
-      slug: "neumonia",
-      kind: "clinical",
-      title: "Neumonía adquirida en la comunidad",
-      category: "Respiratorias",
-      categorySlug: "respiratorias",
-      status: "Disponible",
-      updatedAt: "2026-04-16",
-      summary: "Protocolo clínico para evaluación inicial, datos de alarma, estudios básicos y orientación terapéutica en neumonía adquirida en la comunidad.",
-      subtitle: "Útil para priorizar gravedad, necesidad de referencia y abordaje inicial en primer contacto.",
-      tags: ["respiratorias", "neumonía", "gravedad", "urgencias", "tratamiento"],
-      facts: [
-        { label: "Categoría", value: "Respiratorias" },
-        { label: "Sospecha", value: "Fiebre, tos, disnea, estertores" },
-        { label: "Evaluación", value: "Signos vitales y gravedad" },
-        { label: "Decisión", value: "Ambulatorio o referencia" }
-      ],
-      quickSummary: [
-        "Primero clasifica gravedad y saturación.",
-        "Decide si puede manejarse en casa o necesita referencia.",
-        "No olvides reevaluar comorbilidades y signos de deterioro."
-      ],
-      sections: [
-        {
-          label: "Cuándo sospechar",
-          title: "Clínica inicial",
-          text: "Pensar en neumonía ante fiebre, tos, expectoración, dolor pleurítico, taquipnea, hipoxemia o auscultación sugestiva."
-        },
-        {
-          label: "Estudios",
-          title: "Valoración básica",
-          text: "Revisar signos vitales, saturación, estado general y solicitar estudios de imagen o laboratorio según gravedad y disponibilidad."
-        },
-        {
-          label: "Decisión",
-          title: "Sitio de manejo",
-          text: "Valorar si la persona puede tratarse en forma ambulatoria o si necesita referencia por gravedad, comorbilidad o deterioro respiratorio."
-        },
-        {
-          label: "Tratamiento",
-          title: "Conducta inicial",
-          text: "Indicar antibiótico según guías locales, controlar fiebre, hidratación y seguimiento estrecho si el manejo es ambulatorio."
-        }
-      ],
-      checklist: [
-        "Tomar signos vitales completos.",
-        "Valorar dificultad respiratoria y saturación.",
-        "Identificar comorbilidades.",
-        "Definir criterios de referencia."
-      ],
-      alert: "Taquipnea, hipoxemia, hipotensión o alteración del estado mental obligan a reevaluar gravedad y nivel de atención."
-    },
-    {
-      id: "asma",
-      slug: "asma",
-      kind: "clinical",
-      title: "Crisis asmática aguda",
-      category: "Respiratorias",
-      categorySlug: "respiratorias",
-      status: "Disponible",
-      updatedAt: "2026-04-12",
-      summary: "Protocolo para reconocer gravedad, estabilizar una exacerbación asmática y decidir observación, egreso o referencia.",
-      subtitle: "Enfocado en primer contacto y urgencias básicas.",
-      tags: ["asma", "respiratorias", "sibilancias", "salbutamol", "gravedad"],
-      facts: [
-        { label: "Categoría", value: "Respiratorias" },
-        { label: "Prioridad", value: "Evaluar gravedad rápido" },
-        { label: "Manejo", value: "Broncodilatador y oxígeno" },
-        { label: "Salida", value: "Egreso o referencia" }
-      ],
-      quickSummary: [
-        "Clasifica gravedad al ingreso.",
-        "Revalora tras cada intervención.",
-        "No des egreso sin plan claro de alarma y seguimiento."
-      ],
-      sections: [
-        {
-          label: "Triage",
-          title: "Clasifica la gravedad",
-          text: "Evaluar habla, frecuencia respiratoria, saturación, uso de músculos accesorios, frecuencia cardiaca y respuesta al tratamiento previo."
-        },
-        {
-          label: "Intervención",
-          title: "Manejo inicial",
-          text: "Iniciar broncodilatador inhalado o nebulizado, considerar oxígeno suplementario y antiinflamatorio sistémico según gravedad."
-        },
-        {
-          label: "Reevaluación",
-          title: "Respuesta clínica",
-          text: "Revalorar síntomas, auscultación, saturación y esfuerzo respiratorio tras la primera intervención."
-        },
-        {
-          label: "Decisión final",
-          title: "Destino del paciente",
-          text: "Dar egreso con plan claro si mejora, o referir si persiste la dificultad respiratoria, la hipoxemia o el deterioro."
-        }
-      ],
-      checklist: [
-        "Evaluar gravedad al ingreso.",
-        "Revalorar tras broncodilatador.",
-        "Dar educación de egreso.",
-        "Referir si no hay respuesta adecuada."
-      ],
-      alert: "Silencio auscultatorio, cianosis, agotamiento o dificultad para hablar sugieren crisis grave."
-    },
-    {
-      id: "diarrea",
-      slug: "diarrea",
-      kind: "clinical",
-      title: "Diarrea aguda infecciosa",
-      category: "Gastrointestinales",
-      categorySlug: "gastrointestinales",
-      status: "Disponible",
-      updatedAt: "2026-04-10",
-      summary: "Protocolo para valorar deshidratación, signos de alarma y conducta inicial en diarrea aguda infecciosa.",
-      subtitle: "Pensado para triage, hidratación y decisión de estudios o referencia.",
-      tags: ["diarrea", "gastrointestinales", "deshidratación", "rehidratación"],
-      facts: [
-        { label: "Categoría", value: "Gastrointestinales" },
-        { label: "Prioridad", value: "Estado de hidratación" },
-        { label: "Conducta", value: "Rehidratación" },
-        { label: "Vigilancia", value: "Datos de alarma" }
-      ],
-      quickSummary: [
-        "Lo primero es definir deshidratación.",
-        "No subestimar sangre en heces, sepsis o intolerancia a vía oral.",
-        "Siempre explicar signos de alarma al egreso."
-      ],
-      sections: [
-        {
-          label: "Evaluación",
-          title: "Qué revisar primero",
-          text: "Determinar número de evacuaciones, vómito, fiebre, sangre en heces, tiempo de evolución y estado de hidratación."
-        },
-        {
-          label: "Hidratación",
-          title: "Manejo inicial",
-          text: "Corregir pérdidas con solución oral o intravenosa según el grado de deshidratación y tolerancia a la vía oral."
-        },
-        {
-          label: "Estudios",
-          title: "Cuándo ampliar abordaje",
-          text: "Solicitar estudios si hay sangre en heces, sospecha de sepsis, inmunosupresión, cuadro prolongado o deshidratación importante."
-        },
-        {
-          label: "Seguimiento",
-          title: "Qué explicar al egreso",
-          text: "Dar medidas de hidratación, signos de alarma y orientación sobre higiene y alimentación."
-        }
-      ],
-      checklist: [
-        "Valorar deshidratación.",
-        "Buscar sangre en heces o fiebre alta.",
-        "Decidir si necesita referencia.",
-        "Explicar signos de alarma."
-      ],
-      alert: "Choque, deshidratación grave, deterioro neurológico o intolerancia total a vía oral requieren atención urgente."
-    },
-    {
-      id: "cetoacidosis",
-      slug: "cetoacidosis",
-      kind: "clinical",
-      title: "Cetoacidosis diabética",
-      category: "Metabólicas",
-      categorySlug: "metabolicas",
-      status: "En revisión",
-      updatedAt: "2026-04-04",
-      summary: "Protocolo para identificar datos sugestivos de cetoacidosis diabética, estudios iniciales y prioridades de estabilización.",
-      subtitle: "Módulo clínico orientado a urgencias metabólicas.",
-      tags: ["metabólicas", "diabetes", "cetoacidosis", "urgencias"],
-      facts: [
-        { label: "Categoría", value: "Metabólicas" },
-        { label: "Sospecha", value: "Hiperglucemia y acidosis" },
-        { label: "Prioridad", value: "Líquidos y vigilancia" },
-        { label: "Estado", value: "En revisión" }
-      ],
-      quickSummary: [
-        "Requiere reconocimiento y manejo urgente.",
-        "Líquidos, vigilancia y evaluación metabólica completa son prioritarios.",
-        "No olvidar buscar el desencadenante."
-      ],
-      sections: [
-        {
-          label: "Sospecha",
-          title: "Datos clínicos",
-          text: "Pensar en cetoacidosis ante poliuria, polidipsia, vómito, dolor abdominal, respiración de Kussmaul, deshidratación y alteración del estado mental."
-        },
-        {
-          label: "Estudios",
-          title: "Confirmación inicial",
-          text: "Glucosa, electrólitos, cetonas, gasometría y valoración del estado hemodinámico son parte del abordaje inicial."
-        },
-        {
-          label: "Estabilización",
-          title: "Conducta inicial",
-          text: "Priorizar líquidos, corrección de alteraciones metabólicas, vigilancia estrecha y referencia o manejo hospitalario."
-        },
-        {
-          label: "Seguridad",
-          title: "Qué no olvidar",
-          text: "Buscar factor desencadenante, vigilar potasio y controlar el estado neurológico de forma seriada."
-        }
-      ],
-      checklist: [
-        "Evaluar estado hemodinámico.",
-        "Pedir estudios metabólicos completos.",
-        "Vigilar potasio.",
-        "Identificar desencadenante."
-      ],
-      alert: "Toda persona con sospecha de cetoacidosis diabética requiere manejo urgente y monitorización estrecha."
-    },
-    {
-      id: "migrana",
-      slug: "migrana",
-      kind: "clinical",
-      title: "Migraña aguda",
-      category: "Neurológicas",
-      categorySlug: "neurologicas",
-      status: "Disponible",
-      updatedAt: "2026-03-29",
-      summary: "Abordaje clínico básico de cefalea compatible con migraña y signos de alarma que obligan a descartar causas secundarias.",
-      subtitle: "Protocolo clínico de primer contacto para cefalea aguda recurrente compatible con migraña.",
-      tags: ["neurológicas", "migraña", "cefalea", "alarma"],
-      facts: [
-        { label: "Categoría", value: "Neurológicas" },
-        { label: "Objetivo", value: "Distinguir alarma vs migraña" },
-        { label: "Manejo", value: "Tratamiento sintomático" },
-        { label: "Seguridad", value: "Identificar cefalea secundaria" }
-      ],
-      quickSummary: [
-        "Antes de etiquetar como migraña, busca banderas rojas.",
-        "Revisa patrón previo de cefalea y factores desencadenantes.",
-        "Si cambia de patrón o aparecen déficits, amplía abordaje."
-      ],
-      sections: [
-        {
-          label: "Sospecha",
-          title: "Cuándo pensar en migraña",
-          text: "Cefalea pulsátil, recurrente, unilateral o bilateral, con náusea, fotofobia, fonofobia o antecedentes similares."
-        },
-        {
-          label: "Descartar alarma",
-          title: "Lo primero es no perder gravedad",
-          text: "Buscar fiebre, rigidez de nuca, déficit neurológico, inicio súbito, inmunosupresión o cambio marcado en el patrón habitual."
-        },
-        {
-          label: "Manejo",
-          title: "Conducta inicial",
-          text: "Ofrecer tratamiento sintomático, reposo, hidratación y seguimiento según intensidad y respuesta."
-        },
-        {
-          label: "Seguimiento",
-          title: "Cuándo derivar o estudiar más",
-          text: "Si aparecen signos de alarma, no hay mejoría o el cuadro cambia de patrón, ampliar abordaje."
-        }
-      ],
-      checklist: [
-        "Buscar banderas rojas.",
-        "Valorar patrón previo de cefalea.",
-        "Dar tratamiento y revalorar.",
-        "Referir si hay alarma."
-      ],
-      alert: "Una cefalea súbita intensa, con déficit neurológico o fiebre, no debe asumirse como migraña hasta descartar causas secundarias."
     }
   ]
 };
