@@ -944,6 +944,37 @@
           </article>
         </aside>
       </section>
+
+      ${renderClinicalSources(protocol)}
+    `;
+  }
+
+  function renderClinicalSources(protocol) {
+    const sources = protocol.sources || [];
+    const hasCitation = Boolean(protocol.citation);
+    if (!sources.length && !hasCitation) return "";
+
+    return `
+      <section class="section-card sources-card">
+        <div class="section-head compact-head">
+          <div>
+            <small>Referencias</small>
+            <h2>Fuentes consultadas</h2>
+          </div>
+          <p>Contenido resumido para consulta educativa; las decisiones clínicas deben confirmarse con guías locales y valoración especializada.</p>
+        </div>
+        ${sources.length ? `
+          <div class="source-list">
+            ${sources.map((source) => `
+              <a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">
+                <span>${source.label}</span>
+                <small>${source.url.replace(/^https?:\/\//, "")}</small>
+              </a>
+            `).join("")}
+          </div>
+        ` : ""}
+        ${hasCitation ? `<p class="citation-text">${protocol.citation}</p>` : ""}
+      </section>
     `;
   }
 
