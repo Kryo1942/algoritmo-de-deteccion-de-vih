@@ -694,6 +694,7 @@ select {
 .accent-green { background: linear-gradient(135deg, var(--green), #61c58d); }
 .accent-purple { background: linear-gradient(135deg, var(--purple), #9e83f2); }
 .accent-gold { background: linear-gradient(135deg, var(--gold), #f2bc68); }
+.accent-teal { background: linear-gradient(135deg, var(--teal), #66c7cb); }
 
 .card-meta,
 .card-top,

@@ -44,6 +44,15 @@ window.PROTOCOLOS_SITE = {
       description: "Protocolos para urgencias metabólicas y descompensaciones que requieren reconocimiento temprano.",
       helper: "Categoría disponible para integrar protocolos basados en artículos.",
       accent: "gold"
+    },
+    {
+      id: "Inmunodeficiencias",
+      slug: "inmunodeficiencias",
+      short: "IN",
+      title: "Inmunodeficiencias",
+      description: "Protocolos clínicos para sospecha, clasificación inicial, referencia y seguimiento de inmunodeficiencias.",
+      helper: "Inicialmente orientada a inmunodeficiencias primarias; lista para integrar secundarias después.",
+      accent: "teal"
     }
   ],
   medications: [],
