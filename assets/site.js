@@ -20,6 +20,10 @@
     return base + "protocolos/" + slug + ".html";
   }
 
+  function medicationUrl() {
+    return base + "medicamentos.html";
+  }
+
   function formatDate(dateString) {
     const date = new Date(dateString + "T12:00:00");
     return date.toLocaleDateString("es-MX", {
@@ -60,10 +64,11 @@
     return count + (count === 1 ? " protocolo" : " protocolos");
   }
 
-  function renderTopbar(activeCategorySlug) {
+  function renderTopbar(activeCategorySlug, activeSection) {
     const activeCategory = activeCategorySlug ? getCategoryBySlug(activeCategorySlug) : null;
-    const currentLabel = activeCategory ? activeCategory.short : "Inicio";
-    const currentDetail = activeCategory ? activeCategory.title : "Portal clínico";
+    const inMedications = activeSection === "medications";
+    const currentLabel = inMedications ? "Dosis" : activeCategory ? activeCategory.short : "Inicio";
+    const currentDetail = inMedications ? "Medicamentos y cálculo de dosis" : activeCategory ? activeCategory.title : "Portal clínico";
 
     return `
       <header class="topbar">
@@ -93,9 +98,13 @@
                 <strong>${currentDetail}</strong>
               </div>
               <nav class="menu-list" aria-label="Navegación principal">
-                <a class="menu-link ${!activeCategorySlug ? "active" : ""}" href="${homeUrl()}">
+                <a class="menu-link ${!activeCategorySlug && !inMedications ? "active" : ""}" href="${homeUrl()}">
                   <span>Inicio</span>
                   <small>Portada clínica</small>
+                </a>
+                <a class="menu-link ${inMedications ? "active" : ""}" href="${medicationUrl()}">
+                  <span>Medicamentos</span>
+                  <small>${(site.medications || []).length} cargados</small>
                 </a>
                 ${site.categories.map((category) => `
                   <a class="menu-link ${activeCategorySlug === category.slug ? "active" : ""}" href="${categoryUrl(category.slug)}">
@@ -122,7 +131,7 @@
 
   function renderStats() {
     const availableCount = site.protocols.filter((protocol) => protocol.status === "Disponible").length;
-    const activeCategoriesCount = site.categories.filter((category) => getProtocolsByCategorySlug(category.slug).length > 0).length;
+    const medicationsCount = (site.medications || []).length;
     return `
       <section class="stats-grid">
         <article class="stat-card">
@@ -141,9 +150,9 @@
           <p>Contenido disponible para revisión inmediata.</p>
         </article>
         <article class="stat-card">
-          <span>Categorías con contenido</span>
-          <strong>${activeCategoriesCount}</strong>
-          <p>Categorías que ya cuentan con al menos un protocolo clínico cargado.</p>
+          <span>Medicamentos</span>
+          <strong>${medicationsCount}</strong>
+          <p>Base preparada para asociar fármacos y dosis a protocolos clínicos.</p>
         </article>
       </section>
     `;
@@ -206,6 +215,28 @@
     `;
   }
 
+  function renderMedicationToolCard() {
+    return `
+      <section class="section-card">
+        <div class="section-head">
+          <div>
+            <small>Herramientas clínicas</small>
+            <h2>Medicamentos y dosis</h2>
+          </div>
+          <p>Sección preparada para registrar medicamentos por protocolo y calcular dosis con variables clínicas.</p>
+        </div>
+        <a class="tool-card" href="${medicationUrl()}">
+          <div>
+            <span class="badge">Base vacía</span>
+            <h3>Calculadora de dosis</h3>
+            <p>Lista para integrar medicamentos por enfermedad, edad, sexo/género, peso y reglas de dosificación.</p>
+          </div>
+          <span class="text-link">Abrir sección</span>
+        </a>
+      </section>
+    `;
+  }
+
   function renderHomePage() {
     return `
       ${renderTopbar("")}
@@ -245,6 +276,8 @@
 
         ${renderRecentSection()}
 
+        ${renderMedicationToolCard()}
+
         <section class="section-card" id="librarySection">
           <div class="section-head">
             <div>
@@ -267,6 +300,152 @@
           <div class="protocol-grid" id="homeLibraryGrid">
             ${[...site.protocols].sort(sortByDateDesc).map(renderProtocolCard).join("")}
           </div>
+        </section>
+      </main>
+    `;
+  }
+
+  function renderMedicationPage() {
+    const medications = site.medications || [];
+    const hasMedications = medications.length > 0;
+
+    return `
+      ${renderTopbar("", "medications")}
+      <main class="page-shell">
+        <div class="breadcrumbs">
+          <a href="${homeUrl()}">Inicio</a>
+          <span>/</span>
+          <span>Medicamentos</span>
+        </div>
+
+        <section class="protocol-hero medication-hero">
+          <div class="protocol-hero-main">
+            <div class="chip category">Herramienta clínica</div>
+            <h1>Medicamentos y cálculo de dosis</h1>
+            <p>Base para asociar medicamentos a protocolos y calcular dosis con reglas clínicas definidas por edad, sexo/género, peso y enfermedad.</p>
+            <div class="hero-meta">
+              <span class="chip status">${hasMedications ? medications.length + " medicamentos" : "Sin medicamentos cargados"}</span>
+              <span class="chip date">Estructura inicial</span>
+            </div>
+          </div>
+          <aside class="protocol-hero-side">
+            <h3>Variables preparadas</h3>
+            <ul>
+              <li>Protocolo o enfermedad asociada.</li>
+              <li>Sexo/género cuando la dosis lo requiera.</li>
+              <li>Edad y unidad de edad.</li>
+              <li>Peso corporal en kilogramos.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section class="dose-layout">
+          <form class="dose-panel" id="doseCalculator">
+            <div class="section-head compact-head">
+              <div>
+                <small>Calculadora</small>
+                <h2>Datos para cálculo de dosis</h2>
+              </div>
+            </div>
+
+            <label class="field-group">
+              <span>Medicamento</span>
+              <select id="doseMedication" class="form-control">
+                <option value="">Sin medicamentos cargados</option>
+              </select>
+            </label>
+
+            <label class="field-group">
+              <span>Protocolo asociado</span>
+              <select id="doseProtocol" class="form-control">
+                <option value="">No especificado</option>
+                ${site.protocols.map((protocol) => `<option value="${protocol.slug}">${protocol.title}</option>`).join("")}
+              </select>
+            </label>
+
+            <div class="form-grid">
+              <label class="field-group">
+                <span>Sexo/género</span>
+                <select id="doseSex" class="form-control">
+                  <option value="">No especificado</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="otro">Otro / no aplica</option>
+                </select>
+              </label>
+
+              <label class="field-group">
+                <span>Edad</span>
+                <input id="doseAge" class="form-control" type="number" min="0" step="1" placeholder="Ej. 24">
+              </label>
+
+              <label class="field-group">
+                <span>Unidad de edad</span>
+                <select id="doseAgeUnit" class="form-control">
+                  <option value="years">Años</option>
+                  <option value="months">Meses</option>
+                  <option value="days">Días</option>
+                </select>
+              </label>
+
+              <label class="field-group">
+                <span>Peso (kg)</span>
+                <input id="doseWeight" class="form-control" type="number" min="0" step="0.1" placeholder="Ej. 70">
+              </label>
+            </div>
+
+            <button class="tool-btn primary dose-submit" type="submit">Calcular dosis</button>
+          </form>
+
+          <aside class="dose-result" aria-live="polite">
+            <span class="badge">Resultado</span>
+            <h2 id="doseResultTitle">Sin cálculo disponible</h2>
+            <p id="doseResultText">La calculadora quedará activa cuando se agreguen medicamentos con reglas de dosificación revisadas.</p>
+            <div class="dose-result-grid">
+              <div>
+                <span>Dosis</span>
+                <strong id="doseAmount">Pendiente</strong>
+              </div>
+              <div>
+                <span>Frecuencia</span>
+                <strong id="doseFrequency">Pendiente</strong>
+              </div>
+              <div>
+                <span>Vía</span>
+                <strong id="doseRoute">Pendiente</strong>
+              </div>
+            </div>
+            <p class="dose-note">Usar solo con medicamentos validados y revisar cada cálculo antes de aplicarlo en un paciente.</p>
+          </aside>
+        </section>
+
+        <section class="section-card">
+          <div class="section-head">
+            <div>
+              <small>Base de medicamentos</small>
+              <h2>Medicamentos registrados</h2>
+            </div>
+            <p>${hasMedications ? "Medicamentos disponibles para cálculo y consulta." : "Esta base queda lista para cargar medicamentos vinculados a protocolos clínicos."}</p>
+          </div>
+          ${hasMedications ? `
+            <div class="protocol-grid">
+              ${medications.map((medication) => `
+                <article class="protocol-card">
+                  <div class="card-top">
+                    <span class="chip category">${medication.group || "Medicamento"}</span>
+                    <span class="chip status">${medication.status || "Disponible"}</span>
+                  </div>
+                  <h3>${medication.name}</h3>
+                  <p>${medication.summary || "Medicamento registrado para cálculo de dosis."}</p>
+                </article>
+              `).join("")}
+            </div>
+          ` : `
+            <div class="empty-state">
+              <h2>Sin medicamentos cargados</h2>
+              <p>Cuando agregues un medicamento, aparecerá aquí y podrá conectarse con la calculadora.</p>
+            </div>
+          `}
         </section>
       </main>
     `;
@@ -340,6 +519,135 @@
       link.addEventListener("click", function () {
         setOpen(false);
       });
+    });
+  }
+
+  function setupDoseCalculator() {
+    const form = document.getElementById("doseCalculator");
+    if (!form) return;
+
+    const medications = site.medications || [];
+    const medicationSelect = document.getElementById("doseMedication");
+    const protocolSelect = document.getElementById("doseProtocol");
+    const sexSelect = document.getElementById("doseSex");
+    const ageInput = document.getElementById("doseAge");
+    const ageUnitSelect = document.getElementById("doseAgeUnit");
+    const weightInput = document.getElementById("doseWeight");
+    const submitButton = form.querySelector(".dose-submit");
+    const resultTitle = document.getElementById("doseResultTitle");
+    const resultText = document.getElementById("doseResultText");
+    const doseAmount = document.getElementById("doseAmount");
+    const doseFrequency = document.getElementById("doseFrequency");
+    const doseRoute = document.getElementById("doseRoute");
+
+    function setResult(title, text, amount, frequency, route) {
+      resultTitle.textContent = title;
+      resultText.textContent = text;
+      doseAmount.textContent = amount || "Pendiente";
+      doseFrequency.textContent = frequency || "Pendiente";
+      doseRoute.textContent = route || "Pendiente";
+    }
+
+    function ageToYears(value, unit) {
+      const age = Number(value);
+      if (!Number.isFinite(age)) return null;
+      if (unit === "days") return age / 365;
+      if (unit === "months") return age / 12;
+      return age;
+    }
+
+    function matchesCriteria(rule, patient) {
+      const criteria = rule.criteria || {};
+      if (criteria.protocolSlug && criteria.protocolSlug !== patient.protocolSlug) return false;
+      if (criteria.sex && criteria.sex !== patient.sex) return false;
+      if (Number.isFinite(criteria.minAgeYears) && patient.ageYears < criteria.minAgeYears) return false;
+      if (Number.isFinite(criteria.maxAgeYears) && patient.ageYears > criteria.maxAgeYears) return false;
+      if (Number.isFinite(criteria.minWeightKg) && patient.weightKg < criteria.minWeightKg) return false;
+      if (Number.isFinite(criteria.maxWeightKg) && patient.weightKg > criteria.maxWeightKg) return false;
+      return true;
+    }
+
+    function roundDose(value, roundTo) {
+      if (!roundTo) return value;
+      return Math.round(value / roundTo) * roundTo;
+    }
+
+    function calculateRule(rule, patient) {
+      const calculation = rule.calculation || {};
+      const unit = calculation.unit || "mg";
+      let amount = null;
+
+      if (calculation.type === "mgPerKg") amount = Number(calculation.amount) * patient.weightKg;
+      if (calculation.type === "fixed") amount = Number(calculation.amount);
+
+      if (!Number.isFinite(amount)) return null;
+      if (Number.isFinite(calculation.minDose)) amount = Math.max(amount, calculation.minDose);
+      if (Number.isFinite(calculation.maxDose)) amount = Math.min(amount, calculation.maxDose);
+      amount = roundDose(amount, calculation.roundTo);
+
+      return {
+        amount: amount + " " + unit,
+        frequency: rule.frequency || "No especificada",
+        route: rule.route || "No especificada",
+        note: rule.note || "Cálculo generado con la regla seleccionada."
+      };
+    }
+
+    function getSelectedMedication() {
+      return medications.find((medication) => medication.id === medicationSelect.value);
+    }
+
+    if (!medications.length) {
+      medicationSelect.disabled = true;
+      submitButton.disabled = true;
+      setResult(
+        "Sin medicamentos cargados",
+        "Agrega medicamentos con reglas de dosificación para activar el cálculo.",
+        "Pendiente",
+        "Pendiente",
+        "Pendiente"
+      );
+      return;
+    }
+
+    medicationSelect.innerHTML = '<option value="">Selecciona un medicamento</option>' + medications.map((medication) => `
+      <option value="${medication.id}">${medication.name}</option>
+    `).join("");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const medication = getSelectedMedication();
+      const patient = {
+        protocolSlug: protocolSelect.value,
+        sex: sexSelect.value,
+        ageYears: ageToYears(ageInput.value, ageUnitSelect.value),
+        weightKg: Number(weightInput.value)
+      };
+
+      if (!medication) {
+        setResult("Selecciona un medicamento", "Elige un medicamento para buscar sus reglas de dosificación.");
+        return;
+      }
+
+      if (!Number.isFinite(patient.ageYears) || !Number.isFinite(patient.weightKg) || patient.weightKg <= 0) {
+        setResult("Datos incompletos", "Captura edad y peso para calcular la dosis.");
+        return;
+      }
+
+      const rule = (medication.dosingRules || []).find((item) => matchesCriteria(item, patient));
+      if (!rule) {
+        setResult("Sin regla compatible", "No hay una regla de dosis que coincida con estos datos clínicos.");
+        return;
+      }
+
+      const result = calculateRule(rule, patient);
+      if (!result) {
+        setResult("Regla incompleta", "La regla seleccionada no tiene una fórmula válida.");
+        return;
+      }
+
+      setResult("Dosis calculada", result.note, result.amount, result.frequency, result.route);
     });
   }
 
@@ -787,6 +1095,10 @@
     setupTopbarMenu();
     const protocol = getProtocolBySlug(value);
     if (protocol && protocol.kind === "algorithm") setupAlgorithm(protocol);
+  } else if (page === "medications") {
+    app.innerHTML = renderMedicationPage();
+    setupTopbarMenu();
+    setupDoseCalculator();
   } else {
     app.innerHTML = renderNotFound("No se pudo cargar la vista solicitada.");
     setupTopbarMenu();

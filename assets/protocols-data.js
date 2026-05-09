@@ -46,6 +46,7 @@ window.PROTOCOLOS_SITE = {
       accent: "gold"
     }
   ],
+  medications: [],
   protocols: [
     {
       id: "vih",
