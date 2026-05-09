@@ -651,6 +651,192 @@
     });
   }
 
+  function renderImmunodeficiencyTool() {
+    return `
+      <section class="section-card screening-tool" id="immunodeficiencyTool">
+        <div class="section-head">
+          <div>
+            <small>Herramienta de orientación</small>
+            <h2>Sospecha de inmunodeficiencia primaria</h2>
+          </div>
+          <p>Tamizaje clínico inicial basado en señales de alarma; no sustituye valoración por inmunología ni confirmación por laboratorio.</p>
+        </div>
+
+        <section class="screening-layout">
+          <form class="screening-form" id="immunodeficiencyForm">
+            <div class="form-grid">
+              <label class="field-group">
+                <span>Edad actual</span>
+                <input id="immuneAge" class="form-control" type="number" min="0" step="1" placeholder="Ej. 8">
+              </label>
+
+              <label class="field-group">
+                <span>Unidad</span>
+                <select id="immuneAgeUnit" class="form-control">
+                  <option value="years">Años</option>
+                  <option value="months">Meses</option>
+                  <option value="days">Días</option>
+                </select>
+              </label>
+
+              <label class="field-group">
+                <span>Inicio de síntomas</span>
+                <select id="immuneOnset" class="form-control">
+                  <option value="">No especificado</option>
+                  <option value="infancy">Primer año de vida</option>
+                  <option value="childhood">Infancia</option>
+                  <option value="adolescence">Adolescencia</option>
+                  <option value="adult">Edad adulta</option>
+                </select>
+              </label>
+
+              <label class="field-group">
+                <span>Sexo/género</span>
+                <select id="immuneSex" class="form-control">
+                  <option value="">No especificado</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="otro">Otro / no aplica</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="check-section">
+              <h3>Señales de alarma</h3>
+              <div class="checklist-grid">
+                <label class="check-option"><input type="checkbox" data-score="3" data-critical="true" value="Dos o más neumonías en un año"><span>Dos o más neumonías en un año.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="3" data-critical="true" value="Infecciones profundas, sepsis o meningitis"><span>Infecciones profundas, sepsis, meningitis o infecciones en sitios inusuales.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="3" data-critical="true" value="Gérmenes oportunistas o inusuales"><span>Infecciones oportunistas, inusuales o muy graves para la edad.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="3" data-critical="true" value="Necesidad de antibiótico intravenoso"><span>Necesidad de antibiótico intravenoso para controlar infecciones.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="3" data-critical="true" value="Antecedente familiar relevante"><span>Antecedente familiar de inmunodeficiencia o muertes tempranas por infección.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Otitis, sinusitis o infecciones respiratorias recurrentes"><span>Otitis, sinusitis o infecciones respiratorias recurrentes.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Antibióticos prolongados con poca respuesta"><span>Antibióticos por tiempo prolongado con respuesta pobre.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Abscesos recurrentes"><span>Abscesos recurrentes en piel, tejidos profundos u órganos.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Candidiasis persistente o micosis extensa"><span>Candidiasis persistente, recurrente o micosis extensa.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Falla de crecimiento o diarrea crónica"><span>Falla de crecimiento, pérdida de peso o diarrea crónica.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Autoinmunidad, citopenias o linfoproliferación"><span>Autoinmunidad, citopenias, linfadenopatía o hepatoesplenomegalia.</span></label>
+                <label class="check-option"><input type="checkbox" data-score="2" value="Respuesta pobre a vacunas"><span>Respuesta clínica pobre a vacunas o infecciones a pesar de vacunación adecuada.</span></label>
+              </div>
+            </div>
+
+            <div class="check-section secondary-checks">
+              <h3>Factores que pueden sugerir causa secundaria</h3>
+              <div class="checklist-grid compact-checks">
+                <label class="check-option"><input type="checkbox" data-secondary="true" value="VIH"><span>VIH o exposición de riesgo.</span></label>
+                <label class="check-option"><input type="checkbox" data-secondary="true" value="Inmunosupresores"><span>Uso de esteroides sistémicos, quimioterapia o inmunosupresores.</span></label>
+                <label class="check-option"><input type="checkbox" data-secondary="true" value="Desnutrición"><span>Desnutrición o pérdida de peso importante.</span></label>
+                <label class="check-option"><input type="checkbox" data-secondary="true" value="Diabetes u otra enfermedad crónica"><span>Diabetes, enfermedad renal, hepática u otra enfermedad crónica.</span></label>
+                <label class="check-option"><input type="checkbox" data-secondary="true" value="Asplenia"><span>Asplenia anatómica o funcional.</span></label>
+              </div>
+            </div>
+
+            <button class="tool-btn primary screening-submit" type="submit">Evaluar sospecha</button>
+          </form>
+
+          <aside class="screening-result" aria-live="polite">
+            <span class="badge">Resultado</span>
+            <h2 id="immuneResultTitle">Sin evaluación</h2>
+            <p id="immuneResultText">Marca las señales presentes para estimar el nivel de sospecha y orientar los siguientes pasos.</p>
+            <div class="risk-meter">
+              <span id="immuneRiskBadge" class="risk-level neutral">Pendiente</span>
+              <strong id="immuneScore">0 puntos</strong>
+            </div>
+            <div class="screening-recommendations">
+              <h3>Siguientes pasos sugeridos</h3>
+              <ul id="immuneNextSteps">
+                <li>Completar historia clínica dirigida y documentar patrón de infecciones.</li>
+              </ul>
+            </div>
+            <p class="dose-note">Ante infección grave, datos de sepsis o deterioro clínico, priorizar atención urgente.</p>
+          </aside>
+        </section>
+      </section>
+    `;
+  }
+
+  function setupImmunodeficiencyTool() {
+    const form = document.getElementById("immunodeficiencyForm");
+    if (!form) return;
+
+    const resultTitle = document.getElementById("immuneResultTitle");
+    const resultText = document.getElementById("immuneResultText");
+    const riskBadge = document.getElementById("immuneRiskBadge");
+    const scoreLabel = document.getElementById("immuneScore");
+    const nextSteps = document.getElementById("immuneNextSteps");
+    const onsetSelect = document.getElementById("immuneOnset");
+    const sexSelect = document.getElementById("immuneSex");
+
+    function setRiskClass(level) {
+      riskBadge.className = "risk-level " + level;
+    }
+
+    function renderSteps(items) {
+      nextSteps.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const selectedWarnings = [...form.querySelectorAll("[data-score]:checked")];
+      const secondaryFactors = [...form.querySelectorAll("[data-secondary]:checked")];
+      const criticalCount = selectedWarnings.filter((item) => item.dataset.critical === "true").length;
+      let score = selectedWarnings.reduce((sum, item) => sum + Number(item.dataset.score || 0), 0);
+
+      if (onsetSelect.value === "infancy") score += 2;
+      if (onsetSelect.value === "childhood") score += 1;
+      if (sexSelect.value === "masculino" && (onsetSelect.value === "infancy" || onsetSelect.value === "childhood")) score += 1;
+
+      const warningList = selectedWarnings.map((item) => item.value);
+      const hasSecondary = secondaryFactors.length > 0;
+      let level = "low";
+      let title = "Sospecha baja";
+      let text = "No se identifican suficientes señales de alarma para una sospecha alta con este tamizaje.";
+      let steps = [
+        "Revisar frecuencia real, gravedad, duración y sitio de las infecciones.",
+        "Buscar diagnósticos frecuentes que expliquen infecciones recurrentes, como alergia, asma, exposición escolar o tratamiento incompleto.",
+        "Revalorar si aparecen infecciones graves, oportunistas o mala respuesta a tratamiento."
+      ];
+
+      if (score >= 7 || criticalCount >= 2) {
+        level = "high";
+        title = "Sospecha alta";
+        text = "El patrón marcado sugiere priorizar estudio de inmunodeficiencia y referencia a inmunología clínica.";
+        steps = [
+          "Solicitar biometría hemática completa con diferencial.",
+          "Solicitar inmunoglobulinas cuantitativas: IgG, IgA e IgM.",
+          "Valorar subpoblaciones linfocitarias si el inicio fue temprano, grave u oportunista.",
+          "Valorar respuesta a vacunas y complemento según el patrón clínico.",
+          "Referir a inmunología clínica o alergología/inmunología."
+        ];
+      } else if (score >= 3 || criticalCount === 1) {
+        level = "moderate";
+        title = "Sospecha intermedia";
+        text = "Hay datos que justifican ampliar interrogatorio, documentar infecciones y considerar estudios iniciales.";
+        steps = [
+          "Documentar número, sitio, germen, severidad y tratamiento de cada infección.",
+          "Considerar biometría hemática con diferencial e inmunoglobulinas cuantitativas.",
+          "Revisar esquema de vacunación y respuesta clínica esperada.",
+          "Escalar a inmunología si persisten infecciones, hay mala respuesta o aparece una señal crítica."
+        ];
+      }
+
+      if (hasSecondary) {
+        steps.push("Evaluar causas secundarias en paralelo: " + secondaryFactors.map((item) => item.value).join(", ") + ".");
+      }
+
+      if (warningList.length) {
+        steps.push("Señales marcadas: " + warningList.join("; ") + ".");
+      }
+
+      setRiskClass(level);
+      riskBadge.textContent = title;
+      scoreLabel.textContent = score + (score === 1 ? " punto" : " puntos");
+      resultTitle.textContent = title;
+      resultText.textContent = text;
+      renderSteps(steps);
+    });
+  }
+
   function renderCategoryPage(categorySlug) {
     const category = getCategoryBySlug(categorySlug);
     if (!category) return renderNotFound("No encontramos esa categoría clínica.");
@@ -688,6 +874,8 @@
             `}
           </aside>
         </section>
+
+        ${category.slug === "inmunodeficiencias" ? renderImmunodeficiencyTool() : ""}
 
         <section class="section-card">
           <div class="section-head">
@@ -1090,6 +1278,7 @@
   } else if (page === "category") {
     app.innerHTML = renderCategoryPage(value);
     setupTopbarMenu();
+    if (value === "inmunodeficiencias") setupImmunodeficiencyTool();
   } else if (page === "protocol") {
     app.innerHTML = renderProtocolPage(value);
     setupTopbarMenu();

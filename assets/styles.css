@@ -1004,6 +1004,146 @@ select {
   font-size: 0.92rem;
 }
 
+.screening-tool {
+  overflow: visible;
+}
+
+.screening-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 18px;
+  align-items: start;
+}
+
+.screening-form,
+.screening-result {
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+}
+
+.screening-form {
+  display: grid;
+  gap: 18px;
+}
+
+.check-section {
+  display: grid;
+  gap: 12px;
+}
+
+.check-section h3,
+.screening-recommendations h3 {
+  margin: 0;
+  font-size: 1.16rem;
+}
+
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.compact-checks {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.check-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  min-height: 100%;
+  padding: 12px;
+  border: 1px solid rgba(23, 32, 51, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.check-option input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--teal);
+}
+
+.secondary-checks .check-option input {
+  accent-color: var(--gold);
+}
+
+.screening-submit {
+  width: 100%;
+}
+
+.screening-result {
+  display: grid;
+  gap: 14px;
+  position: sticky;
+  top: 118px;
+}
+
+.screening-result h2 {
+  margin: 0;
+  font-size: 1.54rem;
+}
+
+.screening-result p,
+.screening-result li {
+  color: var(--muted);
+}
+
+.risk-meter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.risk-level {
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.risk-level.neutral {
+  background: rgba(17, 33, 61, 0.08);
+  color: var(--navy);
+}
+
+.risk-level.low {
+  background: rgba(43, 156, 100, 0.14);
+  color: #166c42;
+}
+
+.risk-level.moderate {
+  background: rgba(214, 162, 26, 0.18);
+  color: #7a5600;
+}
+
+.risk-level.high {
+  background: rgba(216, 90, 81, 0.16);
+  color: #a43129;
+}
+
+.screening-recommendations {
+  display: grid;
+  gap: 10px;
+}
+
+.screening-recommendations ul {
+  color: var(--muted);
+}
+
 .facts-grid,
 .test-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1324,8 +1464,13 @@ select {
 
   .protocol-hero,
   .content-grid,
-  .dose-layout {
+  .dose-layout,
+  .screening-layout {
     grid-template-columns: 1fr;
+  }
+
+  .screening-result {
+    position: static;
   }
 }
 
@@ -1369,6 +1514,11 @@ select {
   }
 
   .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checklist-grid,
+  .compact-checks {
     grid-template-columns: 1fr;
   }
 }
@@ -1416,7 +1566,9 @@ select {
   .protocol-hero,
   .protocol-hero-side,
   .dose-panel,
-  .dose-result {
+  .dose-result,
+  .screening-form,
+  .screening-result {
     padding: 18px;
     border-radius: 24px;
   }
