@@ -1177,3 +1177,351 @@ window.PROTOCOLOS_SITE = {
     })
   );
 })();
+
+(function () {
+  const medicationSources = {
+    gammagard: {
+      label: "DailyMed: GAMMAGARD LIQUID",
+      url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9d42adca-0dd7-4df7-864d-5a7feee52130"
+    },
+    idfIg: {
+      label: "IDF: Immunoglobulin replacement therapy",
+      url: "https://primaryimmune.org/understanding-primary-immunodeficiency/treatment/immunoglobulin-replacement-therapy"
+    },
+    actimmune: {
+      label: "DailyMed: ACTIMMUNE",
+      url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5d0b1256-1981-4519-94f4-a4a2f98bd8a3"
+    },
+    cgdReview: {
+      label: "Review: Chronic Granulomatous Disease prophylaxis",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5709447/"
+    },
+    xolremdi: {
+      label: "XOLREMDI prescribing information",
+      url: "https://xolremdihcp.com/pdf/prescribing-information.pdf"
+    },
+    rethymic: {
+      label: "DailyMed: RETHYMIC",
+      url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e0022c28-8cda-4f1e-bcf1-1f440d37ec4a"
+    },
+    kresladi: {
+      label: "KRESLADI prescribing information",
+      url: "https://www.kresladi.com/prescribing-information"
+    },
+    waskyra: {
+      label: "FDA: WASKYRA prescribing information",
+      url: "https://www.fda.gov/media/190096/download"
+    }
+  };
+
+  window.PROTOCOLOS_SITE.medications.push(
+    {
+      id: "ivig-reemplazo-pi",
+      name: "Inmunoglobulina humana IV para reemplazo",
+      group: "Reemplazo humoral",
+      status: "Fórmula con fuente",
+      summary: "Terapia de reemplazo de anticuerpos en inmunodeficiencias primarias con déficit humoral documentado; ajustar por respuesta clínica, infecciones y niveles valle de IgG.",
+      formula: "Fórmula de inicio: peso (kg) x 400-600 mg por mes; la etiqueta de GAMMAGARD LIQUID permite 300-600 mg/kg cada 3-4 semanas según respuesta.",
+      protocols: [
+        "sindrome-whim",
+        "sindrome-hiper-igm",
+        "inmunodeficiencia-comun-variable",
+        "trastornos-relacionados-was",
+        "agammaglobulinemia"
+      ],
+      sources: [medicationSources.idfIg, medicationSources.gammagard],
+      dosingRules: [
+        {
+          criteria: {},
+          calculation: { type: "mgPerKgRange", minAmount: 400, maxAmount: 600, unit: "mg" },
+          frequency: "cada mes o cada 3-4 semanas",
+          route: "IV",
+          note: "Cálculo educativo: peso x 400-600 mg. Ajustar por inmunología según infecciones, IgG valle, producto y tolerancia."
+        }
+      ]
+    },
+    {
+      id: "tmp-smx-profilaxis-cgd",
+      name: "Trimetoprim-sulfametoxazol para profilaxis en CGD",
+      group: "Profilaxis antibacteriana",
+      status: "Fórmula con fuente",
+      summary: "Profilaxis antibacteriana usada en enfermedad granulomatosa crónica; la dosis se calcula por el componente trimetoprim.",
+      formula: "Fórmula CGD: trimetoprim 5 mg/kg/día dividido cada 12 h; máximo 320 mg de trimetoprim al día.",
+      protocols: ["enfermedad-granulomatosa-cronica"],
+      sources: [medicationSources.cgdReview],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "enfermedad-granulomatosa-cronica" },
+          calculation: { type: "mgPerKg", amount: 5, maxDose: 320, unit: "mg de trimetoprim/día" },
+          frequency: "dividir cada 12 h",
+          route: "VO",
+          note: "Cálculo basado en el componente trimetoprim. Revisar función renal, citopenias, alergias e interacciones."
+        }
+      ]
+    },
+    {
+      id: "itraconazol-profilaxis-cgd",
+      name: "Itraconazol para profilaxis antifúngica en CGD",
+      group: "Profilaxis antifúngica",
+      status: "Fórmula con fuente",
+      summary: "Profilaxis antifúngica en enfermedad granulomatosa crónica; requiere vigilancia de interacciones, función hepática y formulación.",
+      formula: "Fórmula CGD: 5 mg/kg/día; máximo 200 mg al día.",
+      protocols: ["enfermedad-granulomatosa-cronica"],
+      sources: [medicationSources.cgdReview],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "enfermedad-granulomatosa-cronica" },
+          calculation: { type: "mgPerKg", amount: 5, maxDose: 200, unit: "mg/día" },
+          frequency: "cada 24 h",
+          route: "VO",
+          note: "Cálculo educativo para profilaxis en CGD. Verificar niveles, interacciones CYP3A4 y función hepática según criterio clínico."
+        }
+      ]
+    },
+    {
+      id: "interferon-gamma-1b-cgd",
+      name: "Interferón gamma-1b",
+      group: "Inmunomodulador",
+      status: "Fórmula con fuente",
+      summary: "ACTIMMUNE está indicado para reducir frecuencia y gravedad de infecciones serias asociadas con enfermedad granulomatosa crónica.",
+      formula: "Si SC > 0.5 m²: 50 mcg/m² por dosis SC tres veces por semana. Si SC <= 0.5 m²: 1.5 mcg/kg por dosis SC tres veces por semana.",
+      protocols: ["enfermedad-granulomatosa-cronica"],
+      sources: [medicationSources.actimmune],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "enfermedad-granulomatosa-cronica", maxBsaM2: 0.5 },
+          calculation: { type: "mcgPerKg", amount: 1.5, unit: "mcg/dosis" },
+          frequency: "tres veces por semana",
+          route: "SC",
+          note: "Regla de etiqueta para SC <= 0.5 m²: 1.5 mcg/kg/dosis."
+        },
+        {
+          criteria: { protocolSlug: "enfermedad-granulomatosa-cronica", minBsaM2: 0.50001 },
+          calculation: { type: "mcgPerM2", amount: 50, unit: "mcg/dosis" },
+          frequency: "tres veces por semana",
+          route: "SC",
+          note: "Regla de etiqueta para SC > 0.5 m²: 50 mcg/m²/dosis."
+        }
+      ]
+    },
+    {
+      id: "mavorixafor-whim",
+      name: "Mavorixafor",
+      group: "Antagonista CXCR4",
+      status: "Fórmula con fuente",
+      summary: "XOLREMDI está indicado en pacientes de 12 años o más con síndrome WHIM para aumentar neutrófilos y linfocitos maduros circulantes.",
+      formula: "Edad >= 12 años: >50 kg, 400 mg VO cada 24 h; <=50 kg, 300 mg VO cada 24 h. Con inhibidor fuerte CYP3A4: reducir a 200 mg/día.",
+      protocols: ["sindrome-whim"],
+      sources: [medicationSources.xolremdi],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "sindrome-whim", minAgeYears: 12, maxWeightKg: 50 },
+          calculation: { type: "fixed", amount: 300, unit: "mg" },
+          frequency: "cada 24 h en ayuno",
+          route: "VO",
+          note: "Dosis de etiqueta para pacientes de 12 años o más con peso <= 50 kg."
+        },
+        {
+          criteria: { protocolSlug: "sindrome-whim", minAgeYears: 12, minWeightKg: 50.01 },
+          calculation: { type: "fixed", amount: 400, unit: "mg" },
+          frequency: "cada 24 h en ayuno",
+          route: "VO",
+          note: "Dosis de etiqueta para pacientes de 12 años o más con peso > 50 kg."
+        }
+      ]
+    },
+    {
+      id: "rethymic-atimia",
+      name: "Tejido tímico procesado alogénico",
+      group: "Terapia celular",
+      status: "Fórmula con fuente",
+      summary: "RETHYMIC está indicado para reconstitución inmune en pacientes pediátricos con atimia congénita.",
+      formula: "Fórmula: superficie corporal (m²) x 5,000-22,000 mm² de tejido tímico.",
+      protocols: ["digeorge-completo", "atimica-congenita"],
+      sources: [medicationSources.rethymic],
+      dosingRules: [
+        {
+          criteria: {},
+          calculation: { type: "mm2PerM2Range", minAmount: 5000, maxAmount: 22000, unit: "mm² de tejido tímico" },
+          frequency: "implantación quirúrgica única",
+          route: "Implantación quirúrgica",
+          note: "Cálculo de etiqueta basado en superficie corporal del receptor. Solo en centro especializado."
+        }
+      ]
+    },
+    {
+      id: "kresladi-lad1",
+      name: "Marnetegragene autotemcel",
+      group: "Terapia génica autóloga",
+      status: "Fórmula con fuente",
+      summary: "KRESLADI está indicado para LAD-I severa pediátrica por variantes bialélicas en ITGB2 cuando no hay donador hermano HLA compatible.",
+      formula: "Dosis mínima: 2.8 x 10^6 células CD34+ por kg como infusión IV única.",
+      protocols: ["deficiencia-adhesion-leucocitaria"],
+      sources: [medicationSources.kresladi],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "deficiencia-adhesion-leucocitaria" },
+          calculation: { type: "millionCellsPerKg", amount: 2.8, unit: "CD34+ células mínimo" },
+          frequency: "infusión única",
+          route: "IV",
+          note: "Cálculo mínimo de etiqueta. Requiere movilización, aféresis, manufactura y acondicionamiento mieloablativo."
+        }
+      ]
+    },
+    {
+      id: "waskyra-was",
+      name: "Etuvetidigene autotemcel",
+      group: "Terapia génica autóloga",
+      status: "Fórmula con fuente",
+      summary: "WASKYRA está indicado para pacientes de 6 meses o más y adultos con síndrome de Wiskott-Aldrich por mutación en WAS, cuando HSCT es apropiado y no hay donador relacionado HLA compatible.",
+      formula: "Dosis mínima: 7 x 10^6 células CD34+ por kg como infusión IV única.",
+      protocols: ["trastornos-relacionados-was"],
+      sources: [medicationSources.waskyra],
+      dosingRules: [
+        {
+          criteria: { protocolSlug: "trastornos-relacionados-was", minAgeYears: 0.5 },
+          calculation: { type: "millionCellsPerKg", amount: 7, unit: "CD34+ células mínimo" },
+          frequency: "infusión única",
+          route: "IV",
+          note: "Cálculo mínimo de etiqueta. Requiere movilización, aféresis, acondicionamiento y centro de terapia celular."
+        }
+      ]
+    }
+  );
+
+  const treatments = {
+    "digeorge-completo": {
+      title: "Tratamiento del DiGeorge completo",
+      summary: "Prioriza protección frente a infecciones, corrección de problemas asociados y valoración de reconstitución inmune.",
+      principles: [
+        { label: "Protección", title: "Manejo como inmunodeficiencia celular severa", text: "Evitar vacunas vivas, reducir exposición infecciosa y usar productos sanguíneos irradiados/CMV negativos cuando esté indicado." },
+        { label: "Reconstitución", title: "Valorar tejido tímico procesado", text: "La ausencia funcional del timo puede requerir implantación de tejido tímico en centro especializado." },
+        { label: "Comorbilidad", title: "Corregir cardiopatía e hipocalcemia", text: "El tratamiento inmunológico debe coordinarse con cardiología, endocrinología, genética e inmunología pediátrica." }
+      ]
+    },
+    "deficiencia-card9": {
+      title: "Tratamiento de la deficiencia de CARD9",
+      summary: "El esquema depende del hongo, el sitio de infección y la gravedad; no hay una fórmula única segura para calculadora.",
+      principles: [
+        { label: "Antifúngico", title: "Tratamiento dirigido por especie y sitio", text: "Usar cultivo, biopsia o identificación molecular para elegir antifúngico; enfermedad invasiva requiere manejo urgente." },
+        { label: "Extensión", title: "Buscar compromiso profundo", text: "Valorar sistema nervioso central, ojo, hueso y órganos profundos cuando la clínica lo sugiera." },
+        { label: "Prevención", title: "Profilaxis secundaria individualizada", text: "Si hay recurrencia, inmunología e infectología pueden indicar terapia prolongada o profilaxis según el caso." }
+      ]
+    },
+    "sindrome-whim": {
+      title: "Tratamiento del síndrome WHIM",
+      summary: "Combina manejo de infecciones, vigilancia de VPH, reemplazo humoral si aplica y terapia dirigida CXCR4 cuando está indicada.",
+      principles: [
+        { label: "Dirigido", title: "Mavorixafor en pacientes elegibles", text: "En pacientes de 12 años o más, mavorixafor tiene dosis por peso en etiqueta para aumentar neutrófilos y linfocitos." },
+        { label: "Humoral", title: "Inmunoglobulina si hay hipogammaglobulinemia clínicamente relevante", text: "Puede considerarse si hay infecciones recurrentes y defecto de anticuerpos documentado." },
+        { label: "VPH", title: "Vigilancia dermatológica y mucosa", text: "Las verrugas persistentes requieren seguimiento por riesgo de lesiones premalignas o malignas." }
+      ]
+    },
+    "deficiencia-adhesion-leucocitaria": {
+      title: "Tratamiento de la deficiencia de adhesión leucocitaria",
+      summary: "La forma severa requiere antibióticos agresivos, control de foco y valoración de HSCT o terapia génica si cumple criterios.",
+      principles: [
+        { label: "Infección", title: "Tratamiento antibiótico temprano", text: "Cultivar, cubrir patógenos probables y drenar/controlar focos cuando sea necesario." },
+        { label: "Definitivo", title: "HSCT o terapia génica en LAD-I severa", text: "KRESLADI tiene dosis mínima publicada para pacientes pediátricos con LAD-I severa sin donador hermano HLA compatible." },
+        { label: "Soporte", title: "Cuidado de heridas y cavidad oral", text: "El manejo dental, de piel y cicatrización es parte del control de complicaciones." }
+      ]
+    },
+    "hiper-ige-autosomico-dominante": {
+      title: "Tratamiento del hiper-IgE autosómico dominante",
+      summary: "No tiene una dosis universal; el manejo se centra en prevención de infecciones, piel y complicaciones pulmonares.",
+      principles: [
+        { label: "Infecciones", title: "Antibióticos y profilaxis individualizada", text: "El esquema depende de cultivos, frecuencia de abscesos, neumonías y tolerancia; no debe calcularse sin contexto." },
+        { label: "Piel", title: "Control de eczema y abscesos", text: "Cuidado cutáneo, tratamiento oportuno de Staphylococcus y vigilancia de sobreinfección." },
+        { label: "Pulmón", title: "Seguimiento de neumoceles y bronquiectasias", text: "La imagen y función pulmonar ayudan a evitar daño acumulado." }
+      ]
+    },
+    "sindrome-hiper-igm": {
+      title: "Tratamiento de los síndromes hiper-IgM",
+      summary: "Incluye reemplazo de inmunoglobulina, prevención de oportunistas y valoración de HSCT según defecto genético.",
+      principles: [
+        { label: "Humoral", title: "Inmunoglobulina de reemplazo", text: "Indicada cuando hay déficit de IgG y susceptibilidad a infecciones; ajustar por respuesta clínica." },
+        { label: "Oportunistas", title: "Profilaxis según fenotipo", text: "Algunas formas requieren profilaxis para Pneumocystis u otros oportunistas; la dosis depende de edad, superficie corporal y contexto." },
+        { label: "Definitivo", title: "Valorar trasplante en formas severas", text: "CD40L/CD40 y otros defectos pueden requerir discusión temprana con inmunología y trasplante." }
+      ]
+    },
+    "hiper-ige-autosomico-recesivo": {
+      title: "Tratamiento del hiper-IgE autosómico recesivo",
+      summary: "El tratamiento depende del gen y del fenotipo; DOCK8 y formas combinadas pueden requerir HSCT.",
+      principles: [
+        { label: "Infecciones", title: "Control bacteriano, viral y fúngico", text: "Tratar por germen y órgano; las infecciones virales extensas deben escalarse." },
+        { label: "Alergia", title: "Manejo integral de dermatitis, asma y alergia alimentaria", text: "Evitar confundirlo con atopia aislada cuando hay infecciones graves." },
+        { label: "Definitivo", title: "Valorar HSCT en DOCK8 u otros defectos severos", text: "La indicación depende del genotipo, gravedad infecciosa, malignidad y disponibilidad de centro experto." }
+      ]
+    },
+    "inmunodeficiencia-comun-variable": {
+      title: "Tratamiento de CVID",
+      summary: "El pilar es reemplazo de inmunoglobulina cuando se confirma defecto humoral, además de control respiratorio y autoinmunidad.",
+      principles: [
+        { label: "Humoral", title: "Inmunoglobulina de reemplazo", text: "Se ajusta por infecciones, niveles valle, peso, comorbilidades y tolerancia al producto." },
+        { label: "Infección", title: "Antibióticos y prevención de daño pulmonar", text: "Tratar infecciones documentadas, vigilar bronquiectasias y considerar profilaxis si el patrón lo justifica." },
+        { label: "No infeccioso", title: "Vigilar autoinmunidad y linfoproliferación", text: "CVID puede requerir tratamiento de citopenias, granulomas, enteropatía o linfadenopatía." }
+      ]
+    },
+    "sindrome-linfoproliferativo-ligado-x": {
+      title: "Tratamiento del síndrome linfoproliferativo ligado al X",
+      summary: "No hay fórmula universal; el manejo depende de EBV, HLH, linfoma, hipogammaglobulinemia y genética.",
+      principles: [
+        { label: "Urgencia", title: "EBV grave o HLH requiere tratamiento inmediato", text: "Coordinar hematología, infectología e inmunología; pueden usarse protocolos de HLH o terapia anti-CD20 según contexto." },
+        { label: "Humoral", title: "Inmunoglobulina si hay hipogammaglobulinemia", text: "Puede reducir infecciones cuando hay defecto de anticuerpos documentado." },
+        { label: "Definitivo", title: "Valorar HSCT", text: "El trasplante puede ser curativo en fenotipos seleccionados y debe discutirse temprano." }
+      ]
+    },
+    "enfermedad-granulomatosa-cronica": {
+      title: "Tratamiento de enfermedad granulomatosa crónica",
+      summary: "Integra profilaxis antibacteriana, antifúngica, inmunomodulación y manejo agresivo de infecciones.",
+      principles: [
+        { label: "Profilaxis", title: "TMP-SMX e itraconazol", text: "Hay fórmulas publicadas para profilaxis en CGD; ajustar por toxicidad, interacciones y criterio especializado." },
+        { label: "Inmunomodulación", title: "Interferón gamma-1b", text: "ACTIMMUNE tiene dosis por superficie corporal o peso según etiqueta." },
+        { label: "Definitivo", title: "Valorar HSCT en casos seleccionados", text: "El trasplante es la única terapia curativa establecida; se individualiza por edad, donador, infecciones e inflamación." }
+      ]
+    },
+    "sindrome-chediak-higashi": {
+      title: "Tratamiento del síndrome de Chediak-Higashi",
+      summary: "El tratamiento se centra en infecciones, fase acelerada tipo HLH y valoración de HSCT.",
+      principles: [
+        { label: "Infección", title: "Antibióticos tempranos y control de foco", text: "Tratar infecciones bacterianas con cultivos y cobertura adecuada." },
+        { label: "HLH", title: "Fase acelerada como urgencia", text: "Fiebre, citopenias, hepatoesplenomegalia o ferritina alta requieren manejo hematológico urgente." },
+        { label: "Definitivo", title: "HSCT para componente hematológico/inmunológico", text: "El trasplante puede corregir el defecto inmunohematológico, aunque no necesariamente previene toda la progresión neurológica." }
+      ]
+    },
+    "trastornos-relacionados-was": {
+      title: "Tratamiento de trastornos relacionados con WAS",
+      summary: "Combina prevención de infecciones, manejo de sangrado, control de eczema y opciones definitivas como HSCT o terapia génica.",
+      principles: [
+        { label: "Soporte", title: "Sangrado, eczema e infecciones", text: "Evitar procedimientos de riesgo si hay trombocitopenia severa, tratar eczema y usar antimicrobianos según infecciones." },
+        { label: "Humoral", title: "Inmunoglobulina si hay defecto de anticuerpos", text: "Puede indicarse para reducir infecciones en fenotipos con respuesta humoral deficiente." },
+        { label: "Definitivo", title: "HSCT o WASKYRA si cumple criterios", text: "WASKYRA tiene dosis mínima publicada para pacientes elegibles sin donador relacionado HLA compatible." }
+      ]
+    },
+    "agammaglobulinemia": {
+      title: "Tratamiento de agammaglobulinemia",
+      summary: "El tratamiento central es reemplazo de inmunoglobulina y prevención de infecciones bacterianas.",
+      principles: [
+        { label: "Humoral", title: "Inmunoglobulina de reemplazo continua", text: "Ajustar dosis por peso, infecciones, niveles IgG y tolerancia." },
+        { label: "Infección", title: "Antibióticos tempranos", text: "Tratar otitis, sinusitis, neumonía, diarrea o infecciones por enterovirus con baja tolerancia al retraso." },
+        { label: "Vacunas", title: "Evitar vacunas vivas cuando estén contraindicadas", text: "La estrategia de vacunación debe revisarse con inmunología por ausencia de respuesta humoral efectiva." }
+      ]
+    },
+    "atimica-congenita": {
+      title: "Tratamiento de atimia congénita",
+      summary: "Requiere protección infecciosa inmediata y valoración de reconstitución inmune con tejido tímico procesado.",
+      principles: [
+        { label: "Protección", title: "Evitar vacunas vivas y exposición infecciosa", text: "Manejar como inmunodeficiencia celular severa mientras se confirma y se coordina tratamiento." },
+        { label: "Reconstitución", title: "RETHYMIC en pacientes pediátricos", text: "La dosis se calcula por superficie corporal y se realiza como implantación quirúrgica en centro especializado." },
+        { label: "Soporte", title: "Inmunoglobulina/profilaxis según evaluación", text: "Puede requerir Ig, antimicrobianos y productos sanguíneos especiales mientras se recupera o reemplaza la función tímica." }
+      ]
+    }
+  };
+
+  window.PROTOCOLOS_SITE.protocols.forEach((protocol) => {
+    const treatment = treatments[protocol.slug];
+    if (!treatment) return;
+    protocol.treatment = treatment;
+    protocol.tags = [...new Set([...(protocol.tags || []), "tratamiento", "medicamentos"])];
+  });
+})();

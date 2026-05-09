@@ -325,7 +325,7 @@
             <p>Base para asociar medicamentos a protocolos y calcular dosis con reglas clínicas definidas por edad, sexo/género, peso y enfermedad.</p>
             <div class="hero-meta">
               <span class="chip status">${hasMedications ? medications.length + " medicamentos" : "Sin medicamentos cargados"}</span>
-              <span class="chip date">Estructura inicial</span>
+              <span class="chip date">Dosis con fuente</span>
             </div>
           </div>
           <aside class="protocol-hero-side">
@@ -335,6 +335,7 @@
               <li>Sexo/género cuando la dosis lo requiera.</li>
               <li>Edad y unidad de edad.</li>
               <li>Peso corporal en kilogramos.</li>
+              <li>Superficie corporal cuando el medicamento use m².</li>
             </ul>
           </aside>
         </section>
@@ -392,6 +393,11 @@
                 <span>Peso (kg)</span>
                 <input id="doseWeight" class="form-control" type="number" min="0" step="0.1" placeholder="Ej. 70">
               </label>
+
+              <label class="field-group">
+                <span>Superficie corporal (m²)</span>
+                <input id="doseBsa" class="form-control" type="number" min="0" step="0.01" placeholder="Opcional">
+              </label>
             </div>
 
             <button class="tool-btn primary dose-submit" type="submit">Calcular dosis</button>
@@ -437,6 +443,12 @@
                   </div>
                   <h3>${medication.name}</h3>
                   <p>${medication.summary || "Medicamento registrado para cálculo de dosis."}</p>
+                  ${medication.formula ? `<p class="formula-note">${medication.formula}</p>` : ""}
+                  ${medication.sources?.length ? `
+                    <div class="mini-source-list">
+                      ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>`).join("")}
+                    </div>
+                  ` : ""}
                 </article>
               `).join("")}
             </div>
@@ -533,6 +545,7 @@
     const ageInput = document.getElementById("doseAge");
     const ageUnitSelect = document.getElementById("doseAgeUnit");
     const weightInput = document.getElementById("doseWeight");
+    const bsaInput = document.getElementById("doseBsa");
     const submitButton = form.querySelector(".dose-submit");
     const resultTitle = document.getElementById("doseResultTitle");
     const resultText = document.getElementById("doseResultText");
@@ -564,6 +577,8 @@
       if (Number.isFinite(criteria.maxAgeYears) && patient.ageYears > criteria.maxAgeYears) return false;
       if (Number.isFinite(criteria.minWeightKg) && patient.weightKg < criteria.minWeightKg) return false;
       if (Number.isFinite(criteria.maxWeightKg) && patient.weightKg > criteria.maxWeightKg) return false;
+      if (Number.isFinite(criteria.minBsaM2) && (!Number.isFinite(patient.bsaM2) || patient.bsaM2 < criteria.minBsaM2)) return false;
+      if (Number.isFinite(criteria.maxBsaM2) && (!Number.isFinite(patient.bsaM2) || patient.bsaM2 > criteria.maxBsaM2)) return false;
       return true;
     }
 
@@ -578,7 +593,45 @@
       let amount = null;
 
       if (calculation.type === "mgPerKg") amount = Number(calculation.amount) * patient.weightKg;
+      if (calculation.type === "mcgPerKg") amount = Number(calculation.amount) * patient.weightKg;
+      if (calculation.type === "mcgPerM2") {
+        if (!Number.isFinite(patient.bsaM2) || patient.bsaM2 <= 0) return null;
+        amount = Number(calculation.amount) * patient.bsaM2;
+      }
       if (calculation.type === "fixed") amount = Number(calculation.amount);
+      if (calculation.type === "mgPerKgRange") {
+        const minAmount = Number(calculation.minAmount) * patient.weightKg;
+        const maxAmount = Number(calculation.maxAmount) * patient.weightKg;
+        if (!Number.isFinite(minAmount) || !Number.isFinite(maxAmount)) return null;
+        return {
+          amount: minAmount.toLocaleString("es-MX", { maximumFractionDigits: 1 }) + " a " + maxAmount.toLocaleString("es-MX", { maximumFractionDigits: 1 }) + " " + unit,
+          frequency: rule.frequency || "No especificada",
+          route: rule.route || "No especificada",
+          note: rule.note || "Cálculo generado con la regla seleccionada."
+        };
+      }
+      if (calculation.type === "mm2PerM2Range") {
+        if (!Number.isFinite(patient.bsaM2) || patient.bsaM2 <= 0) return null;
+        const minAmount = Number(calculation.minAmount) * patient.bsaM2;
+        const maxAmount = Number(calculation.maxAmount) * patient.bsaM2;
+        if (!Number.isFinite(minAmount) || !Number.isFinite(maxAmount)) return null;
+        return {
+          amount: minAmount.toLocaleString("es-MX", { maximumFractionDigits: 0 }) + " a " + maxAmount.toLocaleString("es-MX", { maximumFractionDigits: 0 }) + " " + unit,
+          frequency: rule.frequency || "No especificada",
+          route: rule.route || "No especificada",
+          note: rule.note || "Cálculo generado con la regla seleccionada."
+        };
+      }
+      if (calculation.type === "millionCellsPerKg") {
+        amount = Number(calculation.amount) * patient.weightKg;
+        if (!Number.isFinite(amount)) return null;
+        return {
+          amount: amount.toLocaleString("es-MX", { maximumFractionDigits: 1 }) + " x10^6 " + unit,
+          frequency: rule.frequency || "No especificada",
+          route: rule.route || "No especificada",
+          note: rule.note || "Cálculo generado con la regla seleccionada."
+        };
+      }
 
       if (!Number.isFinite(amount)) return null;
       if (Number.isFinite(calculation.minDose)) amount = Math.max(amount, calculation.minDose);
@@ -622,7 +675,8 @@
         protocolSlug: protocolSelect.value,
         sex: sexSelect.value,
         ageYears: ageToYears(ageInput.value, ageUnitSelect.value),
-        weightKg: Number(weightInput.value)
+        weightKg: Number(weightInput.value),
+        bsaM2: bsaInput.value ? Number(bsaInput.value) : null
       };
 
       if (!medication) {
@@ -630,8 +684,32 @@
         return;
       }
 
+      if (patient.protocolSlug && medication.protocols?.length && !medication.protocols.includes(patient.protocolSlug)) {
+        setResult(
+          "Medicamento no vinculado",
+          "Este medicamento no está asociado a ese protocolo en la base actual.",
+          "No aplica",
+          "No aplica",
+          "No aplica"
+        );
+        return;
+      }
+
       if (!Number.isFinite(patient.ageYears) || !Number.isFinite(patient.weightKg) || patient.weightKg <= 0) {
         setResult("Datos incompletos", "Captura edad y peso para calcular la dosis.");
+        return;
+      }
+
+      const needsBsa = (medication.dosingRules || []).some((rule) => {
+        const calculationType = rule.calculation?.type;
+        const criteria = rule.criteria || {};
+        return ["mcgPerM2", "mm2PerM2Range"].includes(calculationType)
+          || Number.isFinite(criteria.minBsaM2)
+          || Number.isFinite(criteria.maxBsaM2);
+      });
+
+      if (needsBsa && (!Number.isFinite(patient.bsaM2) || patient.bsaM2 <= 0)) {
+        setResult("Falta superficie corporal", "Este medicamento requiere capturar superficie corporal en m² para aplicar su fórmula.");
         return;
       }
 
@@ -918,6 +996,8 @@
         </ul>
       </section>
 
+      ${renderTreatmentPlan(protocol)}
+
       <section class="content-grid">
         <div class="content-main">
           <div class="detail-grid">
@@ -946,6 +1026,62 @@
       </section>
 
       ${renderClinicalSources(protocol)}
+    `;
+  }
+
+  function renderTreatmentPlan(protocol) {
+    const treatment = protocol.treatment;
+    const relatedMeds = (site.medications || []).filter((medication) => {
+      return (medication.protocols || []).includes(protocol.slug);
+    });
+
+    if (!treatment && !relatedMeds.length) return "";
+
+    return `
+      <section class="section-card treatment-card">
+        <div class="section-head compact-head">
+          <div>
+            <small>Tratamiento</small>
+            <h2>${treatment?.title || "Tratamiento y medicamentos"}</h2>
+          </div>
+          <p>${treatment?.summary || "Opciones terapéuticas vinculadas con este protocolo."}</p>
+        </div>
+
+        ${treatment?.principles?.length ? `
+          <div class="treatment-grid">
+            ${treatment.principles.map((item) => `
+              <article class="treatment-item">
+                <span>${item.label}</span>
+                <h3>${item.title}</h3>
+                <p>${item.text}</p>
+              </article>
+            `).join("")}
+          </div>
+        ` : ""}
+
+        ${relatedMeds.length ? `
+          <div class="medication-linked-list">
+            ${relatedMeds.map((medication) => `
+              <article class="linked-medication">
+                <div>
+                  <span class="badge">${medication.group || "Medicamento"}</span>
+                  <h3>${medication.name}</h3>
+                  <p>${medication.summary}</p>
+                  ${medication.formula ? `<p class="formula-note">${medication.formula}</p>` : ""}
+                </div>
+                ${medication.sources?.length ? `
+                  <div class="mini-source-list">
+                    ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>`).join("")}
+                  </div>
+                ` : ""}
+              </article>
+            `).join("")}
+          </div>
+          <a class="cta secondary centered" href="${medicationUrl()}">Abrir calculadora de dosis</a>
+        ` : `
+          <p class="dose-note">Este protocolo no tiene una fórmula universal segura para calculadora. El tratamiento depende de especie, gravedad, genotipo, órgano afectado o centro especializado.</p>
+        `}
+      </section>
     `;
   }
 
