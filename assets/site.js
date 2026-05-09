@@ -650,6 +650,54 @@
       return medications.find((medication) => medication.id === medicationSelect.value);
     }
 
+    function getMedicationsForProtocol(protocolSlug) {
+      if (!protocolSlug) return medications;
+      return medications.filter((medication) => {
+        return (medication.protocols || []).includes(protocolSlug);
+      });
+    }
+
+    function renderMedicationOptions() {
+      const protocolSlug = protocolSelect.value;
+      const filteredMedications = getMedicationsForProtocol(protocolSlug);
+      const previousValue = medicationSelect.value;
+
+      if (!filteredMedications.length) {
+        medicationSelect.innerHTML = '<option value="">Sin medicamentos para este protocolo</option>';
+        medicationSelect.disabled = true;
+        setResult(
+          "Sin medicamentos vinculados",
+          protocolSlug
+            ? "Este protocolo todavía no tiene medicamentos con fórmula de dosis cargada."
+            : "Selecciona un protocolo para ver medicamentos vinculados.",
+          "Pendiente",
+          "Pendiente",
+          "Pendiente"
+        );
+        return;
+      }
+
+      medicationSelect.disabled = false;
+      medicationSelect.innerHTML = '<option value="">Selecciona un medicamento</option>' + filteredMedications.map((medication) => `
+        <option value="${medication.id}">${medication.name}</option>
+      `).join("");
+
+      if (filteredMedications.some((medication) => medication.id === previousValue)) {
+        medicationSelect.value = previousValue;
+      } else if (protocolSlug) {
+        medicationSelect.value = filteredMedications[0].id;
+        setResult(
+          "Medicamentos filtrados",
+          "Mostrando medicamentos vinculados al protocolo seleccionado. Puedes cambiar el medicamento antes de calcular.",
+          "Pendiente",
+          "Pendiente",
+          "Pendiente"
+        );
+      } else {
+        medicationSelect.value = "";
+      }
+    }
+
     if (!medications.length) {
       medicationSelect.disabled = true;
       submitButton.disabled = true;
@@ -663,9 +711,8 @@
       return;
     }
 
-    medicationSelect.innerHTML = '<option value="">Selecciona un medicamento</option>' + medications.map((medication) => `
-      <option value="${medication.id}">${medication.name}</option>
-    `).join("");
+    renderMedicationOptions();
+    protocolSelect.addEventListener("change", renderMedicationOptions);
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
