@@ -996,6 +996,8 @@
         </ul>
       </section>
 
+      ${renderClinicalDecisionDiagram(protocol)}
+
       ${renderTreatmentPlan(protocol)}
 
       <section class="content-grid">
@@ -1029,11 +1031,132 @@
     `;
   }
 
-  function renderTreatmentPlan(protocol) {
-    const treatment = protocol.treatment;
-    const relatedMeds = (site.medications || []).filter((medication) => {
+  function getRelatedMedications(protocol) {
+    return (site.medications || []).filter((medication) => {
       return (medication.protocols || []).includes(protocol.slug);
     });
+  }
+
+  function getEvidenceSources(protocol, relatedMeds) {
+    const sourceMap = new Map();
+    [...(protocol.sources || []), ...relatedMeds.flatMap((medication) => medication.sources || [])].forEach((source) => {
+      if (source?.url && !sourceMap.has(source.url)) sourceMap.set(source.url, source);
+    });
+    return [...sourceMap.values()];
+  }
+
+  function renderEvidenceLinks(sources, limit) {
+    const limitedSources = sources.slice(0, limit || sources.length);
+    if (!limitedSources.length) return "";
+    return `
+      <div class="diagram-evidence">
+        <strong>Base de evidencia</strong>
+        <div>
+          ${limitedSources.map((source) => `
+            <a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderClinicalDecisionDiagram(protocol) {
+    const relatedMeds = getRelatedMedications(protocol);
+    const sources = getEvidenceSources(protocol, relatedMeds);
+    const suspicion = protocol.sections?.[0];
+    const initialStudy = protocol.sections?.[1];
+    const confirmation = protocol.sections?.[2];
+    const safety = protocol.sections?.[3];
+    const treatment = protocol.treatment;
+    const primaryTreatment = treatment?.principles?.[0];
+    const definitiveTreatment = treatment?.principles?.[1] || treatment?.principles?.[2];
+    const medicationNames = relatedMeds.length
+      ? relatedMeds.map((medication) => medication.name).join(", ")
+      : "sin fórmula universal segura; individualizar con especialista";
+
+    return `
+      <section class="section-card decision-diagram-card">
+        <div class="section-head compact-head">
+          <div>
+            <small>Diagrama de decisión</small>
+            <h2>Ruta visual para toma de decisiones</h2>
+          </div>
+          <p>Algoritmo resumido para primer contacto, confirmación y tratamiento inicial; debe ajustarse a guías locales y valoración especializada.</p>
+        </div>
+
+        <div class="decision-diagram">
+          <article class="decision-step decision-step-start">
+            <span>1. Sospecha clínica</span>
+            <h3>${suspicion?.title || "Identificar patrón clínico"}</h3>
+            <p>${suspicion?.text || protocol.summary}</p>
+          </article>
+
+          <div class="flow-arrow" aria-hidden="true"></div>
+
+          <article class="decision-step decision-step-question">
+            <span>2. Pregunta crítica</span>
+            <h3>¿Hay datos de gravedad, infección invasiva o alerta del protocolo?</h3>
+            <p>${protocol.alert}</p>
+          </article>
+
+          <div class="decision-split">
+            <article class="decision-step decision-step-urgent">
+              <span>Si</span>
+              <h3>Escalar de inmediato</h3>
+              <p>Priorizar estabilización, cultivos o estudios del foco, tratamiento de infección activa y referencia urgente a inmunología o equipo especializado.</p>
+            </article>
+            <article class="decision-step decision-step-stable">
+              <span>No</span>
+              <h3>${initialStudy?.title || "Solicitar estudios iniciales"}</h3>
+              <p>${initialStudy?.text || "Documentar patrón clínico y solicitar estudios de inmunidad iniciales."}</p>
+            </article>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true"></div>
+
+          <article class="decision-step decision-step-question">
+            <span>3. Interpretación</span>
+            <h3>¿Los hallazgos apoyan el diagnóstico sospechado?</h3>
+            <p>Contrastar clínica, laboratorio, patrón infeccioso y causas secundarias antes de cerrar el diagnóstico.</p>
+          </article>
+
+          <div class="decision-split">
+            <article class="decision-step decision-step-confirm">
+              <span>Compatible</span>
+              <h3>${confirmation?.title || "Confirmar y referir"}</h3>
+              <p>${confirmation?.text || "Confirmar con pruebas especializadas y derivar para manejo definitivo."}</p>
+            </article>
+            <article class="decision-step decision-step-review">
+              <span>No concluyente</span>
+              <h3>Revalorar y repetir si persiste sospecha</h3>
+              <p>Revisar infecciones documentadas, medicamentos, VIH, desnutrición, pérdidas proteicas u otras causas secundarias; repetir estudios si el cuadro evoluciona.</p>
+            </article>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true"></div>
+
+          <article class="decision-step decision-step-treatment">
+            <span>4. Manejo</span>
+            <h3>${treatment?.title || safety?.title || "Tratamiento y seguimiento"}</h3>
+            <p>${primaryTreatment?.text || treatment?.summary || safety?.text || "Definir tratamiento con especialista según gravedad, genotipo y órgano afectado."}</p>
+            <div class="diagram-medications">
+              <strong>Medicamentos o terapia vinculada:</strong>
+              <span>${medicationNames}</span>
+            </div>
+            ${definitiveTreatment ? `
+              <p class="diagram-note">${definitiveTreatment.title}: ${definitiveTreatment.text}</p>
+            ` : ""}
+          </article>
+        </div>
+
+        ${renderEvidenceLinks(sources, 5)}
+      </section>
+    `;
+  }
+
+  function renderTreatmentPlan(protocol) {
+    const treatment = protocol.treatment;
+    const relatedMeds = getRelatedMedications(protocol);
 
     if (!treatment && !relatedMeds.length) return "";
 
