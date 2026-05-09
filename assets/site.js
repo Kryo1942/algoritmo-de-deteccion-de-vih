@@ -59,6 +59,46 @@
       .sort(sortByDateDesc);
   }
 
+  function getMedicationsByProtocolSlug(slug) {
+    return (site.medications || []).filter((medication) => {
+      return (medication.protocols || []).includes(slug);
+    });
+  }
+
+  function protocolHasDose(protocol) {
+    return getMedicationsByProtocolSlug(protocol.slug).length > 0;
+  }
+
+  function protocolIsUrgent(protocol) {
+    return [
+      protocol.alert || "",
+      protocol.summary || "",
+      ...(protocol.checklist || [])
+    ].join(" ").toLowerCase().includes("urg");
+  }
+
+  function getSourceType(source) {
+    const label = (source.label || "").toLowerCase();
+    const url = (source.url || "").toLowerCase();
+
+    if (url.includes("dailymed") || url.includes("fda.gov") || url.includes("xolremdi") || url.includes("kresladi")) {
+      return { label: "Regulatorio", className: "regulatory" };
+    }
+    if (url.includes("rarediseases.org") || label.includes("nord")) return { label: "NORD", className: "nord" };
+    if (url.includes("primaryimmune.org")) return { label: "IDF", className: "idf" };
+    if (url.includes("ncbi.nlm.nih.gov") || url.includes("pmc.ncbi.nlm.nih.gov") || url.includes("medlineplus.gov")) {
+      return { label: "NCBI/NIH", className: "nih" };
+    }
+    if (url.includes("merckmanuals.com")) return { label: "Manual clínico", className: "manual" };
+    if (url.includes("aaaai.org")) return { label: "AAAAI", className: "society" };
+    return { label: "Fuente clínica", className: "clinical" };
+  }
+
+  function renderSourceBadge(source) {
+    const type = getSourceType(source);
+    return `<small class="source-type ${type.className}">${type.label}</small>`;
+  }
+
   function formatProtocolCount(count) {
     if (count === 0) return "Sin protocolos";
     return count + (count === 1 ? " protocolo" : " protocolos");
@@ -125,6 +165,7 @@
       <div class="hero-actions">
         <a class="cta primary" href="#categoriesSection">Explorar categorías</a>
         <a class="cta secondary" href="#librarySection">Ver biblioteca</a>
+        <a class="cta secondary" href="#glossarySection">Glosario</a>
       </div>
     `;
   }
@@ -174,12 +215,14 @@
   }
 
   function renderProtocolCard(protocol) {
+    const linkedMedications = getMedicationsByProtocolSlug(protocol.slug);
     return `
       <a class="protocol-card" href="${protocolUrl(protocol.slug)}" data-search="${[
         protocol.title,
         protocol.category,
         protocol.summary,
-        protocol.tags.join(" ")
+        protocol.tags.join(" "),
+        linkedMedications.map((medication) => medication.name).join(" ")
       ].join(" ").toLowerCase()}" data-date="${protocol.updatedAt}">
         <div class="card-top">
           <span class="chip category">${protocol.category}</span>
@@ -189,6 +232,7 @@
         <p>${protocol.summary}</p>
         <div class="card-bottom">
           <span class="chip date">${formatDate(protocol.updatedAt)}</span>
+          ${linkedMedications.length ? `<span class="chip dose-chip">${linkedMedications.length} dosis</span>` : ""}
           <span class="text-link">Abrir protocolo</span>
         </div>
       </a>
@@ -227,12 +271,83 @@
         </div>
         <a class="tool-card" href="${medicationUrl()}">
           <div>
-            <span class="badge">Base vacía</span>
+            <span class="badge">${(site.medications || []).length} medicamentos</span>
             <h3>Calculadora de dosis</h3>
-            <p>Lista para integrar medicamentos por enfermedad, edad, sexo/género, peso y reglas de dosificación.</p>
+            <p>Filtra medicamentos por protocolo, calcula superficie corporal y aplica solo reglas de dosificación con fuente.</p>
           </div>
           <span class="text-link">Abrir sección</span>
         </a>
+      </section>
+    `;
+  }
+
+  function renderGlossarySection() {
+    const terms = [
+      { term: "BH", definition: "Biometría hemática; hemograma con recuento celular." },
+      { term: "BSA / SC", definition: "Superficie corporal; algunas dosis se calculan en m²." },
+      { term: "CGD", definition: "Enfermedad granulomatosa crónica." },
+      { term: "CVID", definition: "Inmunodeficiencia común variable." },
+      { term: "DHR", definition: "Dihidrorodamina; prueba funcional de estallido oxidativo." },
+      { term: "HLH", definition: "Linfohistiocitosis hemofagocítica; síndrome inflamatorio grave." },
+      { term: "HSCT", definition: "Trasplante de células hematopoyéticas." },
+      { term: "IgG / IgA / IgM", definition: "Inmunoglobulinas usadas para evaluar inmunidad humoral." },
+      { term: "IVIG / SCIG", definition: "Inmunoglobulina intravenosa o subcutánea." },
+      { term: "VO / IV / SC", definition: "Vía oral, intravenosa y subcutánea." },
+      { term: "VPH", definition: "Virus del papiloma humano." }
+    ];
+
+    return `
+      <section class="section-card" id="glossarySection">
+        <div class="section-head">
+          <div>
+            <small>Apoyo rápido</small>
+            <h2>Glosario clínico</h2>
+          </div>
+          <p>Siglas frecuentes para leer los protocolos sin perderse en abreviaturas.</p>
+        </div>
+        <div class="glossary-grid">
+          ${terms.map((item) => `
+            <article class="glossary-card">
+              <strong>${item.term}</strong>
+              <p>${item.definition}</p>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderMedicationsByProtocolSection() {
+    const protocolGroups = site.protocols
+      .map((protocol) => ({ protocol, medications: getMedicationsByProtocolSlug(protocol.slug) }))
+      .filter((group) => group.medications.length > 0)
+      .sort((a, b) => b.medications.length - a.medications.length || sortByTitle(a.protocol, b.protocol));
+
+    if (!protocolGroups.length) return "";
+
+    return `
+      <section class="section-card">
+        <div class="section-head">
+          <div>
+            <small>Vista por enfermedad</small>
+            <h2>Medicamentos por protocolo</h2>
+          </div>
+          <p>Consulta rápidamente qué medicamentos o terapias con fórmula están vinculados a cada protocolo.</p>
+        </div>
+        <div class="medication-protocol-grid">
+          ${protocolGroups.map(({ protocol, medications }) => `
+            <article class="medication-protocol-card">
+              <div>
+                <span class="chip category">${protocol.category}</span>
+                <h3>${protocol.title}</h3>
+              </div>
+              <ul>
+                ${medications.map((medication) => `<li>${medication.name}</li>`).join("")}
+              </ul>
+              <a class="text-link" href="${protocolUrl(protocol.slug)}">Abrir protocolo</a>
+            </article>
+          `).join("")}
+        </div>
       </section>
     `;
   }
@@ -289,6 +404,17 @@
 
           <div class="controls-row">
             <input id="homeSearch" class="search-input" type="search" placeholder="Buscar VIH, ITS, tamizaje, diagnóstico...">
+            <select id="homeCategory" class="sort-select" aria-label="Filtrar por categoría">
+              <option value="">Todas las categorías</option>
+              ${site.categories.map((category) => `<option value="${category.slug}">${category.title}</option>`).join("")}
+            </select>
+            <select id="homeFeature" class="sort-select" aria-label="Filtrar por característica">
+              <option value="">Todos los protocolos</option>
+              <option value="dose">Con calculadora de dosis</option>
+              <option value="urgent">Con alerta de urgencia</option>
+              <option value="clinical">Solo protocolos clínicos</option>
+              <option value="algorithm">Solo algoritmos</option>
+            </select>
             <select id="homeSort" class="sort-select" aria-label="Ordenar protocolos">
               <option value="newest">Más nuevos primero</option>
               <option value="oldest">Más antiguos primero</option>
@@ -301,6 +427,8 @@
             ${[...site.protocols].sort(sortByDateDesc).map(renderProtocolCard).join("")}
           </div>
         </section>
+
+        ${renderGlossarySection()}
       </main>
     `;
   }
@@ -395,8 +523,13 @@
               </label>
 
               <label class="field-group">
+                <span>Talla (cm)</span>
+                <input id="doseHeight" class="form-control" type="number" min="0" step="0.1" placeholder="Ej. 170">
+              </label>
+
+              <label class="field-group">
                 <span>Superficie corporal (m²)</span>
-                <input id="doseBsa" class="form-control" type="number" min="0" step="0.01" placeholder="Opcional">
+                <input id="doseBsa" class="form-control" type="number" min="0" step="0.01" placeholder="Se calcula si capturas talla">
               </label>
             </div>
 
@@ -425,6 +558,8 @@
           </aside>
         </section>
 
+        ${renderMedicationsByProtocolSection()}
+
         <section class="section-card">
           <div class="section-head">
             <div>
@@ -446,7 +581,7 @@
                   ${medication.formula ? `<p class="formula-note">${medication.formula}</p>` : ""}
                   ${medication.sources?.length ? `
                     <div class="mini-source-list">
-                      ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>`).join("")}
+                      ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${renderSourceBadge(source)} ${source.label}</a>`).join("")}
                     </div>
                   ` : ""}
                 </article>
@@ -465,6 +600,8 @@
 
   function setupHomeInteractions() {
     const searchInput = document.getElementById("homeSearch");
+    const categorySelect = document.getElementById("homeCategory");
+    const featureSelect = document.getElementById("homeFeature");
     const sortSelect = document.getElementById("homeSort");
     const grid = document.getElementById("homeLibraryGrid");
     const resultCount = document.getElementById("homeResultCount");
@@ -473,13 +610,20 @@
     function renderLibrary() {
       const query = searchInput.value.trim().toLowerCase();
       let items = allProtocols.filter((protocol) => {
-        if (!query) return true;
-        return [
+        const matchesQuery = !query || [
           protocol.title,
           protocol.category,
           protocol.summary,
-          protocol.tags.join(" ")
+          protocol.tags.join(" "),
+          getMedicationsByProtocolSlug(protocol.slug).map((medication) => medication.name).join(" ")
         ].join(" ").toLowerCase().includes(query);
+        const matchesCategory = !categorySelect.value || protocol.categorySlug === categorySelect.value;
+        const matchesFeature = !featureSelect.value
+          || (featureSelect.value === "dose" && protocolHasDose(protocol))
+          || (featureSelect.value === "urgent" && protocolIsUrgent(protocol))
+          || (featureSelect.value === "clinical" && protocol.kind === "clinical")
+          || (featureSelect.value === "algorithm" && protocol.kind === "algorithm");
+        return matchesQuery && matchesCategory && matchesFeature;
       });
 
       if (sortSelect.value === "oldest") items = items.sort(sortByDateAsc);
@@ -498,6 +642,8 @@
     }
 
     searchInput.addEventListener("input", renderLibrary);
+    categorySelect.addEventListener("change", renderLibrary);
+    featureSelect.addEventListener("change", renderLibrary);
     sortSelect.addEventListener("change", renderLibrary);
   }
 
@@ -545,6 +691,7 @@
     const ageInput = document.getElementById("doseAge");
     const ageUnitSelect = document.getElementById("doseAgeUnit");
     const weightInput = document.getElementById("doseWeight");
+    const heightInput = document.getElementById("doseHeight");
     const bsaInput = document.getElementById("doseBsa");
     const submitButton = form.querySelector(".dose-submit");
     const resultTitle = document.getElementById("doseResultTitle");
@@ -567,6 +714,17 @@
       if (unit === "days") return age / 365;
       if (unit === "months") return age / 12;
       return age;
+    }
+
+    function calculateBsa(weightKg, heightCm) {
+      if (!Number.isFinite(weightKg) || !Number.isFinite(heightCm) || weightKg <= 0 || heightCm <= 0) return null;
+      return Math.sqrt((weightKg * heightCm) / 3600);
+    }
+
+    function updateBsaFromHeight() {
+      const calculatedBsa = calculateBsa(Number(weightInput.value), Number(heightInput.value));
+      if (!calculatedBsa) return;
+      bsaInput.value = calculatedBsa.toFixed(2);
     }
 
     function matchesCriteria(rule, patient) {
@@ -713,6 +871,8 @@
 
     renderMedicationOptions();
     protocolSelect.addEventListener("change", renderMedicationOptions);
+    weightInput.addEventListener("input", updateBsaFromHeight);
+    heightInput.addEventListener("input", updateBsaFromHeight);
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -1025,6 +1185,54 @@
     `;
   }
 
+  function renderProtocolQuickSheet(protocol) {
+    if (protocol.kind !== "clinical") return "";
+
+    const relatedMeds = getMedicationsByProtocolSlug(protocol.slug);
+    const treatmentSummary = relatedMeds.length
+      ? relatedMeds.map((medication) => medication.name).join(", ")
+      : protocol.treatment?.summary || "Manejo individualizado con especialista.";
+    const cards = [
+      {
+        label: "Cuándo sospechar",
+        title: protocol.sections?.[0]?.title || "Sospecha clínica",
+        text: protocol.sections?.[0]?.text || protocol.summary
+      },
+      {
+        label: "Primer estudio",
+        title: protocol.sections?.[1]?.title || "Evaluación inicial",
+        text: protocol.sections?.[1]?.text || "Documentar patrón clínico y solicitar estudios iniciales."
+      },
+      {
+        label: "Dato de alarma",
+        title: "No retrasar atención",
+        text: protocol.alert
+      },
+      {
+        label: "Tratamiento clave",
+        title: protocol.treatment?.title || "Manejo",
+        text: treatmentSummary
+      },
+      {
+        label: "Cuándo referir",
+        title: protocol.sections?.[2]?.title || "Derivación",
+        text: protocol.sections?.[2]?.text || "Referir a inmunología clínica si la sospecha persiste o hay resultados compatibles."
+      }
+    ];
+
+    return `
+      <section class="quick-sheet">
+        ${cards.map((card) => `
+          <article class="quick-sheet-card">
+            <span>${card.label}</span>
+            <h3>${card.title}</h3>
+            <p>${card.text}</p>
+          </article>
+        `).join("")}
+      </section>
+    `;
+  }
+
   function renderClinicalProtocol(protocol) {
     return `
       <section class="facts-grid">
@@ -1100,7 +1308,10 @@
         <strong>Base de evidencia</strong>
         <div>
           ${limitedSources.map((source) => `
-            <a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>
+            <a href="${source.url}" target="_blank" rel="noopener noreferrer">
+              ${renderSourceBadge(source)}
+              <span>${source.label}</span>
+            </a>
           `).join("")}
         </div>
       </div>
@@ -1122,7 +1333,7 @@
       : "sin fórmula universal segura; individualizar con especialista";
 
     return `
-      <section class="section-card decision-diagram-card">
+      <section class="section-card decision-diagram-card" id="decisionDiagram">
         <div class="section-head compact-head">
           <div>
             <small>Diagrama de decisión</small>
@@ -1131,8 +1342,22 @@
           <p>Algoritmo resumido para primer contacto, confirmación y tratamiento inicial; debe ajustarse a guías locales y valoración especializada.</p>
         </div>
 
+        <div class="decision-controls no-print">
+          <button class="tool-btn primary" type="button" data-clinical-step="start">Iniciar</button>
+          <button class="tool-btn secondary" type="button" data-clinical-step="urgent">Sí: hay gravedad</button>
+          <button class="tool-btn secondary" type="button" data-clinical-step="stable">No: paciente estable</button>
+          <button class="tool-btn secondary" type="button" data-clinical-step="confirm">Confirmación</button>
+          <button class="tool-btn secondary" type="button" data-clinical-step="treatment">Manejo</button>
+          <button class="tool-btn secondary" type="button" data-clinical-step="reset">Mostrar todo</button>
+        </div>
+
+        <article class="status-card clinical-flow-status no-print" aria-live="polite">
+          <strong class="clinical-status-title">Vista completa</strong>
+          <p class="clinical-status-text">Puedes recorrer el algoritmo por pasos o revisar todo el flujo completo.</p>
+        </article>
+
         <div class="decision-diagram">
-          <article class="decision-step decision-step-start">
+          <article class="decision-step decision-step-start" data-step="start">
             <span>1. Sospecha clínica</span>
             <h3>${suspicion?.title || "Identificar patrón clínico"}</h3>
             <p>${suspicion?.text || protocol.summary}</p>
@@ -1140,19 +1365,19 @@
 
           <div class="flow-arrow" aria-hidden="true"></div>
 
-          <article class="decision-step decision-step-question">
+          <article class="decision-step decision-step-question" data-step="question">
             <span>2. Pregunta crítica</span>
             <h3>¿Hay datos de gravedad, infección invasiva o alerta del protocolo?</h3>
             <p>${protocol.alert}</p>
           </article>
 
           <div class="decision-split">
-            <article class="decision-step decision-step-urgent">
+            <article class="decision-step decision-step-urgent" data-step="urgent">
               <span>Si</span>
               <h3>Escalar de inmediato</h3>
               <p>Priorizar estabilización, cultivos o estudios del foco, tratamiento de infección activa y referencia urgente a inmunología o equipo especializado.</p>
             </article>
-            <article class="decision-step decision-step-stable">
+            <article class="decision-step decision-step-stable" data-step="stable">
               <span>No</span>
               <h3>${initialStudy?.title || "Solicitar estudios iniciales"}</h3>
               <p>${initialStudy?.text || "Documentar patrón clínico y solicitar estudios de inmunidad iniciales."}</p>
@@ -1161,19 +1386,19 @@
 
           <div class="flow-arrow" aria-hidden="true"></div>
 
-          <article class="decision-step decision-step-question">
+          <article class="decision-step decision-step-question" data-step="interpretation">
             <span>3. Interpretación</span>
             <h3>¿Los hallazgos apoyan el diagnóstico sospechado?</h3>
             <p>Contrastar clínica, laboratorio, patrón infeccioso y causas secundarias antes de cerrar el diagnóstico.</p>
           </article>
 
           <div class="decision-split">
-            <article class="decision-step decision-step-confirm">
+            <article class="decision-step decision-step-confirm" data-step="confirm">
               <span>Compatible</span>
               <h3>${confirmation?.title || "Confirmar y referir"}</h3>
               <p>${confirmation?.text || "Confirmar con pruebas especializadas y derivar para manejo definitivo."}</p>
             </article>
-            <article class="decision-step decision-step-review">
+            <article class="decision-step decision-step-review" data-step="review">
               <span>No concluyente</span>
               <h3>Revalorar y repetir si persiste sospecha</h3>
               <p>Revisar infecciones documentadas, medicamentos, VIH, desnutrición, pérdidas proteicas u otras causas secundarias; repetir estudios si el cuadro evoluciona.</p>
@@ -1182,7 +1407,7 @@
 
           <div class="flow-arrow" aria-hidden="true"></div>
 
-          <article class="decision-step decision-step-treatment">
+          <article class="decision-step decision-step-treatment" data-step="treatment">
             <span>4. Manejo</span>
             <h3>${treatment?.title || safety?.title || "Tratamiento y seguimiento"}</h3>
             <p>${primaryTreatment?.text || treatment?.summary || safety?.text || "Definir tratamiento con especialista según gravedad, genotipo y órgano afectado."}</p>
@@ -1239,9 +1464,9 @@
                   <p>${medication.summary}</p>
                   ${medication.formula ? `<p class="formula-note">${medication.formula}</p>` : ""}
                 </div>
-                ${medication.sources?.length ? `
+                  ${medication.sources?.length ? `
                   <div class="mini-source-list">
-                    ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${source.label}</a>`).join("")}
+                    ${medication.sources.map((source) => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${renderSourceBadge(source)} ${source.label}</a>`).join("")}
                   </div>
                 ` : ""}
               </article>
@@ -1274,6 +1499,7 @@
             ${sources.map((source) => `
               <a class="source-link" href="${source.url}" target="_blank" rel="noopener noreferrer">
                 <span>${source.label}</span>
+                ${renderSourceBadge(source)}
                 <small>${source.url.replace(/^https?:\/\//, "")}</small>
               </a>
             `).join("")}
@@ -1407,7 +1633,7 @@
     if (!related.length) return "";
 
     return `
-      <section class="section-card spaced-top">
+      <section class="section-card spaced-top related-protocols">
         <div class="section-head">
           <div>
             <small>Misma categoría</small>
@@ -1446,6 +1672,10 @@
               <span class="chip status">${protocol.status}</span>
               <span class="chip date">Actualizado: ${formatDate(protocol.updatedAt)}</span>
             </div>
+            <div class="hero-actions no-print">
+              <button class="cta secondary print-btn" type="button">Imprimir / guardar PDF</button>
+              ${protocol.kind === "clinical" ? `<a class="cta primary" href="#decisionDiagram">Ver diagrama</a>` : ""}
+            </div>
           </div>
           <aside class="protocol-hero-side">
             <h3>Orientación rápida</h3>
@@ -1456,6 +1686,8 @@
             </ul>
           </aside>
         </section>
+
+        ${renderProtocolQuickSheet(protocol)}
 
         ${protocol.kind === "algorithm" ? renderAlgorithmProtocol(protocol) : renderClinicalProtocol(protocol)}
 
@@ -1475,6 +1707,62 @@
         </section>
       </main>
     `;
+  }
+
+  function setupPrintButton() {
+    const printButton = document.querySelector(".print-btn");
+    if (!printButton) return;
+    printButton.addEventListener("click", () => window.print());
+  }
+
+  function setupClinicalDecisionDiagram() {
+    const card = document.querySelector(".decision-diagram-card");
+    if (!card) return;
+
+    const steps = [...card.querySelectorAll(".decision-step")];
+    const buttons = [...card.querySelectorAll("[data-clinical-step]")];
+    const statusTitle = card.querySelector(".clinical-status-title");
+    const statusText = card.querySelector(".clinical-status-text");
+    const stepGroups = {
+      start: ["start", "question"],
+      urgent: ["question", "urgent", "treatment"],
+      stable: ["question", "stable", "interpretation"],
+      confirm: ["interpretation", "confirm", "review"],
+      treatment: ["confirm", "treatment"]
+    };
+
+    function setStep(target) {
+      if (target === "reset") {
+        steps.forEach((step) => {
+          step.classList.remove("is-active", "is-dimmed");
+        });
+        buttons.forEach((button) => button.classList.remove("active"));
+        statusTitle.textContent = "Vista completa";
+        statusText.textContent = "Puedes recorrer el algoritmo por pasos o revisar todo el flujo completo.";
+        return;
+      }
+
+      const activeSteps = stepGroups[target] || [target];
+      steps.forEach((step) => {
+        const active = activeSteps.includes(step.dataset.step);
+        step.classList.toggle("is-active", active);
+        step.classList.toggle("is-dimmed", !active);
+      });
+      buttons.forEach((button) => button.classList.toggle("active", button.dataset.clinicalStep === target));
+
+      const focusStep = steps.find((step) => step.dataset.step === activeSteps[activeSteps.length - 1]) || steps[0];
+      statusTitle.textContent = focusStep.querySelector("h3")?.textContent || "Paso seleccionado";
+      statusText.textContent = focusStep.querySelector("p")?.textContent || "";
+      focusStep.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => setStep(button.dataset.clinicalStep));
+    });
+
+    steps.forEach((step) => {
+      step.addEventListener("click", () => setStep(step.dataset.step || "reset"));
+    });
   }
 
   function setupAlgorithm(protocol) {
@@ -1619,8 +1907,10 @@
   } else if (page === "protocol") {
     app.innerHTML = renderProtocolPage(value);
     setupTopbarMenu();
+    setupPrintButton();
     const protocol = getProtocolBySlug(value);
     if (protocol && protocol.kind === "algorithm") setupAlgorithm(protocol);
+    if (protocol && protocol.kind === "clinical") setupClinicalDecisionDiagram();
   } else if (page === "medications") {
     app.innerHTML = renderMedicationPage();
     setupTopbarMenu();

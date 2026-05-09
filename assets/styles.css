@@ -808,7 +808,7 @@ select {
 
 .controls-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(170px, 0.7fr) minmax(180px, 0.8fr) minmax(150px, 0.6fr) auto;
   gap: 12px;
   align-items: center;
   margin-bottom: 18px;
@@ -843,6 +843,43 @@ select {
   background: rgba(17, 33, 61, 0.08);
   color: var(--navy);
   font-weight: 700;
+}
+
+.dose-chip {
+  color: #0b6d73;
+  background: rgba(26, 150, 161, 0.12);
+}
+
+.glossary-grid,
+.medication-protocol-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.glossary-card,
+.medication-protocol-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: var(--shadow-sm);
+}
+
+.glossary-card strong {
+  color: var(--navy);
+  font-size: 1.02rem;
+}
+
+.glossary-card p,
+.medication-protocol-card li {
+  color: var(--muted);
+}
+
+.medication-protocol-card ul {
+  padding-left: 18px;
 }
 
 .breadcrumbs {
@@ -1162,6 +1199,43 @@ select {
   margin-top: 8px;
 }
 
+.quick-sheet {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quick-sheet-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-sheet-card span {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(17, 33, 61, 0.08);
+  color: var(--navy);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.quick-sheet-card h3 {
+  font-size: 1.06rem;
+}
+
+.quick-sheet-card p {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
 .content-grid {
   grid-template-columns: minmax(0, 1.15fr) 320px;
   align-items: start;
@@ -1185,6 +1259,17 @@ select {
   overflow: hidden;
 }
 
+.decision-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.clinical-flow-status {
+  margin-bottom: 14px;
+}
+
 .decision-diagram {
   display: grid;
   gap: 12px;
@@ -1200,6 +1285,34 @@ select {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.78);
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.decision-step:hover,
+.decision-step.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(17, 33, 61, 0.22);
+  box-shadow: 0 18px 36px rgba(17, 33, 61, 0.14);
+}
+
+.decision-step.is-active::before {
+  content: "Paso activo";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.decision-step.is-dimmed {
+  opacity: 0.42;
 }
 
 .decision-step span {
@@ -1320,6 +1433,9 @@ select {
 }
 
 .diagram-evidence a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 7px 10px;
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.84);
@@ -1328,6 +1444,25 @@ select {
   font-weight: 800;
   border: 1px solid var(--line);
 }
+
+.source-type {
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(17, 33, 61, 0.08);
+  color: var(--navy);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.source-type.regulatory { background: rgba(216, 90, 81, 0.13); color: #9a2e28; }
+.source-type.nord { background: rgba(119, 88, 216, 0.13); color: #5633ad; }
+.source-type.idf { background: rgba(26, 150, 161, 0.13); color: #0b6d73; }
+.source-type.nih { background: rgba(43, 156, 100, 0.13); color: #166c42; }
+.source-type.manual { background: rgba(214, 162, 26, 0.16); color: #765300; }
+.source-type.society { background: rgba(63, 116, 255, 0.13); color: #2749b8; }
 
 .treatment-card {
   gap: 18px;
@@ -1378,6 +1513,9 @@ select {
 }
 
 .mini-source-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 6px 10px;
   border-radius: var(--radius-pill);
   background: rgba(17, 33, 61, 0.07);
@@ -1693,7 +1831,10 @@ select {
   .info-grid,
   .stats-grid,
   .facts-grid,
-  .test-grid {
+  .test-grid,
+  .quick-sheet,
+  .glossary-grid,
+  .medication-protocol-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1733,6 +1874,9 @@ select {
   .detail-grid,
   .content-grid,
   .branch-grid,
+  .quick-sheet,
+  .glossary-grid,
+  .medication-protocol-grid,
   .protocol-grid.three-up {
     grid-template-columns: 1fr;
   }
@@ -1823,5 +1967,57 @@ select {
 
   .node-top {
     flex-direction: column;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  body::before,
+  .topbar,
+  .breadcrumbs,
+  .no-print,
+  .related-protocols,
+  .menu-panel,
+  .tool-btn,
+  .cta {
+    display: none !important;
+  }
+
+  .page-shell {
+    width: 100%;
+    margin: 0;
+    gap: 14px;
+  }
+
+  .protocol-hero,
+  .section-card,
+  .summary-card,
+  .detail-card,
+  .info-card,
+  .decision-step,
+  .quick-sheet-card,
+  .treatment-item,
+  .linked-medication {
+    box-shadow: none;
+    break-inside: avoid;
+    background: #fff;
+  }
+
+  .protocol-hero,
+  .content-grid,
+  .quick-sheet,
+  .decision-split,
+  .treatment-grid,
+  .medication-linked-list,
+  .facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  a {
+    text-decoration: none;
   }
 }
