@@ -134,7 +134,7 @@
   }
 
   function topbar(active) {
-    return "<header class='vax-topbar'><a class='vax-brand' href='" + homeUrl() + "'><span class='vax-brand-mark'>PC</span><span>Protocolos Clínicos</span></a><nav class='vax-nav' aria-label='Navegación de vacunación'><a href='" + homeUrl() + "'>Inicio</a><a class='" + (active === "vaccination" ? "active" : "") + "' href='" + vaccinationUrl() + "'>Vacunación</a></nav></header>";
+    return "<header class='vax-topbar'><a class='vax-brand' href='" + homeUrl() + "'><span class='vax-brand-mark'>UANL</span><span>Centro UANL de Protocolos Clínicos</span></a><nav class='vax-nav' aria-label='Navegación de vacunación'><a href='" + homeUrl() + "'>Inicio</a><a class='" + (active === "vaccination" ? "active" : "") + "' href='" + vaccinationUrl() + "'>Vacunación UANL</a></nav></header>";
   }
 
   function landingCard(vaccine) {
@@ -150,7 +150,7 @@
   }
 
   function renderLanding() {
-    app.innerHTML = topbar("vaccination") + "<main class='vax-shell'><section class='vax-hero'><div><span class='vax-eyebrow'>Centro de infografías clínicas</span><h1>Vacunación explicada con claridad, precisión y confianza</h1><p>Estas subpáginas resumen para qué sirve cada vacuna, qué enfermedad previene, cómo se aplica, qué tan frecuente es el problema, por qué puede repetirse y cuáles efectos adversos pueden aparecer sin generar alarma innecesaria.</p><div class='vax-toolbar'><a class='vax-button primary' href='#vacunas'>Ver vacunas</a><button class='vax-button' type='button' onclick='window.print()'>Imprimir</button></div></div><aside class='vax-hero-aside'><strong>Enfoque de comunicación</strong><ul class='vax-list'><li>Explicar beneficios antes de hablar de riesgos.</li><li>Separar efectos esperados de señales de alarma.</li><li>Usar fuentes oficiales y lenguaje no alarmista.</li></ul></aside></section><div class='vax-section-head' id='vacunas'><div><span class='vax-eyebrow'>Subpáginas</span><h2>Vacunas incluidas</h2></div><p>Selecciona una vacuna para abrir su infografía completa.</p></div><section class='vax-grid'>" + vaccines.map(landingCard).join("") + "</section>" + credits() + "</main>";
+    app.innerHTML = topbar("vaccination") + "<main class='vax-shell'><section class='vax-hero'><div><span class='vax-eyebrow'>UANL · Departamento de Inmunología</span><h1>Módulo profesional de vacunación clínica</h1><p>Estas subpáginas resumen para qué sirve cada vacuna, qué enfermedad previene, cómo se aplica, qué tan frecuente es el problema, por qué puede repetirse y cuáles efectos adversos pueden aparecer sin generar alarma innecesaria.</p><div class='vax-toolbar'><a class='vax-button primary' href='#vacunas'>Ver vacunas</a><button class='vax-button' type='button' onclick='window.print()'>Imprimir</button></div></div><aside class='vax-hero-aside'><strong>Enfoque de comunicación</strong><ul class='vax-list'><li>Explicar beneficios antes de hablar de riesgos.</li><li>Separar efectos esperados de señales de alarma.</li><li>Usar fuentes oficiales y lenguaje no alarmista.</li></ul></aside></section><div class='vax-section-head' id='vacunas'><div><span class='vax-eyebrow'>Subpáginas clínicas</span><h2>Vacunas incluidas</h2></div><p>Selecciona una vacuna para abrir su infografía completa.</p></div><section class='vax-grid'>" + vaccines.map(landingCard).join("") + "</section>" + credits() + "</main>";
   }
 
   function tile(kind, title, body) {

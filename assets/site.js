@@ -108,15 +108,15 @@
     const activeCategory = activeCategorySlug ? getCategoryBySlug(activeCategorySlug) : null;
     const inMedications = activeSection === "medications";
     const currentLabel = inMedications ? "Dosis" : activeCategory ? activeCategory.short : "Inicio";
-    const currentDetail = inMedications ? "Medicamentos y cálculo de dosis" : activeCategory ? activeCategory.title : "Portal clínico";
+    const currentDetail = inMedications ? "Medicamentos y cálculo de dosis" : activeCategory ? activeCategory.title : "Centro académico UANL";
 
     return `
       <header class="topbar">
         <a class="brand" href="${homeUrl()}">
-          <span class="brand-mark">PC</span>
+          <span class="brand-mark">UANL</span>
           <span class="brand-copy">
-            <strong>Protocolos Clínicos</strong>
-            <small>Consulta por categoría, enfermedad y fecha de actualización</small>
+            <strong>Centro UANL de Protocolos Clínicos</strong>
+            <small>Facultad de Medicina · Departamento de Inmunología</small>
           </span>
         </a>
         <div class="topbar-tools">
@@ -140,7 +140,7 @@
               <nav class="menu-list" aria-label="Navegación principal">
                 <a class="menu-link ${!activeCategorySlug && !inMedications ? "active" : ""}" href="${homeUrl()}">
                   <span>Inicio</span>
-                  <small>Portada clínica</small>
+                  <small>Panel académico</small>
                 </a>
                 <a class="menu-link ${inMedications ? "active" : ""}" href="${medicationUrl()}">
                   <span>Medicamentos</span>
@@ -247,7 +247,7 @@
       <section class="section-card">
         <div class="section-head">
           <div>
-            <small>Portada clínica</small>
+            <small>Centro académico UANL</small>
             <h2>Protocolos disponibles</h2>
           </div>
           <p>Ordenados por fecha de actualización para revisar primero las incorporaciones más recientes.</p>
@@ -358,9 +358,9 @@
       <main class="page-shell">
         <section class="hero-grid">
           <article class="hero-main">
-            <div class="eyebrow">Portal de consulta clínica</div>
-            <h1>Protocolos clínicos organizados por enfermedad y categoría</h1>
-            <p>Reúne protocolos clínicos sustentados en artículos de referencia, organizados por área clínica para facilitar su consulta y expansión progresiva.</p>
+            <div class="eyebrow">UANL · Facultad de Medicina</div>
+            <h1>Centro académico de protocolos clínicos e inmunología</h1>
+            <p>Plataforma de consulta educativa con protocolos, algoritmos, medicamentos y vacunación, organizada para revisión clínica clara y actualización progresiva.</p>
             ${renderHeroActions()}
           </article>
           <aside class="hero-side">
