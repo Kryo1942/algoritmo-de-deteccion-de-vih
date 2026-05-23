@@ -124,7 +124,24 @@
   function vaccineUrl(slug) { return base + "vacunas/" + slug + ".html"; }
   function homeUrl() { return base + "index.html"; }
   function vaccinationUrl() { return base + "vacunacion.html"; }
+  function categoryUrl(slug) { return base + "categorias/" + slug + ".html"; }
+  function medicationUrl() { return base + "medicamentos.html"; }
   function esc(text) { return String(text || "").replace(/[&<>]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
+
+  function siteData() {
+    return window.PROTOCOLOS_SITE || { categories: [], protocols: [], medications: [] };
+  }
+
+  function protocolCount(categorySlug) {
+    return siteData().protocols.filter(function (protocol) {
+      return protocol.categorySlug === categorySlug;
+    }).length;
+  }
+
+  function formatProtocolCount(count) {
+    if (count === 0) return "Sin protocolos";
+    return count + (count === 1 ? " protocolo" : " protocolos");
+  }
 
   function teamNames() {
     var site = window.PROTOCOLOS_SITE;
@@ -134,7 +151,53 @@
   }
 
   function topbar(active) {
-    return "<header class='vax-topbar'><a class='vax-brand' href='" + homeUrl() + "'><span class='vax-brand-mark'>UANL</span><span>Centro UANL de Protocolos Clínicos</span></a><nav class='vax-nav' aria-label='Navegación de vacunación'><a href='" + homeUrl() + "'>Inicio</a><a class='" + (active === "vaccination" ? "active" : "") + "' href='" + vaccinationUrl() + "'>Vacunación UANL</a></nav></header>";
+    return "<header class='vax-topbar'><a class='vax-brand' href='" + homeUrl() + "'><span class='vax-brand-mark'>UANL</span><span>Centro UANL de Protocolos Clínicos</span></a><div class='vax-topbar-tools'>" + indexMenu(active) + "<nav class='vax-nav' aria-label='Navegación de vacunación'><a href='" + homeUrl() + "'>Inicio</a><a class='" + (active === "vaccination" ? "active" : "") + "' href='" + vaccinationUrl() + "'>Vacunación UANL</a></nav></div></header>";
+  }
+
+  function indexLink(href, label, detail, active) {
+    return "<a class='vax-index-link" + (active ? " active" : "") + "' href='" + href + "'><span>" + esc(label) + "</span><small>" + esc(detail) + "</small></a>";
+  }
+
+  function indexMenu(active) {
+    var site = siteData();
+    var medicationCount = (site.medications || []).length;
+    var medicationDetail = medicationCount ? medicationCount + " cargados" : "Sin medicamentos";
+    var categoryLinks = (site.categories || []).map(function (category) {
+      return indexLink(categoryUrl(category.slug), category.title, formatProtocolCount(protocolCount(category.slug)), false);
+    }).join("");
+    return "<div class='vax-index-shell'><button class='vax-index-toggle' type='button' aria-expanded='false' aria-controls='vaxSiteIndex'><span><small>Índice</small><strong>Secciones</strong></span><span class='vax-menu-icon' aria-hidden='true'><span></span><span></span><span></span></span></button><div class='vax-index-panel' id='vaxSiteIndex' hidden><div class='vax-index-head'><small>Navegación principal</small><strong>Índice del sitio UANL</strong></div><nav class='vax-index-list' aria-label='Índice del sitio'>" + indexLink(homeUrl(), "Inicio", "Panel académico", false) + indexLink(medicationUrl(), "Medicamentos", medicationDetail, false) + indexLink(vaccinationUrl(), "Vacunación UANL", "Infografías clínicas", active === "vaccination") + categoryLinks + "</nav></div></div>";
+  }
+
+  function setupVaxIndexMenu() {
+    var shell = document.querySelector(".vax-index-shell");
+    var toggle = document.querySelector(".vax-index-toggle");
+    var panel = document.querySelector(".vax-index-panel");
+    if (!shell || !toggle || !panel) return;
+
+    function setOpen(open) {
+      shell.classList.toggle("open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      panel.hidden = !open;
+    }
+
+    toggle.addEventListener("click", function (event) {
+      event.stopPropagation();
+      setOpen(!shell.classList.contains("open"));
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!shell.contains(event.target)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") setOpen(false);
+    });
+
+    panel.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        setOpen(false);
+      });
+    });
   }
 
   function landingCard(vaccine) {
@@ -151,6 +214,7 @@
 
   function renderLanding() {
     app.innerHTML = topbar("vaccination") + "<main class='vax-shell'><section class='vax-hero'><div><span class='vax-eyebrow'>UANL · Departamento de Inmunología</span><h1>Módulo profesional de vacunación clínica</h1><p>Estas subpáginas resumen para qué sirve cada vacuna, qué enfermedad previene, cómo se aplica, qué tan frecuente es el problema, por qué puede repetirse y cuáles efectos adversos pueden aparecer sin generar alarma innecesaria.</p><div class='vax-toolbar'><a class='vax-button primary' href='#vacunas'>Ver vacunas</a><button class='vax-button' type='button' onclick='window.print()'>Imprimir</button></div></div><aside class='vax-hero-aside'><strong>Enfoque de comunicación</strong><ul class='vax-list'><li>Explicar beneficios antes de hablar de riesgos.</li><li>Separar efectos esperados de señales de alarma.</li><li>Usar fuentes oficiales y lenguaje no alarmista.</li></ul></aside></section><div class='vax-section-head' id='vacunas'><div><span class='vax-eyebrow'>Subpáginas clínicas</span><h2>Vacunas incluidas</h2></div><p>Selecciona una vacuna para abrir su infografía completa.</p></div><section class='vax-grid'>" + vaccines.map(landingCard).join("") + "</section>" + credits() + "</main>";
+    setupVaxIndexMenu();
   }
 
   function tile(kind, title, body) {
@@ -160,6 +224,7 @@
   function renderDetail(vaccine) {
     var adverseList = vaccine.adverse.map(function (item) { return "<li>" + esc(item) + "</li>"; }).join("");
     app.innerHTML = topbar("vaccination") + "<main class='vax-shell'><a class='vax-back' href='" + vaccinationUrl() + "'>Volver a vacunación</a><section class='vax-detail-hero'><div><span class='vax-eyebrow'>Infografía clínica</span><h1>" + esc(vaccine.title) + "</h1><p>" + esc(vaccine.protects) + "</p><div class='vax-chip-row'><span class='vax-chip " + vaccine.tone + "'>" + esc(vaccine.short) + "</span><span class='vax-chip'>Prevención</span><span class='vax-chip'>Efectos adversos en botón aparte</span></div></div><aside class='vax-detail-aside'><strong>Mensaje central</strong><p>Las vacunas preparan defensas antes de la exposición. La mayoría de molestias posteriores son leves y breves; las señales de alarma son poco frecuentes y se explican por separado.</p></aside></section><section class='vax-panel'><div class='vax-section-head'><div><span class='vax-eyebrow'>Resumen visual</span><h2>Qué debe saber el paciente</h2></div><p>Información diseñada para una infografía completa y fácil de leer.</p></div><div class='vax-infographic'>" + tile("primary", "Para qué sirve", vaccine.use) + tile("blue", "Esquema general", vaccine.schedule) + tile("green", "Prevalencia", vaccine.prevalence) + tile("gold", "Recurrencia", vaccine.recurrence) + tile("red", "Qué previene", vaccine.protects) + tile("primary", "Cómo explicarlo", "La vacunación no busca asustar: busca reducir complicaciones reales con una intervención preventiva estudiada y vigilada.") + "</div><div class='vax-toolbar'><button class='vax-button primary' type='button' data-adverse>Ver efectos adversos</button><button class='vax-button' type='button' onclick='window.print()'>Imprimir</button></div><section class='vax-panel vax-adverse' id='adversePanel' hidden><span class='vax-eyebrow'>Seguridad</span><h2>Efectos adversos explicados sin alarmar</h2><p>La mayoría son señales de que el sistema inmune está respondiendo y desaparecen solos. No significan que la vacuna haya causado la enfermedad.</p><ul>" + adverseList + "</ul><div class='vax-note'><strong>Cuándo sí consultar:</strong> " + esc(vaccine.warning) + "</div></section></section>" + sources(vaccine.sources) + credits() + "</main>";
+    setupVaxIndexMenu();
     var button = document.querySelector("[data-adverse]");
     var panel = document.getElementById("adversePanel");
     if (button && panel) {

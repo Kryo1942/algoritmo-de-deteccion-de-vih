@@ -65,6 +65,127 @@ a { color: inherit; }
   letter-spacing: 0;
 }
 
+.vax-topbar-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.vax-index-shell {
+  position: relative;
+}
+
+.vax-index-toggle {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.vax-index-toggle small,
+.vax-index-head small,
+.vax-index-link small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.vax-index-toggle strong,
+.vax-index-head strong,
+.vax-index-link span {
+  display: block;
+  line-height: 1.2;
+}
+
+.vax-menu-icon {
+  width: 18px;
+  height: 14px;
+  display: inline-grid;
+  gap: 4px;
+}
+
+.vax-menu-icon span {
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--red);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.vax-index-shell.open .vax-menu-icon span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.vax-index-shell.open .vax-menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.vax-index-shell.open .vax-menu-icon span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.vax-index-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  width: min(382px, calc(100vw - 32px));
+  max-height: min(70vh, 640px);
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 50px rgba(17, 19, 24, 0.22);
+}
+
+.vax-index-panel[hidden] {
+  display: none;
+}
+
+.vax-index-head {
+  margin-bottom: 10px;
+  padding: 10px 11px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.vax-index-list {
+  display: grid;
+  gap: 8px;
+}
+
+.vax-index-link {
+  display: block;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.vax-index-link:hover,
+.vax-index-link.active {
+  border-color: rgba(179, 22, 34, 0.42);
+  background: #fff4f5;
+}
+
+.vax-index-link.active span {
+  color: var(--red);
+}
+
 .vax-nav {
   display: flex;
   gap: 8px;
@@ -349,6 +470,16 @@ p { margin-top: 0; }
 
 @media (max-width: 620px) {
   .vax-topbar { position: static; align-items: flex-start; flex-direction: column; }
+  .vax-topbar-tools,
+  .vax-index-shell,
+  .vax-index-toggle { width: 100%; }
+  .vax-topbar-tools { align-items: stretch; flex-direction: column; }
+  .vax-index-panel {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: 8px;
+  }
   .vax-nav { width: 100%; justify-content: stretch; }
   .vax-nav a { flex: 1 1 auto; }
   .vax-shell { width: min(100% - 22px, 1180px); padding-top: 16px; }
@@ -367,6 +498,8 @@ p { margin-top: 0; }
 .vax-hero,
 .vax-panel,
 .vax-nav a,
+.vax-index-toggle,
+.vax-index-link,
 .vax-button {
   min-width: 0;
   overflow-wrap: anywhere;
