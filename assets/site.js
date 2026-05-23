@@ -146,6 +146,10 @@
                   <span>Medicamentos</span>
                   <small>${(site.medications || []).length} cargados</small>
                 </a>
+                <a class="menu-link" href="${base}vacunacion.html">
+                  <span>Vacunación UANL</span>
+                  <small>Vacunas</small>
+                </a>
                 ${site.categories.map((category) => `
                   <a class="menu-link ${activeCategorySlug === category.slug ? "active" : ""}" href="${categoryUrl(category.slug)}">
                     <span>${category.title}</span>
