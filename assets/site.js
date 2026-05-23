@@ -433,6 +433,10 @@
         </section>
 
         ${renderGlossarySection()}
+
+        <footer class="home-footnote">
+          Facultad de Medicina, UANL · Departamento de Inmunología · Revisado por el Dr. Noé Macías Segura.
+        </footer>
       </main>
     `;
   }
